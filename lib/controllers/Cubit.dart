@@ -1,8 +1,7 @@
-import 'dart:ffi';
-
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 
@@ -24,12 +23,18 @@ class Xeatscubit extends Cubit<XeatsStates> {
   var datecontroller = TextEditingController();
   String? Value;
   var Gender;
+  int currentindex = 0;
+
   static Xeatscubit get(context) => BlocProvider.of(context);
 
   void changepasswordVisablity() {
     isPassword = !isPassword;
     emit(SuperXeatsOff(isPassword));
     print(isPassword);
+  }
+
+  void changebottomnavindex(int index) {
+    currentindex = index;
   }
 
   void changepasswordVisablity1() {
@@ -40,5 +45,21 @@ class Xeatscubit extends Cubit<XeatsStates> {
 
   void changegender() {
     Gender = Value;
+  }
+
+  List<dynamic> Search = [];
+
+  void Searchbar(String value) {
+    DioHelper.getdata(
+      url: 'v2/everything',
+      query: {
+        'q': value,
+        'apiKey': 'ba69be2f050f4f0ca5aa36c5c9c28420',
+      },
+    ).then((value) {
+      Search = value.data['articles'];
+    }).catchError((error) {
+      print(error.toString());
+    });
   }
 }

@@ -17,6 +17,8 @@ class SignIn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return BlocProvider(
       create: (BuildContext context) => Xeatscubit(),
       child: BlocConsumer<Xeatscubit, XeatsStates>(
@@ -27,6 +29,8 @@ class SignIn extends StatelessWidget {
           return Scaffold(
             body: SingleChildScrollView(
                 child: Container(
+              width: width,
+              height: height,
               decoration: BoxDecoration(
                   color: Colors.blue.withOpacity(0.12),
                   image: DecorationImage(

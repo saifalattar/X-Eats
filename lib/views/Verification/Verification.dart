@@ -15,6 +15,8 @@ class Verify extends StatelessWidget {
   var formkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return BlocProvider(
       create: (context) => Xeatscubit(),
       child: BlocConsumer<Xeatscubit, XeatsStates>(
@@ -26,6 +28,8 @@ class Verify extends StatelessWidget {
               SliverFillRemaining(
                 hasScrollBody: false,
                 child: Container(
+                  width: width,
+                  height: height,
                   decoration: BoxDecoration(
                       color: Colors.blue.withOpacity(0.12),
                       image: DecorationImage(
@@ -40,9 +44,9 @@ class Verify extends StatelessWidget {
                           const SizedBox(
                             height: 50,
                           ),
-                          const Align(
+                          Align(
                               child: Image(
-                            height: 250,
+                            height: height / 3,
                             image: AssetImage('assets/Images/password.png'),
                           )),
                           const Text("Verification Code",
@@ -68,7 +72,7 @@ class Verify extends StatelessWidget {
                                 width: 20,
                               ),
                               SizedBox(
-                                width: 70,
+                                width: width / 5,
                                 child: OtpField(
                                   onTap: () {
                                     Action:
@@ -85,7 +89,7 @@ class Verify extends StatelessWidget {
                                 width: 10,
                               ),
                               SizedBox(
-                                width: 70,
+                                width: width / 5,
                                 child: OtpField(
                                   Action: TextInputAction.next,
                                   controller: Xeatscubit.get(context).XeatOtp2,
@@ -98,7 +102,7 @@ class Verify extends StatelessWidget {
                                 width: 10,
                               ),
                               SizedBox(
-                                width: 70,
+                                width: width / 5,
                                 child: OtpField(
                                   Action: TextInputAction.next,
                                   controller: Xeatscubit.get(context).XeatOtp3,
@@ -111,7 +115,7 @@ class Verify extends StatelessWidget {
                                 width: 10,
                               ),
                               SizedBox(
-                                width: 70,
+                                width: width / 5,
                                 child: OtpField(
                                   Action: TextInputAction.done,
                                   controller: Xeatscubit.get(context).XeatOtp4,
@@ -137,8 +141,10 @@ class Verify extends StatelessWidget {
                             height: 20,
                           ),
                           SizedBox(
-                            width: 315,
-                            height: 65,
+                            width: width / 1.15,
+                            height: height / 11.8,
+                            // width: 315,
+                            //height: 65,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
@@ -146,7 +152,7 @@ class Verify extends StatelessWidget {
                               onPressed: () {},
                               child: Expanded(
                                 child: Row(children: [
-                                  const SizedBox(
+                                  SizedBox(
                                     width: 75,
                                   ),
                                   Text('Verify now',

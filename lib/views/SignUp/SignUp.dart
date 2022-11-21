@@ -15,6 +15,8 @@ class SignUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return BlocProvider(
       create: (BuildContext context) => Xeatscubit(),
       child: BlocConsumer<Xeatscubit, XeatsStates>(
@@ -25,6 +27,8 @@ class SignUp extends StatelessWidget {
           return Scaffold(
             body: SingleChildScrollView(
               child: Container(
+                height: height,
+                width: width,
                 decoration: BoxDecoration(
                     color: Colors.blue.withOpacity(0.12),
                     image: DecorationImage(
@@ -36,7 +40,7 @@ class SignUp extends StatelessWidget {
                 child: Column(
                   children: [
                     SizedBox(
-                      height: 50,
+                      height: 35,
                     ),
                     Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,10 +91,10 @@ class SignUp extends StatelessWidget {
                               ? 'please put your Password'
                               : null),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
-                    Container(
+                    SizedBox(
                       width: 315,
                       child: defultformfield(
                           prefix: Icons.lock_open,

@@ -26,9 +26,13 @@ class SignUp2 extends StatelessWidget {
         builder: (context, state) {
           var cubit = Xeatscubit.get(context);
           var cubit1 = Xeatscubit.get(context);
+          double width = MediaQuery.of(context).size.width;
+          double height = MediaQuery.of(context).size.height;
           return Scaffold(
             body: SingleChildScrollView(
               child: Container(
+                width: width,
+                height: height,
                 decoration: BoxDecoration(
                     color: Colors.blue.withOpacity(0.12),
                     image: DecorationImage(
@@ -60,24 +64,28 @@ class SignUp2 extends StatelessWidget {
                           ]),
                       Align(
                           child: Image(
+                        height: height / 3.5,
                         image: AssetImage('assets/Images/First.png'),
                       )),
                       Row(children: [
-                        Container(
-                          width: 157.5,
-                          child: defultformfield(
-                              controller: Xeatscubit.get(context).Firstname,
-                              label: 'First Name',
-                              type: TextInputType.name,
-                              validator: (value) => value!.isEmpty
-                                  ? 'Put your First Name'
-                                  : null),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 17, right: 10),
+                          child: Container(
+                            width: width / 2.5,
+                            child: defultformfield(
+                                controller: Xeatscubit.get(context).Firstname,
+                                label: 'First Name',
+                                type: TextInputType.name,
+                                validator: (value) => value!.isEmpty
+                                    ? 'Put your First Name'
+                                    : null),
+                          ),
                         ),
                         SizedBox(
                           width: 15,
                         ),
                         Container(
-                          width: 157.5,
+                          width: width / 2.5,
                           child: defultformfield(
                               controller: Xeatscubit.get(context).Lastname,
                               label: 'Last Name',

@@ -261,3 +261,11 @@ Widget OtpField(
         ),
       ),
     );
+Widget CircularNotchBottom(
+        {required List<BottomNavigationBarItem> Items,
+        CircularNotchedRectangle? Circle,
+        required int currentindex,
+        int? notchMargin,
+        Color? color,
+        Function(int)? ontap}) =>
+    BottomNavigationBar(currentIndex: currentindex, onTap: ontap, items: Items);

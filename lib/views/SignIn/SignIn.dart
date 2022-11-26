@@ -41,105 +41,108 @@ class SignIn extends StatelessWidget {
                   )),
               child: Form(
                 key: formkey,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 50,
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(12),
-                          child: Text("Login",
-                              style: const TextStyle(
-                                fontFamily: 'UberMoveTextBold',
-                                fontSize: 25.0,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 9, 134, 211),
-                              )),
-                        )
-                      ],
-                    ),
-                    Align(
-                        child: Image(
-                      image: AssetImage('assets/Images/First.png'),
-                    )),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 0, horizontal: 21),
-                      child: Container(
-                        child: defultformfield(
-                            prefix: Icons.email_outlined,
-                            controller: Xeatscubit.get(context).email,
-                            label: 'Email',
-                            type: TextInputType.emailAddress,
-                            validator: (value) => value!.isEmpty
-                                ? 'please put your Email'
-                                : null),
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.all(4),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 50,
                       ),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 0, horizontal: 22),
-                      child: Container(
-                        width: double.infinity,
-                        child: defultformfield(
-                            prefix: Icons.lock_open,
-                            controller: cubit.Password,
-                            label: 'Password',
-                            suffix: cubit.isPassword
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                            type: TextInputType.visiblePassword,
-                            isPassword: cubit.isPassword,
-                            suffixpressed: () {
-                              cubit.changepasswordVisablity();
-                            },
-                            validator: (value) => value!.isEmpty
-                                ? 'please put your Password'
-                                : null),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(12),
+                            child: Text("Login",
+                                style: const TextStyle(
+                                  fontFamily: 'UberMoveTextBold',
+                                  fontSize: 25.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color.fromARGB(255, 9, 134, 211),
+                                )),
+                          )
+                        ],
                       ),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    defultbutton(
-                        function: (() {
-                          final form = formkey.currentState;
-                          if (form != null && form.validate()) {
-                            Navigation(context, SignUp());
-                          }
-                        }),
-                        text: 'Sign In'),
-                    SizedBox(
-                      height: 80,
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Spacer(
-                          flex: 3,
+                      Align(
+                          child: Image(
+                        image: AssetImage('assets/Images/First.png'),
+                      )),
+                      Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 0, horizontal: 21),
+                        child: Container(
+                          child: defultformfield(
+                              prefix: Icons.email_outlined,
+                              controller: Xeatscubit.get(context).email,
+                              label: 'Email',
+                              type: TextInputType.emailAddress,
+                              validator: (value) => value!.isEmpty
+                                  ? 'please put your Email'
+                                  : null),
                         ),
-                        Text(
-                          'Don\'t have an account?',
-                          style: TextStyle(fontSize: 15),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 0, horizontal: 22),
+                        child: Container(
+                          width: double.infinity,
+                          child: defultformfield(
+                              prefix: Icons.lock_open,
+                              controller: cubit.Password,
+                              label: 'Password',
+                              suffix: cubit.isPassword
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              type: TextInputType.visiblePassword,
+                              isPassword: cubit.isPassword,
+                              suffixpressed: () {
+                                cubit.changepasswordVisablity();
+                              },
+                              validator: (value) => value!.isEmpty
+                                  ? 'please put your Password'
+                                  : null),
                         ),
-                        TextButton(
-                            onPressed: () {
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      defultbutton(
+                          function: (() {
+                            final form = formkey.currentState;
+                            if (form != null && form.validate()) {
                               Navigation(context, SignUp());
-                            },
-                            child: Text(
-                              'Sign up?',
-                              style: TextStyle(fontSize: 15),
-                            ))
-                      ],
-                    )
-                  ],
+                            }
+                          }),
+                          text: 'Sign In'),
+                      SizedBox(
+                        height: 80,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Spacer(
+                            flex: 3,
+                          ),
+                          Text(
+                            'Don\'t have an account?',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          TextButton(
+                              onPressed: () {
+                                Navigation(context, SignUp());
+                              },
+                              child: Text(
+                                'Sign up?',
+                                style: TextStyle(fontSize: 15),
+                              ))
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             )),

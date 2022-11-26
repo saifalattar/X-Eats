@@ -145,34 +145,9 @@ class Verify extends StatelessWidget {
                             height: height / 11.8,
                             // width: 315,
                             //height: 65,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12))),
-                              onPressed: () {},
-                              child: Expanded(
-                                child: Row(children: [
-                                  SizedBox(
-                                    width: 75,
-                                  ),
-                                  Text('Verify now',
-                                      style: GoogleFonts.kanit(
-                                        textStyle: const TextStyle(
-                                          fontSize: 25.0,
-                                          fontStyle: FontStyle.normal,
-                                          color: Colors.black,
-                                        ),
-                                      )),
-                                  const SizedBox(
-                                    width: 50,
-                                  ),
-                                  Image.asset(
-                                    'assets/Images/Khaledd.png',
-                                    height: 20,
-                                    width: 20,
-                                  )
-                                ]),
-                              ),
+                            child: defultbutton(
+                              text: 'Verify now',
+                              function: () {},
                             ),
                           ),
                         ],

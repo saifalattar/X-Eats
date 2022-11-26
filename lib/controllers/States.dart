@@ -7,3 +7,7 @@ class SuperXeatsOff extends SuperXeats {
 
   SuperXeatsOff(this.isPassword);
 }
+
+class ChangeSuccefully extends SuperXeats {}
+
+class ShoowLabel extends SuperXeats {}

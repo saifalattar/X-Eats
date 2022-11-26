@@ -2,8 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:xeats/views/Boarding/Boarding.dart';
+import 'package:xeats/views/SignIn/SignIn.dart';
 import 'package:xeats/views/SignUp/SignUp.dart';
-import 'package:xeats/views/Welcoming/Welcoming.dart';
+import 'package:xeats/views/Layout/Layout.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Welcoming(),
+      home: Layout(),
       debugShowCheckedModeBanner: false,
     );
   }

@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/States.dart';
+import 'dart:math' as math;
+import 'dart:ui';
 
 class Boarding extends StatelessWidget {
   Boarding({super.key});
@@ -31,18 +34,29 @@ class Boarding extends StatelessWidget {
                           fit: BoxFit.cover)),
                   child: Column(
                     children: [
-                      SizedBox(
-                        height: height / 6.5,
-                      ),
                       Image(
-                        height: height / 3,
-                        image: const AssetImage('assets/Images/password.png'),
+                        height: height / 2.4,
+                        image: const AssetImage('assets/Images/time.png'),
                       ),
-                      Image(
-                        color: Colors.red,
-                        height: height / 1.95,
-                        image: const AssetImage('Co.png'),
+                      Text(
+                        "ON TIME!!!",
+                        style: GoogleFonts.kanit(
+                            fontSize: 40,
+                            textStyle: TextStyle(color: Colors.black)),
                       ),
+                      Spacer(),
+                      Container(
+                        color: Colors.blue,
+                        child: CustomPaint(
+                          isComplex: true,
+
+                          size: Size(
+                              width,
+                              height *
+                                  0.300), //You can Replace [WIDTH] with your desired width for Custom Paint and height will be calculated automatically
+                          painter: MyPainter(),
+                        ),
+                      )
                     ],
                   ),
                 )
@@ -55,20 +69,31 @@ class Boarding extends StatelessWidget {
   }
 }
 
-// class CustomClipperr extends CustomClipper<Path> {
-//   @override
-//   Path getClip(Size size) {
-//     double w = size.width;
-//     double h = size.height / 1.95;
+class MyPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()..color = Colors.blue;
+    canvas.drawArc(
+      Rect.fromCenter(
+        center: Offset(size.height / 1.3, size.width / 30),
+        height: size.height,
+        width: size.width + 12,
+      ),
+      math.pi * 2,
+      math.pi * 2,
+      false,
+      paint,
+    );
+    final ParagraphBuilder paragraphBuilder = ParagraphBuilder(ParagraphStyle(
+      fontSize: 40,
+      textAlign: TextAlign.justify,
+    ))
+      ..addText('Welcome to X-eats');
+    final Paragraph paragraph = paragraphBuilder.build()
+      ..layout(ParagraphConstraints(width: size.width - 12.0 - 12.0));
+    canvas.drawParagraph(paragraph, const Offset(12.0, 36.0));
+  }
 
-//     final path = Path();
-//     path.lineTo(0, h);
-//     path.quadraticBezierTo(w * 0.5, h - 100, w, h);
-//     return path;
-//   }
-
-//   @override
-//   bool shouldReclip(CustomClipper<Path> oldClipper) {
-//     return false;
-//   }
-// }
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
+}

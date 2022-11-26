@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 
 Widget defultformfield(
         {required final FormFieldValidator<String> validator,
@@ -123,14 +124,6 @@ Widget NextButton({
                   color: Colors.black,
                 ),
               )),
-          SizedBox(
-            width: 75,
-          ),
-          Image.asset(
-            'assets/Images/Khaledd.png',
-            height: 20,
-            width: 20,
-          )
         ]),
       ),
     );
@@ -196,13 +189,11 @@ Widget SelectedGender({
       ),
       hint: Text('Gender',
           style: GoogleFonts.kanit(
-            textStyle: const TextStyle(
-              fontFamily: 'UberMoveTextBold',
-              fontSize: 20.0,
-              fontStyle: FontStyle.normal,
-              color: Colors.black,
-            ),
-          )),
+              textStyle: const TextStyle(
+            fontFamily: 'UberMoveTextBold',
+            fontSize: 20.0,
+            fontStyle: FontStyle.normal,
+          ))),
       items: Gender.map((String genderr) {
         return DropdownMenuItem<String>(
           child: Row(children: [
@@ -269,3 +260,110 @@ Widget CircularNotchBottom(
         Color? color,
         Function(int)? ontap}) =>
     BottomNavigationBar(currentIndex: currentindex, onTap: ontap, items: Items);
+Widget Resturants({
+  double raduisPadding = 8.0,
+  double raduisButton = 10.0,
+  double Height = 100,
+  double Weight = 100,
+  Image? image,
+  Color? Colors,
+  VoidCallback? Navigate,
+  String? data,
+}) =>
+    Column(
+      children: [
+        Container(
+          height: Height,
+          width: Weight,
+          child: Padding(
+            padding: EdgeInsets.all(raduisPadding),
+            child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors,
+                    shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.all(Radius.circular(raduisButton)))),
+                onPressed: Navigate,
+                child: image),
+          ),
+        ),
+        Text(
+          "$data",
+          // semanticsLabel: data,
+          style: GoogleFonts.kanit(),
+        )
+      ],
+    );
+Widget Dividerr() => Padding(
+      padding: const EdgeInsetsDirectional.only(
+        start: 5.0,
+      ),
+      child: Container(
+        width: double.infinity,
+        height: 1.0,
+        color: Colors.grey[300],
+      ),
+    );
+Widget Product(list, context, {widget, String? Data, String? Assets}) =>
+    InkWell(
+      onTap: () {
+        Navigation(context, widget);
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Row(
+          children: [
+            Container(
+              width: 120,
+              height: 120,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  image: DecorationImage(
+                    image: AssetImage('$Assets'),
+                    fit: BoxFit.cover,
+                  )),
+            ),
+            SizedBox(
+              width: 20,
+            ),
+            Expanded(
+              child: Container(
+                height: 120,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        "$Data",
+                        style: Theme.of(context).textTheme.bodyText1,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Text(
+                      '$Data',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+Widget ProudctMenu(list, context, {isSearch = false}) => ConditionalBuilder(
+      condition: list.length > 0,
+      builder: (context) => ListView.separated(
+        physics: BouncingScrollPhysics(),
+        itemBuilder: (context, index) => Product(list[index], context),
+        separatorBuilder: (context, index) => Dividerr(),
+        itemCount: list.length,
+      ),
+      fallback: (context) => isSearch
+          ? Container()
+          : Center(
+              child: CircularProgressIndicator(),
+            ),
+    );

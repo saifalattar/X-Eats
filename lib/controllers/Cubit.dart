@@ -1,9 +1,13 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/controllers/Components/Components.dart';
+import 'package:xeats/views/HomePage/HomePage.dart';
 
 class Xeatscubit extends Cubit<XeatsStates> {
   Xeatscubit() : super(SuperXeats());
@@ -22,29 +26,94 @@ class Xeatscubit extends Cubit<XeatsStates> {
   var Phone = TextEditingController();
   var datecontroller = TextEditingController();
   String? Value;
+  bool ShowLabel = true;
+  bool ShowLabel2 = true;
+  bool ShowLabel3 = true;
+  bool ShowLabel4 = true;
   var Gender;
   int currentindex = 0;
+  List<Widget> Screens = [
+    HomePage(),
+  ];
+  List<BottomNavigationBarItem> bottomitems = const [
+    BottomNavigationBarItem(
+      backgroundColor: Colors.blue,
+      icon: Icon(
+        Icons.home_outlined,
+        color: Color.fromARGB(193, 0, 0, 0),
+      ),
+      label: 'Home',
+    ),
+    BottomNavigationBarItem(
+        backgroundColor: Colors.blue,
+        icon: Image(
+            height: 30,
+            width: 25,
+            image: AssetImage("assets/Images/Profile.png")),
+        label: 'Profile'),
+    BottomNavigationBarItem(
+        backgroundColor: Colors.blue,
+        icon: Icon(
+          Icons.restaurant,
+          color: Colors.black,
+        ),
+        label: 'Resturants'),
+    BottomNavigationBarItem(
+        backgroundColor: Colors.blue,
+        icon: Icon(
+          Icons.filter_alt,
+          color: Colors.black,
+        ),
+        label: 'Filter'),
+    BottomNavigationBarItem(
+        backgroundColor: Colors.blue,
+        icon: Icon(
+          Icons.search,
+          color: Colors.black,
+        ),
+        label: 'Search'),
+  ];
 
   static Xeatscubit get(context) => BlocProvider.of(context);
 
   void changepasswordVisablity() {
     isPassword = !isPassword;
     emit(SuperXeatsOff(isPassword));
-    print(isPassword);
   }
 
   void changebottomnavindex(int index) {
     currentindex = index;
+
+    emit(ChangeSuccefully());
   }
 
   void changepasswordVisablity1() {
     isPassword1 = !isPassword1;
     emit(SuperXeatsOff(isPassword1));
-    print(isPassword1);
   }
 
   void changegender() {
     Gender = Value;
+  }
+
+  void showwLabel1() {
+    ShowLabel = !ShowLabel;
+    emit(ShoowLabel());
+  }
+
+  void showwLabel2() {
+    ShowLabel2 = !ShowLabel2;
+    emit(ShoowLabel());
+  }
+
+  void showwLabel3() {
+    ShowLabel3 = !ShowLabel3;
+    emit(ShoowLabel());
+  }
+
+  void showwLabel4() {
+    ShowLabel4 = !ShowLabel4;
+    emit(ShoowLabel());
   }
 
   List<dynamic> Search = [];

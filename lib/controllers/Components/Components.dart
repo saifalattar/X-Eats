@@ -6,6 +6,46 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 
+// Row(
+//                 children: [
+//                   Container(
+//                     width: 120,
+//                     height: 120,
+//                     decoration: BoxDecoration(
+//                         borderRadius: BorderRadius.circular(10.0),
+//                         image: const DecorationImage(
+//                           image: AssetImage('assets/Images/Shawrma.png'),
+//                           fit: BoxFit.cover,
+//                         )),
+//                   ),
+//                   const SizedBox(
+//                     width: 20,
+//                   ),
+//                   Expanded(
+//                       child: SizedBox(
+//                     height: 120,
+//                     child: Column(
+//                       crossAxisAlignment: CrossAxisAlignment.start,
+//                       mainAxisAlignment: MainAxisAlignment.start,
+//                       children: [
+//                         Expanded(
+//                           child: Text(
+//                             "Shawrma Frakh",
+//                             style: GoogleFonts.kanit(fontSize: 20),
+//                             maxLines: 1,
+//                             overflow: TextOverflow.ellipsis,
+//                           ),
+//                         ),
+//                         const Text(
+//                           'EGP:35.00',
+//                           style: TextStyle(color: Colors.black),
+//                         ),
+//                       ],
+//                     ),
+//                   ))
+//                 ],
+//               ),
+
 Widget defultformfield(
         {required final FormFieldValidator<String> validator,
         TextEditingController? controller,
@@ -304,66 +344,73 @@ Widget Dividerr() => Padding(
         color: Colors.grey[300],
       ),
     );
-Widget Product(list, context, {widget, String? Data, String? Assets}) =>
-    InkWell(
-      onTap: () {
-        Navigation(context, widget);
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Row(
-          children: [
-            Container(
-              width: 120,
-              height: 120,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  image: DecorationImage(
-                    image: AssetImage('$Assets'),
-                    fit: BoxFit.cover,
-                  )),
-            ),
-            SizedBox(
-              width: 20,
-            ),
-            Expanded(
-              child: Container(
-                height: 120,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        "$Data",
-                        style: Theme.of(context).textTheme.bodyText1,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    Text(
-                      '$Data',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ],
-                ),
-              ),
-            )
-          ],
+Widget Product(
+        {context, widget, String? Data, String? Assets, String? Price}) =>
+    Column(
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height / 4,
         ),
-      ),
-    );
-Widget ProudctMenu(list, context, {isSearch = false}) => ConditionalBuilder(
-      condition: list.length > 0,
-      builder: (context) => ListView.separated(
-        physics: BouncingScrollPhysics(),
-        itemBuilder: (context, index) => Product(list[index], context),
-        separatorBuilder: (context, index) => Dividerr(),
-        itemCount: list.length,
-      ),
-      fallback: (context) => isSearch
-          ? Container()
-          : Center(
-              child: CircularProgressIndicator(),
+        InkWell(
+          onTap: () {
+            Navigation(context, widget);
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              children: [
+                Container(
+                  width: 120,
+                  height: 120,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      image: DecorationImage(
+                        image: AssetImage('$Assets'),
+                        fit: BoxFit.cover,
+                      )),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Expanded(
+                  child: Container(
+                    height: 120,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            "$Data",
+                            style: GoogleFonts.kanit(fontSize: 20),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Text(
+                          '$Price',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
             ),
+          ),
+        ),
+      ],
+    );
+Widget ProudctMenu(
+  context,
+) =>
+    ListView.separated(
+      physics: BouncingScrollPhysics(),
+      itemBuilder: (context, index) => Product(
+          Data: "Shawrma Frakh\n" + "شاورما فراخ",
+          Assets: "assets/Images/Shawrma.png",
+          Price: "EGP 35.00"),
+      separatorBuilder: (context, index) => Dividerr(),
+      itemCount: 10,
     );

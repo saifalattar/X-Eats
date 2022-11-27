@@ -8,6 +8,9 @@ import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/views/HomePage/HomePage.dart';
+import 'package:xeats/views/Profile/Profile.dart';
+import 'package:xeats/views/Resturants/Resturants.dart';
+import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
 
 class Xeatscubit extends Cubit<XeatsStates> {
   Xeatscubit() : super(SuperXeats());
@@ -34,6 +37,8 @@ class Xeatscubit extends Cubit<XeatsStates> {
   int currentindex = 0;
   List<Widget> Screens = [
     HomePage(),
+    Resturantss(),
+    Profile(),
   ];
   List<BottomNavigationBarItem> bottomitems = const [
     BottomNavigationBarItem(
@@ -46,13 +51,6 @@ class Xeatscubit extends Cubit<XeatsStates> {
     ),
     BottomNavigationBarItem(
         backgroundColor: Colors.blue,
-        icon: Image(
-            height: 30,
-            width: 25,
-            image: AssetImage("assets/Images/Profile.png")),
-        label: 'Profile'),
-    BottomNavigationBarItem(
-        backgroundColor: Colors.blue,
         icon: Icon(
           Icons.restaurant,
           color: Colors.black,
@@ -61,17 +59,10 @@ class Xeatscubit extends Cubit<XeatsStates> {
     BottomNavigationBarItem(
         backgroundColor: Colors.blue,
         icon: Icon(
-          Icons.filter_alt,
+          Icons.account_circle,
           color: Colors.black,
         ),
-        label: 'Filter'),
-    BottomNavigationBarItem(
-        backgroundColor: Colors.blue,
-        icon: Icon(
-          Icons.search,
-          color: Colors.black,
-        ),
-        label: 'Search'),
+        label: 'Profile'),
   ];
 
   static Xeatscubit get(context) => BlocProvider.of(context);

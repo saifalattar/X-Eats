@@ -24,7 +24,7 @@ class Layout extends StatelessWidget {
   var dt = DateTime.now();
 
   Layout({super.key}) {
-    sum123 = int.parse(minute + Hour);
+    sum123 = int.parse(Hour + minute);
     print(Hour);
     print(minute);
     print(sum123);
@@ -48,7 +48,8 @@ class Layout extends StatelessWidget {
               return Scaffold(
                   body: cubit.Screens[cubit.currentindex],
                   bottomNavigationBar: BottomNavigationBar(
-                    backgroundColor: Colors.black,
+                    selectedLabelStyle: GoogleFonts.kanit(),
+                    backgroundColor: Colors.white,
                     items: cubit.bottomitems,
                     currentIndex: cubit.currentindex,
                     onTap: (index) {

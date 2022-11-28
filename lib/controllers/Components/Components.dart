@@ -167,8 +167,10 @@ Widget NextButton({
         ]),
       ),
     );
-void Navigation(context, widget) => Navigator.pushAndRemoveUntil(
-    context, MaterialPageRoute(builder: (context) => widget), (Route) => false);
+void Navigation(context, widget) => Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => widget),
+    );
 List<String> Gender = ['Male', 'Female'];
 String? gender;
 

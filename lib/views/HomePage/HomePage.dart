@@ -9,6 +9,8 @@ import 'package:xeats/controllers/Components/search.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/views/Layout/Layout.dart';
+import 'package:xeats/views/Profile/Profile.dart';
+import 'package:xeats/views/Resturants/Resturants.dart';
 import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
 
@@ -23,6 +25,7 @@ class HomePage extends StatelessWidget {
         create: (context) => Xeatscubit(),
         child: BlocConsumer<Xeatscubit, XeatsStates>(
           builder: ((context, state) {
+            var cubit = Xeatscubit.get(context);
             return Scaffold(
               body: Container(
                 child: SingleChildScrollView(

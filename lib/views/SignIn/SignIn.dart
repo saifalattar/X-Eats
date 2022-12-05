@@ -4,151 +4,119 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:xeats/controllers/States.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:xeats/controllers/AuthCubit/States.dart';
+import 'package:xeats/controllers/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/views/SignUp/SignUp.dart';
 
-import '../../controllers/Cubit.dart';
-
 class SignIn extends StatelessWidget {
   SignIn({super.key});
-
-  var formkey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    return BlocProvider(
-      create: (BuildContext context) => Xeatscubit(),
-      child: BlocConsumer<Xeatscubit, XeatsStates>(
-        listener: ((context, state) {}),
-        builder: (context, state) {
-          var cubit = Xeatscubit.get(context);
-          var cubit1 = Xeatscubit.get(context);
-          return Scaffold(
-            body: SingleChildScrollView(
-                child: Container(
-              width: width,
-              height: height,
-              decoration: BoxDecoration(
-                  color: Colors.blue.withOpacity(0.12),
-                  image: DecorationImage(
-                    image: AssetImage(
-                      'assets/Images/BG.png',
-                    ),
-                    fit: BoxFit.cover,
-                  )),
+    return BlocConsumer<AuthCubit, AuthStates>(
+      listener: ((context, state) {}),
+      builder: (context, state) {
+        var cubit = AuthCubit.get(context);
+        return Scaffold(
+          backgroundColor: Color(0xff0986d3),
+          body: Container(
+            width: width,
+            height: height,
+            decoration: BoxDecoration(
+                color: Colors.white,
+              borderRadius: BorderRadius.only(topRight: Radius.circular(150.r))
+            ),
+            child: SafeArea(
               child: Form(
-                key: formkey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                key: cubit.signin_formkey,
                 child: SingleChildScrollView(
-                  padding: EdgeInsets.all(4),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 50,
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(12),
-                            child: Text("Login",
-                                style: const TextStyle(
-                                  fontFamily: 'UberMoveTextBold',
-                                  fontSize: 25.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color.fromARGB(255, 9, 134, 211),
-                                )),
-                          )
-                        ],
-                      ),
-                      Align(
+                  child: Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 15.h, horizontal: 26.w),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Login",
+                            style: TextStyle(
+                              fontFamily: 'UberMoveTextBold',
+                              fontSize: 25.0.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 9, 134, 211),
+                            )),
+                        Center(
                           child: Image(
-                        image: AssetImage('assets/Images/First.png'),
-                      )),
-                      Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 0, horizontal: 21),
-                        child: Container(
-                          child: defultformfield(
-                              prefix: Icons.email_outlined,
-                              controller: Xeatscubit.get(context).email,
-                              label: 'Email',
-                              type: TextInputType.emailAddress,
-                              validator: (value) => value!.isEmpty
-                                  ? 'please put your Email'
-                                  : null),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 0, horizontal: 22),
-                        child: Container(
-                          width: double.infinity,
-                          child: defultformfield(
-                              prefix: Icons.lock_open,
-                              controller: cubit.Password,
-                              label: 'Password',
-                              suffix: cubit.isPassword
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              type: TextInputType.visiblePassword,
-                              isPassword: cubit.isPassword,
-                              suffixpressed: () {
-                                cubit.changepasswordVisablity();
-                              },
-                              validator: (value) => value!.isEmpty
-                                  ? 'please put your Password'
-                                  : null),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      defultbutton(
-                          function: (() {
-                            final form = formkey.currentState;
-                            if (form != null && form.validate()) {
-                              Navigation(context, SignUp());
-                            }
-                          }),
-                          text: 'Sign In'),
-                      SizedBox(
-                        height: 80,
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Spacer(
-                            flex: 3,
+                            image: AssetImage('assets/Images/First.png'),
+                            width: width / 2,
+                            height: width / 2,
                           ),
-                          Text(
-                            'Don\'t have an account?',
-                            style: TextStyle(fontSize: 15),
-                          ),
-                          TextButton(
-                              onPressed: () {
-                                Navigation(context, SignUp());
-                              },
-                              child: Text(
-                                'Sign up?',
-                                style: TextStyle(fontSize: 15),
-                              ))
-                        ],
-                      )
-                    ],
+                        ),
+                        SocialAuth(),
+                        defultformfield(
+                            prefix: Icons.email_outlined,
+                            controller: cubit.signin_email,
+                            label: 'Email',
+                            type: TextInputType.emailAddress,
+                            validator: (value) => value!.isEmpty
+                                ? 'Please enter your Email'
+                                : null),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        defultformfield(
+                            prefix: Icons.lock_open,
+                            controller: cubit.signin_password,
+                            label: 'Password',
+                            suffix: cubit.isPassword_lpgin
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            type: TextInputType.visiblePassword,
+                            isPassword: cubit.isPassword_lpgin,
+                            suffixpressed: () {
+                              cubit.changepasswordVisablityLogin();
+                            },
+                            validator: (value) => value!.isEmpty
+                                ? 'Please Enter your Password'
+                                : null),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        defultbutton(
+                            function: (() {
+                              cubit.signin(context);
+                            }),
+                            text: 'Sign In'),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              'Don\'t have an account?',
+                              style: TextStyle(fontSize: 15.sp),
+                            ),
+                            TextButton(
+                                onPressed: () {
+                                  NavigateAndRemov(context, Signup());
+                                },
+                                child: Text(
+                                  'Sign up',
+                                  style: TextStyle(fontSize: 15.sp),
+                                ))
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
-            )),
-          );
-        },
-      ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

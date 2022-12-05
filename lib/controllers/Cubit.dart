@@ -28,12 +28,10 @@ class Xeatscubit extends Cubit<XeatsStates> {
   var Lastname = TextEditingController();
   var Phone = TextEditingController();
   var datecontroller = TextEditingController();
-  String? Value;
   bool ShowLabel = true;
   bool ShowLabel2 = true;
   bool ShowLabel3 = true;
   bool ShowLabel4 = true;
-  var Gender;
   int currentindex = 0;
   List<Widget> Screens = [
     HomePage(),
@@ -83,9 +81,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
     emit(SuperXeatsOff(isPassword1));
   }
 
-  void changegender() {
-    Gender = Value;
-  }
+
 
   void showwLabel1() {
     ShowLabel = !ShowLabel;

@@ -1,10 +1,16 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:xeats/controllers/AuthCubit/cubit.dart';
+import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/views/Boarding/Boarding.dart';
+import 'package:xeats/views/CompleteProfile/Complete_Profile.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
 import 'package:xeats/views/SignUp/SignUp.dart';
 import 'package:xeats/views/Layout/Layout.dart';
+import 'package:xeats/views/Verification/Verification.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,9 +21,28 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Layout(),
-      debugShowCheckedModeBanner: false,
-    );
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (context) => Xeatscubit()),
+          BlocProvider(create: (context) => AuthCubit())
+        ],
+        child: ScreenUtilInit(
+          designSize: const Size(414, 896),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (context, child) {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'X-EATS',
+              theme: ThemeData(
+                primarySwatch: Colors.blue,
+                textTheme:
+                    Typography.englishLike2018.apply(fontSizeFactor: 1.sp),
+              ),
+              home: child,
+            );
+          },
+          child: Verify(),
+        ));
   }
 }

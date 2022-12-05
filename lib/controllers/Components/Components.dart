@@ -3,6 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 
@@ -66,47 +67,50 @@ Widget defultformfield(
         double? width,
         TextStyle? labelst}) =>
     Container(
+
       child: TextFormField(
-        validator: validator,
-        controller: controller,
-        obscureText: isPassword,
-        onChanged: changed,
-        onTap: onTap,
-        onFieldSubmitted: onsubmit,
-        keyboardType: type,
-        style: GoogleFonts.kanit(
-          height: 1.5,
-        ),
-        decoration: InputDecoration(
-          prefixIconConstraints: BoxConstraints(maxWidth: 100, minWidth: 40),
-          enabledBorder: const OutlineInputBorder(
-              borderRadius: const BorderRadius.all(Radius.circular(20)),
-              borderSide: const BorderSide(color: Colors.grey)),
-          fillColor: background,
-          labelStyle: labelst,
-          focusedBorder: const OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.grey),
-              borderRadius: const BorderRadius.all(Radius.circular(20))),
-          labelText: label,
-          prefixIcon: Icon(
-            prefix,
-            color: Colors.black,
+          validator: validator,
+          controller: controller,
+          obscureText: isPassword,
+          onChanged: changed,
+          onTap: onTap,
+          onFieldSubmitted: onsubmit,
+          keyboardType: type,
+          style: GoogleFonts.kanit(
+            height: 1.5,
           ),
-          suffixIcon: suffix != null
-              ? IconButton(
-                  onPressed: suffixpressed,
-                  icon: Icon(
-                    suffix,
-                    color: Colors.black,
-                  ),
-                )
-              : null,
-          border: const OutlineInputBorder(borderSide: BorderSide()),
-        ),
-      ),
+          decoration: InputDecoration(
+            enabledBorder: const OutlineInputBorder(
+                borderRadius: const BorderRadius.all(Radius.circular(20)),
+                borderSide: const BorderSide(color: Colors.grey)),
+            fillColor: background,
+            labelStyle: labelst,
+            focusedBorder: const OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.grey),
+                borderRadius: const BorderRadius.all(Radius.circular(20))
+            ),
+            labelText: label,
+            prefixIcon: Icon(
+              prefix,
+              color: Colors.black,
+            ),
+            suffixIcon: suffix != null
+                ? IconButton(
+                    onPressed: suffixpressed,
+                    icon: Icon(
+                      suffix,
+                      color: Colors.black,
+                    ),
+                  )
+                : null,
+            border: const OutlineInputBorder(
+              borderRadius: const BorderRadius.all(Radius.circular(20)),
+            ),
+          )),
     );
+
 Widget defultbutton({
-  double width = 320,
+  double width = double.infinity,
   bool isUppercase = true,
   double radius = 20,
   required VoidCallback function,
@@ -116,7 +120,7 @@ Widget defultbutton({
 }) =>
     Container(
       width: width,
-      height: 65,
+      height: 55.h,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
@@ -124,9 +128,9 @@ Widget defultbutton({
         onPressed: function,
         child: Text(isUppercase ? text : text,
             style: GoogleFonts.kanit(
-              textStyle: const TextStyle(
+              textStyle: TextStyle(
                 fontFamily: 'UberMoveTextBold',
-                fontSize: 25.0,
+                fontSize: 25.0.sp,
                 fontStyle: FontStyle.normal,
                 color: Colors.black,
               ),
@@ -167,6 +171,10 @@ Widget NextButton({
         ]),
       ),
     );
+
+void NavigateAndRemov(context, widget) => Navigator.pushAndRemoveUntil(
+    context, MaterialPageRoute(builder: (context) => widget), (route) => false);
+
 void Navigation(context, widget) => Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => widget),
@@ -210,10 +218,11 @@ Widget SelectedGender({
         labelStyle: labelst,
         focusedBorder: const OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.grey),
-            borderRadius: const BorderRadius.all(Radius.circular(20))),
+            borderRadius: const BorderRadius.all(Radius.circular(20))
+        ),
         prefixIcon: Image(
-          width: 1,
-          height: 1,
+          width: 1.w,
+          height: 1.w,
           image: AssetImage(
             'assets/Images/gender.png',
           ),
@@ -231,9 +240,9 @@ Widget SelectedGender({
       ),
       hint: Text('Gender',
           style: GoogleFonts.kanit(
-              textStyle: const TextStyle(
+              textStyle:  TextStyle(
             fontFamily: 'UberMoveTextBold',
-            fontSize: 20.0,
+            fontSize: 20.0.sp,
             fontStyle: FontStyle.normal,
           ))),
       items: Gender.map((String genderr) {
@@ -257,8 +266,10 @@ Widget SelectedGender({
         );
       }).toList(),
     );
+
 Widget OtpField(
-        {required final FormFieldValidator<String> validator,
+    context,
+        {
         TextEditingController? controller,
         TextInputAction? Action,
         Color background = Colors.blue,
@@ -267,13 +278,19 @@ Widget OtpField(
         BorderSide? bord,
         TextStyle? labelst}) =>
     Container(
+
       child: TextFormField(
         inputFormatters: [LengthLimitingTextInputFormatter(1)],
         textInputAction: Action,
-        validator: validator,
+        autovalidateMode: AutovalidateMode.always,
+        validator: (value){
+          if(value!.isNotEmpty&&value!=" "){
+            FocusScope.of(context).nextFocus();
+
+          }
+        },
         controller: controller,
         textAlign: TextAlign.center,
-        onTap: onTap,
         keyboardType: type,
         style: GoogleFonts.kanit(
             height: 1.5,
@@ -294,6 +311,7 @@ Widget OtpField(
         ),
       ),
     );
+
 Widget CircularNotchBottom(
         {required List<BottomNavigationBarItem> Items,
         CircularNotchedRectangle? Circle,
@@ -302,6 +320,7 @@ Widget CircularNotchBottom(
         Color? color,
         Function(int)? ontap}) =>
     BottomNavigationBar(currentIndex: currentindex, onTap: ontap, items: Items);
+
 Widget Resturants({
   double raduisPadding = 8.0,
   double raduisButton = 10.0,
@@ -336,6 +355,7 @@ Widget Resturants({
         )
       ],
     );
+
 Widget Dividerr() => Padding(
       padding: const EdgeInsetsDirectional.only(
         start: 5.0,
@@ -346,6 +366,7 @@ Widget Dividerr() => Padding(
         color: Colors.grey[300],
       ),
     );
+
 Widget Product(
         {context, widget, String? Data, String? Assets, String? Price}) =>
     Column(
@@ -404,6 +425,7 @@ Widget Product(
         ),
       ],
     );
+
 Widget ProudctMenu(
   context,
 ) =>
@@ -416,3 +438,28 @@ Widget ProudctMenu(
       separatorBuilder: (context, index) => Dividerr(),
       itemCount: 10,
     );
+
+Widget SocialAuth() {
+  return Padding(
+    padding: EdgeInsets.symmetric(vertical: 10.0.h),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        SizedBox(
+            height: 53.w,
+            width: 53.w,
+            child: IconButton(
+                onPressed: () {},
+                icon: Image.asset(
+                  "assets/Images/Facebook-mdpi.png",
+                ))),
+        SizedBox(
+            width: 53.w,
+            height: 53.w,
+            child: IconButton(
+                onPressed: () {},
+                icon: Image.asset("assets/Images/Google.png")))
+      ],
+    ),
+  );
+}

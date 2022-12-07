@@ -5,8 +5,9 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:xeats/controllers/AuthCubit/States.dart';
-import 'package:xeats/controllers/AuthCubit/cubit.dart';
+import 'package:xeats/controllers/Bloc/AuthCubit/DataCubit/States.dart';
+import 'package:xeats/controllers/Bloc/AuthCubit/DataCubit/cubit.dart';
+
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/views/SignUp/SignUp.dart';
 
@@ -28,8 +29,8 @@ class SignIn extends StatelessWidget {
             height: height,
             decoration: BoxDecoration(
                 color: Colors.white,
-              borderRadius: BorderRadius.only(topRight: Radius.circular(150.r))
-            ),
+                borderRadius:
+                    BorderRadius.only(topRight: Radius.circular(150.r))),
             child: SafeArea(
               child: Form(
                 autovalidateMode: AutovalidateMode.onUserInteraction,

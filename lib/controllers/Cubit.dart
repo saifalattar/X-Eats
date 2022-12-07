@@ -81,41 +81,31 @@ class Xeatscubit extends Cubit<XeatsStates> {
     emit(SuperXeatsOff(isPassword1));
   }
 
+  List<dynamic> GettProducts = [];
 
+  void GetProducts() {
+    DioHelper.getdata(url: 'get_products/', query: {}).then((value) {
+      GettProducts = value.data['Names'];
 
-  void showwLabel1() {
-    ShowLabel = !ShowLabel;
-    emit(ShoowLabel());
-  }
-
-  void showwLabel2() {
-    ShowLabel2 = !ShowLabel2;
-    emit(ShoowLabel());
-  }
-
-  void showwLabel3() {
-    ShowLabel3 = !ShowLabel3;
-    emit(ShoowLabel());
-  }
-
-  void showwLabel4() {
-    ShowLabel4 = !ShowLabel4;
-    emit(ShoowLabel());
-  }
-
-  List<dynamic> Search = [];
-
-  void Searchbar(String value) {
-    DioHelper.getdata(
-      url: 'v2/everything',
-      query: {
-        'q': value,
-        'apiKey': 'ba69be2f050f4f0ca5aa36c5c9c28420',
-      },
-    ).then((value) {
-      Search = value.data['articles'];
+      emit(ProductsSuccess());
     }).catchError((error) {
-      print(error.toString());
+      print(ProductsFail(error.toString()));
+    });
+  }
+
+  static List<dynamic> ResturantsList = [];
+
+  void GetResturants() async {
+    DioHelper.getdata(
+      url: 'get_restaurants/',
+      query: {},
+    ).then((value) {
+      ResturantsList = value.data['Names'];
+      print(ResturantsList[0]['image']);
+      print("https://x-eats.com" + ResturantsList[0]['image']);
+    }).catchError((error) {
+      emit(ProductsFail(error.toString()));
+      print(ProductsFail(error.toString()));
     });
   }
 }

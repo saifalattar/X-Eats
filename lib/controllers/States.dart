@@ -11,3 +11,11 @@ class SuperXeatsOff extends SuperXeats {
 class ChangeSuccefully extends SuperXeats {}
 
 class ShoowLabel extends SuperXeats {}
+
+class ProductsSuccess extends SuperXeats {}
+
+class ProductsFail extends SuperXeats {
+  final String error;
+
+  ProductsFail(this.error);
+}

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, camel_case_types
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -6,12 +6,14 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:xeats/controllers/AuthCubit/States.dart';
-import 'package:xeats/controllers/AuthCubit/cubit.dart';
+
+import 'package:xeats/controllers/Bloc/AuthCubit/DataCubit/States.dart';
+import 'package:xeats/controllers/Bloc/AuthCubit/DataCubit/cubit.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
+import 'package:xeats/views/SignUp/SignUp.dart';
 import 'package:xeats/views/Verification/Verification.dart';
 
 class Complete_Profile extends StatelessWidget {

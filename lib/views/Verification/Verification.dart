@@ -1,8 +1,5 @@
 // ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors
 
-
-
-
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
@@ -11,8 +8,9 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:xeats/controllers/AuthCubit/States.dart';
-import 'package:xeats/controllers/AuthCubit/cubit.dart';
+import 'package:xeats/controllers/Bloc/AuthCubit/DataCubit/States.dart';
+import 'package:xeats/controllers/Bloc/AuthCubit/DataCubit/cubit.dart';
+
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
@@ -42,8 +40,9 @@ class Verify extends StatelessWidget {
             height: height,
             decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.only(topRight: Radius.circular(70.r),topLeft: Radius.circular(70.r))
-            ),
+                borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(70.r),
+                    topLeft: Radius.circular(70.r))),
             child: SafeArea(
               child: Form(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -51,7 +50,7 @@ class Verify extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Padding(
                     padding:
-                    EdgeInsets.symmetric(vertical: 15.h, horizontal: 26.w),
+                        EdgeInsets.symmetric(vertical: 15.h, horizontal: 26.w),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -62,30 +61,29 @@ class Verify extends StatelessWidget {
                             height: width / 2,
                           ),
                         ),
-                         Center(
-                           child: Text("Verification Code",
+                        Center(
+                          child: Text("Verification Code",
                               style: TextStyle(
                                 fontFamily: 'UberMoveTextBold',
                                 fontSize: 30.0.sp,
                                 fontWeight: FontWeight.bold,
                                 color: Color.fromARGB(255, 9, 134, 211),
                               )),
-                         ),
-                         SizedBox(
+                        ),
+                        SizedBox(
                           height: 5.h,
                         ),
-                         Center(
-                           child: Text(
+                        Center(
+                          child: Text(
                             'Please type the verification code sent to your e-mail',
-                            style: TextStyle(fontSize: 15.sp),textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 15.sp),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                         ),
-
                         Padding(
-                          padding:  EdgeInsets.symmetric(vertical: 10.0.w),
+                          padding: EdgeInsets.symmetric(vertical: 10.0.w),
                           child: Row(
                             children: [
-
                               Expanded(
                                 child: OtpField(
                                   context,
@@ -94,43 +92,42 @@ class Verify extends StatelessWidget {
                                   type: TextInputType.phone,
                                 ),
                               ),
-                              SizedBox(width: 26.w,),
+                              SizedBox(
+                                width: 26.w,
+                              ),
                               Expanded(
                                 child: OtpField(
                                   context,
                                   Action: TextInputAction.next,
                                   controller: Xeatscubit.get(context).XeatOtp2,
                                   type: TextInputType.phone,
-
                                 ),
                               ),
-                              SizedBox(width: 26.w,),
-
+                              SizedBox(
+                                width: 26.w,
+                              ),
                               Expanded(
                                 child: OtpField(
                                   context,
                                   Action: TextInputAction.next,
                                   controller: Xeatscubit.get(context).XeatOtp3,
                                   type: TextInputType.phone,
-
                                 ),
                               ),
-                              SizedBox(width: 26.w,),
-
+                              SizedBox(
+                                width: 26.w,
+                              ),
                               Expanded(
-
                                 child: OtpField(
                                   context,
                                   Action: TextInputAction.done,
                                   controller: Xeatscubit.get(context).XeatOtp4,
                                   type: TextInputType.phone,
-
                                 ),
                               ),
                             ],
                           ),
                         ),
-
                         TextButton(
                             onPressed: () {},
                             child: Text(
@@ -158,5 +155,3 @@ class Verify extends StatelessWidget {
     );
   }
 }
-
-

@@ -67,7 +67,6 @@ Widget defultformfield(
         double? width,
         TextStyle? labelst}) =>
     Container(
-
       child: TextFormField(
           validator: validator,
           controller: controller,
@@ -87,8 +86,7 @@ Widget defultformfield(
             labelStyle: labelst,
             focusedBorder: const OutlineInputBorder(
                 borderSide: const BorderSide(color: Colors.grey),
-                borderRadius: const BorderRadius.all(Radius.circular(20))
-            ),
+                borderRadius: const BorderRadius.all(Radius.circular(20))),
             labelText: label,
             prefixIcon: Icon(
               prefix,
@@ -218,8 +216,7 @@ Widget SelectedGender({
         labelStyle: labelst,
         focusedBorder: const OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.grey),
-            borderRadius: const BorderRadius.all(Radius.circular(20))
-        ),
+            borderRadius: const BorderRadius.all(Radius.circular(20))),
         prefixIcon: Image(
           width: 1.w,
           height: 1.w,
@@ -240,7 +237,7 @@ Widget SelectedGender({
       ),
       hint: Text('Gender',
           style: GoogleFonts.kanit(
-              textStyle:  TextStyle(
+              textStyle: TextStyle(
             fontFamily: 'UberMoveTextBold',
             fontSize: 20.0.sp,
             fontStyle: FontStyle.normal,
@@ -267,10 +264,8 @@ Widget SelectedGender({
       }).toList(),
     );
 
-Widget OtpField(
-    context,
-        {
-        TextEditingController? controller,
+Widget OtpField(context,
+        {TextEditingController? controller,
         TextInputAction? Action,
         Color background = Colors.blue,
         required TextInputType type,
@@ -278,15 +273,13 @@ Widget OtpField(
         BorderSide? bord,
         TextStyle? labelst}) =>
     Container(
-
       child: TextFormField(
         inputFormatters: [LengthLimitingTextInputFormatter(1)],
         textInputAction: Action,
-        autovalidateMode: AutovalidateMode.always,
-        validator: (value){
-          if(value!.isNotEmpty&&value!=" "){
-            FocusScope.of(context).nextFocus();
-
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        validator: (value) {
+          if (value!.isNotEmpty && value != "") {
+            FocusScope.of(context).focusInDirection(TraversalDirection.right);
           }
         },
         controller: controller,

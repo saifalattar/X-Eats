@@ -1,3 +1,6 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings
+
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -6,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/States.dart';
+import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
 
 class Resturantss extends StatelessWidget {
@@ -16,10 +20,12 @@ class Resturantss extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return BlocProvider(
-        create: (context) => Xeatscubit(),
+        create: (context) => Xeatscubit()..GetResturants(),
         child: BlocConsumer<Xeatscubit, XeatsStates>(
           listener: (context, state) {},
           builder: (context, state) {
+            var cubit = Xeatscubit.get(context);
+            var data_from_api = Xeatscubit.ResturantsList;
             return Scaffold(
               body: SingleChildScrollView(
                 child: Column(children: [
@@ -48,66 +54,36 @@ class Resturantss extends StatelessWidget {
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       children: [
-                        Container(
-                          height: height / 3.8,
-                          width: width / 1.1,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              image: DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image:
-                                      AssetImage('assets/Images/Tahrir.jpg'))),
-                        ),
-                        SizedBox(
-                          height: height / 30,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigation(context, ResturantsMenu());
+                        ListView.separated(
+                          separatorBuilder: ((context, index) =>
+                              SizedBox(height: height / 45)),
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              onTap: () {
+                                if (index == 0) {
+                                  Navigation(context, ResturantsMenu());
+                                } else if (index == 1) {
+                                  Navigation(context, Profile());
+                                }
+                              },
+                              child: Ink(
+                                height: height / 3.8,
+                                width: width / 1.1,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    image: DecorationImage(
+                                        fit: BoxFit.fill,
+                                        image: NetworkImage(
+                                            'https://www.x-eats.com' +
+                                                data_from_api[index]
+                                                    ['image']))),
+                              ),
+                            );
                           },
-                          child: Ink(
-                            height: height / 3.8,
-                            width: width / 1.1,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                image: DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: AssetImage(
-                                        'assets/Images/Salama.jpg'))),
-                          ),
+                          itemCount: data_from_api.length,
                         ),
-                        SizedBox(height: height / 30),
-                        InkWell(
-                          onTap: () {
-                            Navigation(context, ResturantsMenu());
-                          },
-                          child: Ink(
-                            height: height / 3.8,
-                            width: width / 1.1,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                image: DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: AssetImage(
-                                        'assets/Images/karmElsham.png'))),
-                          ),
-                        ),
-                        SizedBox(height: height / 30),
-                        InkWell(
-                          onTap: () {
-                            Navigation(context, ResturantsMenu());
-                          },
-                          child: Ink(
-                            height: height / 3.8,
-                            width: width / 1.1,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                image: DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: AssetImage(
-                                        'assets/Images/karmElsham.png'))),
-                          ),
-                        )
                       ],
                     ),
                   )

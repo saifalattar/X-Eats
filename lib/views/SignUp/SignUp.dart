@@ -5,13 +5,15 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:xeats/controllers/AuthCubit/States.dart';
-import 'package:xeats/controllers/AuthCubit/cubit.dart';
+
+import 'package:xeats/controllers/Bloc/AuthCubit/DataCubit/States.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/controllers/Components/Components.dart';
+import 'package:xeats/views/CompleteProfile/Complete_Profile.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
 import 'package:xeats/views/SignUp/SignUp.dart';
 
+import '../../controllers/Bloc/AuthCubit/DataCubit/cubit.dart';
 import '../../controllers/Cubit.dart';
 
 class Signup extends StatelessWidget {
@@ -27,14 +29,13 @@ class Signup extends StatelessWidget {
         var cubit = AuthCubit.get(context);
         return Scaffold(
           backgroundColor: Color(0xff0986d3),
-
           body: Container(
             width: width,
             height: height,
-             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(topRight: Radius.circular(150.r))
-          ),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius:
+                    BorderRadius.only(topRight: Radius.circular(150.r))),
             child: SafeArea(
               child: Form(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -108,7 +109,11 @@ class Signup extends StatelessWidget {
                         SizedBox(
                           height: 15.h,
                         ),
-                        defultbutton(function: (() {}), text: 'Sign Up'),
+                        defultbutton(
+                            function: (() {
+                              NavigateAndRemov(context, Complete_Profile());
+                            }),
+                            text: 'Sign Up'),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,

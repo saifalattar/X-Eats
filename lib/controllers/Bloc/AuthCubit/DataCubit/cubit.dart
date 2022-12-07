@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:xeats/controllers/AuthCubit/States.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:xeats/controllers/Bloc/AuthCubit/DataCubit/States.dart';
 import 'package:xeats/controllers/Components/Components.dart';
+import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/views/HomePage/HomePage.dart';
-
-import '../../views/Verification/Verification.dart';
+import 'package:xeats/views/Verification/Verification.dart';
 
 class AuthCubit extends Cubit<AuthStates> {
   AuthCubit() : super(AuthInitState());
@@ -33,29 +34,54 @@ class AuthCubit extends Cubit<AuthStates> {
   void changegender() {
     Gender = Value;
   }
-  void Validate_Cpmplete_profile(BuildContext context){
-      if (complee_profile_formkey.currentState!.validate()) {
-        Navigation(context, Verify());
-      }
+
+  Future<void> CreateUser(
+    context, {
+    String? first_name,
+    String? Email,
+    String? last_name,
+  }) async {
+    DioHelper.PostData(data: {
+      "first_name": first_name,
+      "Email": Email,
+      "last_name": last_name
+    }, url: "get_users/")
+        .then((value) async {
+      SharedPreferences Auth = await SharedPreferences.getInstance();
+      Auth.setString("Names", value.data['Names'])
+          .then((value) => NavigateAndRemov(context, Verify()));
+    });
   }
+
+  void Validate_Cpmplete_profile(BuildContext context) {
+    if (complee_profile_formkey.currentState!.validate()) {
+      CreateUser(context,
+          Email: signup_email.text,
+          first_name: Firstname.text,
+          last_name: Lastname.text);
+    }
+  }
+
   //-------------Show password method-------------------//
   void changepasswordVisablityLogin() {
-    isPassword_lpgin=!isPassword_lpgin;
+    isPassword_lpgin = !isPassword_lpgin;
     emit(ShowPassState());
   }
+
   void changepasswordVisablitySignup() {
-    isPassword_signup=!isPassword_signup;
+    isPassword_signup = !isPassword_signup;
     emit(ShowPassState());
   }
+
   void changepasswordVisablityConfirmSignup() {
-    isPassword_signup=!isPassword_signup;
+    isPassword_signup = !isPassword_signup;
     emit(ShowPassState());
   }
+
   //---------------signin method---------------------//
-void signin(BuildContext context){
-    if(signin_formkey.currentState!.validate()){
+  void signin(BuildContext context) {
+    if (signin_formkey.currentState!.validate()) {
       Navigation(context, HomePage());
     }
-}
-
+  }
 }

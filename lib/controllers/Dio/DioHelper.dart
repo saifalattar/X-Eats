@@ -13,7 +13,7 @@ class DioHelper {
   static init() {
     dio = Dio(
       BaseOptions(
-        baseUrl: 'https://newsapi.org/',
+        baseUrl: 'https://x-eats.com/',
         receiveDataWhenStatusError: true,
       ),
     );
@@ -23,9 +23,14 @@ class DioHelper {
     required url,
     required Map<String, dynamic> query,
   }) async {
-    return await dio!.get(
+    return await dio!.get(url, queryParameters: query);
+  }
+
+  static Future<Response> PostData(
+      {required Map<String, dynamic> data, required url}) async {
+    return await dio!.post(
       url,
-      queryParameters: query,
+      data: data,
     );
   }
 }

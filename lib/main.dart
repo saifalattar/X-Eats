@@ -3,7 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:xeats/controllers/Bloc/AuthCubit/DataCubit/cubit.dart';
+
+import 'package:xeats/controllers/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/views/Boarding/Boarding.dart';

@@ -6,14 +6,14 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:xeats/controllers/Bloc/AuthCubit/DataCubit/States.dart';
+import 'package:xeats/controllers/AuthCubit/States.dart';
+import 'package:xeats/controllers/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/views/CompleteProfile/Complete_Profile.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
 import 'package:xeats/views/SignUp/SignUp.dart';
 
-import '../../controllers/Bloc/AuthCubit/DataCubit/cubit.dart';
 import '../../controllers/Cubit.dart';
 
 class Signup extends StatelessWidget {

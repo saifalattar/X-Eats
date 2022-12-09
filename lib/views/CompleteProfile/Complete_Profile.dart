@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, camel_case_types
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -66,7 +68,7 @@ class Complete_Profile extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: defultformfield(
-                                    controller: cubit.Firstname,
+                                    controller: cubit.first_name,
                                     label: 'First Name',
                                     type: TextInputType.name,
                                     validator: (value) => value!.isEmpty
@@ -78,7 +80,7 @@ class Complete_Profile extends StatelessWidget {
                               ),
                               Expanded(
                                 child: defultformfield(
-                                    controller: cubit.Lastname,
+                                    controller: cubit.last_name,
                                     label: 'Last Name',
                                     type: TextInputType.name,
                                     validator: (value) => value!.isEmpty
@@ -93,8 +95,21 @@ class Complete_Profile extends StatelessWidget {
                           width: double.infinity,
                           child: defultformfield(
                               prefix: Icons.phone_android,
-                              controller: Xeatscubit.get(context).Phone,
+                              controller: cubit.PhoneNumber,
                               label: 'Phone No.',
+                              type: TextInputType.phone,
+                              validator: (value) => value!.isEmpty
+                                  ? 'Put your Phone number'
+                                  : null),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Container(
+                          width: double.infinity,
+                          child: defultformfield(
+                              controller: cubit.nu_id,
+                              label: 'NU ID ',
                               type: TextInputType.phone,
                               validator: (value) => value!.isEmpty
                                   ? 'Put your Phone number'
@@ -144,9 +159,39 @@ class Complete_Profile extends StatelessWidget {
                         SizedBox(
                           height: 15,
                         ),
+                        Container(
+                          width: double.infinity,
+                          child: SelectedTitle(
+                            changed: (value) {
+                              value = cubit.ValueTitle;
+                              title = cubit.title;
+                              cubit.changetitle();
+                            },
+                            form: (value) =>
+                                value == null ? 'Select your title' : null,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
                         defultbutton(
                             function: () {
-                              cubit.Validate_Cpmplete_profile(context);
+                              if (cubit.complee_profile_formkey.currentState!
+                                  .validate()) {
+                                cubit.CreateUser(
+                                  context,
+                                  password: cubit.password.text,
+                                  email: cubit.email.text,
+                                  first_name: cubit.first_name.text,
+                                  last_name: cubit.last_name.text,
+                                  title: cubit.title,
+                                  nu_id: cubit.nu_id.text,
+                                  school: "CS",
+                                  PhoneNumber: cubit.PhoneNumber.text,
+                                );
+
+                                Navigation(context, Verify());
+                              }
                             },
                             text: 'Next'),
                       ],

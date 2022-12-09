@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -5,6 +7,7 @@ import 'package:xeats/controllers/Bloc/AuthCubit/DataCubit/States.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/views/HomePage/HomePage.dart';
+import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Verification/Verification.dart';
 
 class AuthCubit extends Cubit<AuthStates> {
@@ -18,47 +21,67 @@ class AuthCubit extends Cubit<AuthStates> {
   TextEditingController signin_password = TextEditingController();
   //----------------Signup form Variables ------------------------//
   GlobalKey<FormState> signup_formkey = GlobalKey<FormState>();
-  TextEditingController signup_password = TextEditingController();
+  TextEditingController password = TextEditingController();
   TextEditingController signup_confirm_password = TextEditingController();
   bool isPassword_signup = true;
   bool isPassword_confirm_signup = true;
   //---------------Complete Profile Form Variables---------------//
   GlobalKey<FormState> complee_profile_formkey = GlobalKey<FormState>();
   TextEditingController datecontroller = TextEditingController();
-  TextEditingController signup_email = TextEditingController();
-  TextEditingController Firstname = TextEditingController();
-  TextEditingController Lastname = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController first_name = TextEditingController();
+  TextEditingController last_name = TextEditingController();
+  TextEditingController PhoneNumber = TextEditingController();
+  TextEditingController nu_id = TextEditingController();
   String? Value;
-  var Gender;
+  String? ValueTitle;
+  String? Gender;
+  String? title;
   //---------------Complete Profile Methods-------------//
   void changegender() {
     Gender = Value;
+    emit(ChangeGenderState());
   }
 
-  Future<void> CreateUser(
-    context, {
-    String? first_name,
-    String? Email,
-    String? last_name,
-  }) async {
-    DioHelper.PostData(data: {
+  void changetitle() {
+    title = ValueTitle;
+  }
+
+  Future<void> CreateUser(context,
+      {String? first_name,
+      String? email,
+      String? last_name,
+      String? PhoneNumber,
+      String? password,
+      String? title,
+      String? school,
+      String? nu_id}) async {
+    await DioHelper.PostData(data: {
+      "password": password,
+      "email": email,
       "first_name": first_name,
-      "Email": Email,
-      "last_name": last_name
+      "last_name": last_name,
+      "title": title,
+      "nu_id": nu_id,
+      "school": school,
+      "PhoneNumber": PhoneNumber,
     }, url: "get_users/")
         .then((value) async {
       SharedPreferences Auth = await SharedPreferences.getInstance();
-      Auth.setString("Names", value.data['Names'])
-          .then((value) => NavigateAndRemov(context, Verify()));
+      Auth.setString("token", value.data['token'])
+          .then((value) => NavigateAndRemov(context, Verify()))
+          .catchError((error) {
+        print(error.toString());
+      });
     });
   }
 
   void Validate_Cpmplete_profile(BuildContext context) {
     if (complee_profile_formkey.currentState!.validate()) {
       CreateUser(context,
-          Email: signup_email.text,
-          first_name: Firstname.text,
-          last_name: Lastname.text);
+          email: email.text,
+          first_name: first_name.text,
+          last_name: last_name.text);
     }
   }
 
@@ -74,14 +97,20 @@ class AuthCubit extends Cubit<AuthStates> {
   }
 
   void changepasswordVisablityConfirmSignup() {
-    isPassword_signup = !isPassword_signup;
+    isPassword_confirm_signup = !isPassword_confirm_signup;
     emit(ShowPassState());
   }
 
   //---------------signin method---------------------//
   void signin(BuildContext context) {
     if (signin_formkey.currentState!.validate()) {
-      Navigation(context, HomePage());
+      Navigation(context, Layout());
+    }
+  }
+
+  void signup(BuildContext context) {
+    if (signup_formkey.currentState!.validate()) {
+      Navigation(context, Layout());
     }
   }
 }

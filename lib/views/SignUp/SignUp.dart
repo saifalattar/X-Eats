@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, unrelated_type_equality_checks
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -64,7 +64,7 @@ class Signup extends StatelessWidget {
                         SocialAuth(),
                         defultformfield(
                             prefix: Icons.email_outlined,
-                            controller: Xeatscubit.get(context).email,
+                            controller: cubit.email,
                             label: 'Email',
                             type: TextInputType.emailAddress,
                             validator: (value) => value!.isEmpty
@@ -75,7 +75,7 @@ class Signup extends StatelessWidget {
                         ),
                         defultformfield(
                             prefix: Icons.lock_open,
-                            controller: cubit.signup_password,
+                            controller: cubit.password,
                             label: 'Password',
                             suffix: cubit.isPassword_signup
                                 ? Icons.visibility
@@ -103,9 +103,10 @@ class Signup extends StatelessWidget {
                             suffixpressed: () {
                               cubit.changepasswordVisablityConfirmSignup();
                             },
-                            validator: (value) => value!.isEmpty
-                                ? 'Please Enter your Password'
-                                : null),
+                            validator: (value) =>
+                                value!.isEmpty || value != cubit.password.text
+                                    ? 'Password Doesn\'t match'
+                                    : null),
                         SizedBox(
                           height: 15.h,
                         ),

@@ -17,6 +17,7 @@ import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Verification/Verification.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   DioHelper.init();
   runApp(MyApp());
 }

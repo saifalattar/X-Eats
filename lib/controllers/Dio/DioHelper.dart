@@ -1,5 +1,7 @@
 // ignore_for_file: unused_element
 
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -26,10 +28,21 @@ class DioHelper {
     return await dio!.get(url, queryParameters: query);
   }
 
-  static Future<Response> PostData(
-      {required Map<String, dynamic> data, required url}) async {
+  static Future<Response> PostData({
+    required url,
+    String lang = 'en',
+    String? token,
+    Map<String, dynamic>? query,
+    required Map<String, dynamic> data,
+  }) async {
+    dio!.options.headers = {
+      'lang': lang,
+      'token': token,
+      'Content-Type': 'application/json',
+    };
     return await dio!.post(
       url,
+      queryParameters: query,
       data: data,
     );
   }

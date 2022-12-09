@@ -177,14 +177,14 @@ void Navigation(context, widget) => Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => widget),
     );
+
 List<String> Gender = ['Male', 'Female'];
 String? gender;
-
 Widget SelectedGender({
   required final FormFieldValidator<String> form,
   Color background = Colors.transparent,
   void Function(String)? onsubmit,
-  void Function(dynamic)? changed,
+  void Function(void)? changed,
   VoidCallback? suffixpressed,
   VoidCallback? onTap,
   BorderSide? bord,
@@ -456,3 +456,80 @@ Widget SocialAuth() {
     ),
   );
 }
+
+List<String> Listtitle = ['Freshman', 'Sophomore', 'Junior', 'Senior'];
+String? title;
+
+Widget SelectedTitle({
+  required final FormFieldValidator<String> form,
+  Color background = Colors.transparent,
+  void Function(String)? onsubmit,
+  void Function(dynamic)? changed,
+  VoidCallback? suffixpressed,
+  VoidCallback? onTap,
+  BorderSide? bord,
+  IconData? prefix,
+  TextStyle? Texcolor,
+  IconData? suffix,
+  TextStyle? labelst,
+}) =>
+    DropdownButtonFormField<String>(
+      validator: form,
+      alignment: AlignmentDirectional.bottomStart,
+      value: title,
+      icon: Image(
+        width: 20,
+        height: 20,
+        fit: BoxFit.fill,
+        image: AssetImage(
+          'assets/Images/Khaled.png',
+        ),
+      ),
+      onTap: onTap,
+      onChanged: changed,
+      style: GoogleFonts.kanit(height: 1.5),
+      decoration: InputDecoration(
+        enabledBorder: const OutlineInputBorder(
+            borderRadius: const BorderRadius.all(Radius.circular(20)),
+            borderSide: const BorderSide(color: Colors.grey)),
+        fillColor: background,
+        labelStyle: labelst,
+        focusedBorder: const OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.grey),
+            borderRadius: const BorderRadius.all(Radius.circular(20))),
+        suffixIcon: suffix != null
+            ? IconButton(
+                onPressed: suffixpressed,
+                icon: Icon(
+                  suffix,
+                  color: Colors.black,
+                ),
+              )
+            : null,
+        border: const OutlineInputBorder(borderSide: BorderSide()),
+      ),
+      hint: Text('title',
+          style: GoogleFonts.kanit(
+              textStyle: TextStyle(
+            fontFamily: 'UberMoveTextBold',
+            fontSize: 20.0.sp,
+            fontStyle: FontStyle.normal,
+          ))),
+      items: Listtitle.map((String titlee) {
+        return DropdownMenuItem<String>(
+          child: Row(children: [
+            Text(
+              titlee.toString(),
+              style: GoogleFonts.kanit(
+                  textStyle: TextStyle(
+                fontFamily: 'UberMoveTextBold',
+                fontSize: 20.0,
+                fontStyle: FontStyle.normal,
+                color: Colors.black,
+              )),
+            ),
+          ]),
+          value: titlee,
+        );
+      }).toList(),
+    );

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,17 +16,22 @@ class AuthCubit extends Cubit<AuthStates> {
   static AuthCubit get(context) => BlocProvider.of(context);
 
   //----------------Signin form Variables ------------------------//
+
   GlobalKey<FormState> signin_formkey = GlobalKey<FormState>();
   bool isPassword_lpgin = true;
   TextEditingController signin_email = TextEditingController();
   TextEditingController signin_password = TextEditingController();
+
   //----------------Signup form Variables ------------------------//
+
   GlobalKey<FormState> signup_formkey = GlobalKey<FormState>();
   TextEditingController password = TextEditingController();
   TextEditingController signup_confirm_password = TextEditingController();
   bool isPassword_signup = true;
   bool isPassword_confirm_signup = true;
+
   //---------------Complete Profile Form Variables---------------//
+
   GlobalKey<FormState> complee_profile_formkey = GlobalKey<FormState>();
   TextEditingController datecontroller = TextEditingController();
   TextEditingController email = TextEditingController();
@@ -37,7 +43,9 @@ class AuthCubit extends Cubit<AuthStates> {
   String? ValueTitle;
   String? Gender;
   String? title;
+
   //---------------Complete Profile Methods-------------//
+
   void changegender() {
     Gender = Value;
     emit(ChangeGenderState());
@@ -47,15 +55,17 @@ class AuthCubit extends Cubit<AuthStates> {
     title = ValueTitle;
   }
 
-  Future<void> CreateUser(context,
-      {String? first_name,
-      String? email,
-      String? last_name,
-      String? PhoneNumber,
-      String? password,
-      String? title,
-      String? school,
-      String? nu_id}) async {
+  Future<void> CreateUser(
+    context, {
+    String? first_name,
+    String? email,
+    String? last_name,
+    String? PhoneNumber,
+    String? password,
+    String? title,
+    String? school,
+    String? nu_id,
+  }) async {
     await DioHelper.PostData(data: {
       "password": password,
       "email": email,
@@ -65,13 +75,33 @@ class AuthCubit extends Cubit<AuthStates> {
       "nu_id": nu_id,
       "school": school,
       "PhoneNumber": PhoneNumber,
-    }, url: "get_users/")
+    }, url: "create_users_API/")
         .then((value) async {
       SharedPreferences Auth = await SharedPreferences.getInstance();
+
       Auth.setString("token", value.data['token'])
           .then((value) => NavigateAndRemov(context, Verify()))
           .catchError((error) {
         print(error.toString());
+      });
+    });
+  }
+
+  login(
+    context, {
+    String? email,
+    String? password,
+  }) async {
+    await DioHelper.PostData(data: {
+      "password": password,
+      "email": email,
+    }, url: "login_users_API/")
+        .then((value) async {
+      SharedPreferences Auth = await SharedPreferences.getInstance();
+      Auth.setString("token", value.data['token'])
+          .then((value) => NavigateAndRemov(context, HomePage()))
+          .catchError((error) {
+        // print(error.toString());
       });
     });
   }
@@ -102,6 +132,7 @@ class AuthCubit extends Cubit<AuthStates> {
   }
 
   //---------------signin method---------------------//
+
   void signin(BuildContext context) {
     if (signin_formkey.currentState!.validate()) {
       Navigation(context, Layout());

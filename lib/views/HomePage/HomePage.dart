@@ -112,42 +112,38 @@ class HomePage extends StatelessWidget {
                                       ),
                                       //
                                       Resturants(
-                                        data: "Koshry" + "\n Eltahrir",
-                                        Colors:
-                                            const Color.fromARGB(255, 5, 95, 9),
-                                        image: const Image(
-                                          image: AssetImage(
-                                            'assets/Images/Tahrir.jpg',
+                                          data: "Koshry" + "\n Eltahrir",
+                                          Colors: const Color.fromARGB(
+                                              255, 5, 95, 9),
+                                          image: const Image(
+                                            image: AssetImage(
+                                              'assets/Images/Tahrir.jpg',
+                                            ),
                                           ),
-                                        ),
-                                        Navigate: () =>
-                                            Navigation(context, SignIn()),
-                                      ),
+                                          Navigate: () => {}),
 
                                       Resturants(
-                                        data: "Salama " + "\nElmotmiz",
-                                        Colors: const Color.fromARGB(
-                                            255, 109, 17, 11),
-                                        image: const Image(
-                                          image: AssetImage(
-                                            'assets/Images/Salama.jpg',
+                                          data: "Salama " + "\nElmotmiz",
+                                          Colors: const Color.fromARGB(
+                                              255, 109, 17, 11),
+                                          image: const Image(
+                                            image: AssetImage(
+                                              'assets/Images/Salama.jpg',
+                                            ),
                                           ),
-                                        ),
-                                        Navigate: () =>
-                                            Navigation(context, SignIn()),
-                                      ),
+                                          Navigate: () => {}),
                                       Resturants(
-                                        data: "Koshry" + "\n Eltahrir",
-                                        Colors:
-                                            const Color.fromARGB(255, 5, 95, 9),
-                                        image: const Image(
-                                          image: AssetImage(
-                                            'assets/Images/Tahrir.jpg',
+                                          data: "Koshry" + "\n Eltahrir",
+                                          Colors: const Color.fromARGB(
+                                              255, 5, 95, 9),
+                                          image: const Image(
+                                            image: AssetImage(
+                                              'assets/Images/Tahrir.jpg',
+                                            ),
                                           ),
-                                        ),
-                                        Navigate: () =>
-                                            Navigation(context, SignIn()),
-                                      ),
+                                          Navigate: () => {}
+                                          // Navigation(context, SignIn()),
+                                          ),
                                       Resturants(
                                         data: "Karm" + "\nElsham",
                                         Colors: Colors.amber,
@@ -183,44 +179,38 @@ class HomePage extends StatelessWidget {
                                   child: Row(
                                     children: [
                                       Resturants(
-                                        Weight: width / 2.0,
-                                        Height: height / 4.2,
-                                        data: "Shawrma Frakh" + "\n",
-                                        Colors: Colors.white,
-                                        image: const Image(
-                                          image: AssetImage(
-                                            'assets/Images/Shawrma.png',
+                                          Weight: width / 2.0,
+                                          Height: height / 4.2,
+                                          data: "Shawrma Frakh" + "\n",
+                                          Colors: Colors.white,
+                                          image: const Image(
+                                            image: AssetImage(
+                                              'assets/Images/Shawrma.png',
+                                            ),
                                           ),
-                                        ),
-                                        Navigate: () =>
-                                            Navigation(context, SignIn()),
-                                      ),
+                                          Navigate: () => {}),
                                       Resturants(
-                                        Weight: width / 2.0,
-                                        Height: height / 4.2,
-                                        data: "Shawrma Frakh" + "\n",
-                                        Colors: Colors.white,
-                                        image: const Image(
-                                          image: AssetImage(
-                                            'assets/Images/Shawrma.png',
+                                          Weight: width / 2.0,
+                                          Height: height / 4.2,
+                                          data: "Shawrma Frakh" + "\n",
+                                          Colors: Colors.white,
+                                          image: const Image(
+                                            image: AssetImage(
+                                              'assets/Images/Shawrma.png',
+                                            ),
                                           ),
-                                        ),
-                                        Navigate: () =>
-                                            Navigation(context, SignIn()),
-                                      ),
+                                          Navigate: () => {}),
                                       Resturants(
-                                        Weight: width / 2.0,
-                                        Height: height / 4.2,
-                                        data: "Shawrma Frakh" + "\n",
-                                        Colors: Colors.white,
-                                        image: const Image(
-                                          image: AssetImage(
-                                            'assets/Images/Shawrma.png',
+                                          Weight: width / 2.0,
+                                          Height: height / 4.2,
+                                          data: "Shawrma Frakh" + "\n",
+                                          Colors: Colors.white,
+                                          image: const Image(
+                                            image: AssetImage(
+                                              'assets/Images/Shawrma.png',
+                                            ),
                                           ),
-                                        ),
-                                        Navigate: () =>
-                                            Navigation(context, SignIn()),
-                                      ),
+                                          Navigate: () => {}),
                                       //
                                     ],
                                   ),

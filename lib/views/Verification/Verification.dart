@@ -13,6 +13,7 @@ import 'package:xeats/controllers/AuthCubit/cubit.dart';
 
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/controllers/Components/Components.dart';
+import 'package:xeats/views/LoginSuccess/loginSuccess.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
 import 'package:xeats/views/SignUp/SignUp.dart';
 
@@ -141,7 +142,9 @@ class Verify extends StatelessWidget {
                         ),
                         defultbutton(
                           text: 'Verify now',
-                          function: () {},
+                          function: () {
+                            Navigation(context, LoginSuccess());
+                          },
                         ),
                       ],
                     ),

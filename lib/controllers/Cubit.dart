@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,6 +39,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
     Resturantss(),
     Profile(),
   ];
+
   List<BottomNavigationBarItem> bottomitems = const [
     BottomNavigationBarItem(
       backgroundColor: Colors.blue,
@@ -101,11 +103,8 @@ class Xeatscubit extends Cubit<XeatsStates> {
       query: {},
     ).then((value) {
       ResturantsList = value.data['Names'];
-      print(ResturantsList[0]['image']);
-      print("https://x-eats.com" + ResturantsList[0]['image']);
     }).catchError((error) {
       emit(ProductsFail(error.toString()));
-      print(ProductsFail(error.toString()));
     });
   }
 }

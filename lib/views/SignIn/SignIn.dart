@@ -1,5 +1,8 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'dart:math';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -9,6 +12,10 @@ import 'package:xeats/controllers/AuthCubit/States.dart';
 import 'package:xeats/controllers/AuthCubit/cubit.dart';
 
 import 'package:xeats/controllers/Components/Components.dart';
+import 'package:xeats/controllers/Cubit.dart';
+import 'package:xeats/controllers/Dio/DioHelper.dart';
+import 'package:xeats/views/HomePage/HomePage.dart';
+import 'package:xeats/views/LoginSuccess/loginSuccess.dart';
 import 'package:xeats/views/SignUp/SignUp.dart';
 
 class SignIn extends StatelessWidget {
@@ -56,10 +63,10 @@ class SignIn extends StatelessWidget {
                             height: width / 2,
                           ),
                         ),
-                        SocialAuth(),
+                        // SocialAuth(),
                         defultformfield(
                             prefix: Icons.email_outlined,
-                            controller: cubit.signin_email,
+                            controller: cubit.email,
                             label: 'Email',
                             type: TextInputType.emailAddress,
                             validator: (value) => value!.isEmpty
@@ -70,7 +77,7 @@ class SignIn extends StatelessWidget {
                         ),
                         defultformfield(
                             prefix: Icons.lock_open,
-                            controller: cubit.signin_password,
+                            controller: cubit.password,
                             label: 'Password',
                             suffix: cubit.isPassword_lpgin
                                 ? Icons.visibility
@@ -87,10 +94,29 @@ class SignIn extends StatelessWidget {
                           height: 15.h,
                         ),
                         defultbutton(
-                            function: (() {
-                              cubit.signin(context);
-                            }),
-                            text: 'Sign In'),
+                            function: () {
+                              if (cubit.signin_formkey.currentState!
+                                  .validate()) {
+                                cubit
+                                    .login(
+                                  context,
+                                  password: cubit.password.text,
+                                  email: cubit.email.text,
+                                )
+                                    .catchError((e) {
+                                  var dioException = e as DioError;
+                                  var status =
+                                      dioException.response!.statusCode;
+                                  if (e.runtimeType == DioError) {
+                                    print(dioException.response!.statusCode);
+                                  }
+                                  if (status == 302) {
+                                    Navigation(context, LoginSuccess());
+                                  }
+                                });
+                              }
+                            },
+                            text: 'Login'),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.end,

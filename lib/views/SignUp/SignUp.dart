@@ -61,7 +61,7 @@ class Signup extends StatelessWidget {
                             height: width / 2,
                           ),
                         ),
-                        SocialAuth(),
+                        // SocialAuth(),
                         defultformfield(
                             prefix: Icons.email_outlined,
                             controller: cubit.email,

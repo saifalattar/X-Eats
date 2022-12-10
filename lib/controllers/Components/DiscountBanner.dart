@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:xeats/controllers/Components/loading.dart';
+import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
+import 'package:xeats/controllers/Cubit.dart';
 
 class DiscountBanner extends StatelessWidget {
   const DiscountBanner({
@@ -9,20 +10,43 @@ class DiscountBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: CarouselSlider.builder(
-      itemCount: 15,
-      itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) =>
-          Container(
-        child: Text(itemIndex.toString()),
-      ),
-      options: CarouselOptions(
-        autoPlay: false,
-        enlargeCenterPage: true,
-        viewportFraction: 0.9,
-        aspectRatio: 2.0,
-        initialPage: 2,
-      ),
-    ));
+    var data_from_api = Xeatscubit.getimages;
+    // print(data_from_api[0]['name']);
+    return Column(
+      children: [
+        CarouselSlider.builder(
+          itemCount: data_from_api.length,
+          itemBuilder: (BuildContext context, int index, int pageViewIndex) {
+            return Container(
+              child: Image(
+                image: NetworkImage(
+                  'https://www.x-eats.com' +
+                      data_from_api[index]['background_image'],
+                ),
+              ),
+            );
+          },
+          options: CarouselOptions(
+            autoPlay: false,
+            enlargeCenterPage: true,
+            viewportFraction: 0.9,
+            aspectRatio: 2.0,
+            initialPage: 2,
+          ),
+        )
+      ],
+    );
   }
 }
+
+
+// BoxDecoration(
+//                   borderRadius: BorderRadius.circular(20),
+//                   image: DecorationImage(
+//                     fit: BoxFit.fill,
+//                     image: NetworkImage(
+//                       'https://www.x-eats.com' +
+//                           data_from_api[itemIndex]['background_image'],
+//                     ),
+//                   ),
+//                 ),

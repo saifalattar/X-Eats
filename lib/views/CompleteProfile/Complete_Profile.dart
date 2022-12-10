@@ -1,23 +1,15 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, camel_case_types
-
-import 'dart:collection';
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-
 import 'package:xeats/controllers/AuthCubit/States.dart';
 import 'package:xeats/controllers/AuthCubit/cubit.dart';
-import 'package:xeats/controllers/Cubit.dart';
-import 'package:xeats/controllers/States.dart';
 import 'package:xeats/controllers/Components/Components.dart';
-import 'package:xeats/views/SignIn/SignIn.dart';
-import 'package:xeats/views/SignUp/SignUp.dart';
+import 'package:xeats/controllers/Components/Global%20Components/DefaultButton.dart';
 import 'package:xeats/views/Verification/Verification.dart';
+import '../../controllers/Components/Auth Components/DropDownListGender.dart';
+import '../../controllers/Components/Auth Components/DropDownListTitle.dart';
+import '../../controllers/Components/Global Components/defaultFormField.dart';
 
 class Complete_Profile extends StatelessWidget {
   Complete_Profile({super.key});
@@ -68,7 +60,8 @@ class Complete_Profile extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Expanded(
-                                child: defultformfield(
+                                child: DefaultFormField(
+                                    isPassword: false,
                                     controller: cubit.first_name,
                                     label: 'First Name',
                                     type: TextInputType.name,
@@ -80,7 +73,8 @@ class Complete_Profile extends StatelessWidget {
                                 width: 10.w,
                               ),
                               Expanded(
-                                child: defultformfield(
+                                child: DefaultFormField(
+                                    isPassword: false,
                                     controller: cubit.last_name,
                                     label: 'Last Name',
                                     type: TextInputType.name,
@@ -94,7 +88,8 @@ class Complete_Profile extends StatelessWidget {
                         ),
                         Container(
                           width: double.infinity,
-                          child: defultformfield(
+                          child: DefaultFormField(
+                              isPassword: false,
                               prefix: Icons.phone_android,
                               controller: cubit.PhoneNumber,
                               label: 'Phone No.',
@@ -108,7 +103,8 @@ class Complete_Profile extends StatelessWidget {
                         ),
                         Container(
                           width: double.infinity,
-                          child: defultformfield(
+                          child: DefaultFormField(
+                              isPassword: false,
                               controller: cubit.nu_id,
                               label: 'NU ID ',
                               type: TextInputType.phone,
@@ -121,7 +117,8 @@ class Complete_Profile extends StatelessWidget {
                         ),
                         Container(
                           width: double.infinity,
-                          child: defultformfield(
+                          child: DefaultFormField(
+                              isPassword: false,
                               controller: cubit.datecontroller,
                               prefix: Icons.calendar_month,
                               label: 'DD/MM/YYYY',
@@ -147,14 +144,14 @@ class Complete_Profile extends StatelessWidget {
                         ),
                         Container(
                           width: double.infinity,
-                          child: SelectedGender(
+                          child: DropDownListGender(
                             changed: (value) {
                               value = cubit.Value;
-                              gender = cubit.Gender;
                               cubit.changegender();
                             },
                             form: (value) =>
                                 value == null ? 'Select your gender' : null,
+                            gender: cubit.Gender,
                           ),
                         ),
                         SizedBox(
@@ -175,7 +172,7 @@ class Complete_Profile extends StatelessWidget {
                         SizedBox(
                           height: 15,
                         ),
-                        defultbutton(
+                        DefaultButton(
                             function: () {
                               if (cubit.complee_profile_formkey.currentState!
                                   .validate()) {

@@ -6,7 +6,9 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:xeats/controllers/Components/Components.dart';
+import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/views/Profile/Profile.dart';
@@ -17,8 +19,11 @@ class Resturantss extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Future<bool> result = InternetConnectionChecker().hasConnection;
+
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+
     return BlocProvider(
         create: (context) => Xeatscubit()..GetResturants(),
         child: BlocConsumer<Xeatscubit, XeatsStates>(
@@ -62,23 +67,21 @@ class Resturantss extends StatelessWidget {
                           itemBuilder: (context, index) {
                             return InkWell(
                               onTap: () {
-                                if (index == 0) {
-                                  Navigation(context, ResturantsMenu());
-                                } else if (index == 1) {
-                                  Navigation(context, Profile());
-                                }
+                                Navigation(context, ResturantsMenu());
                               },
                               child: Ink(
                                 height: height / 3.8,
                                 width: width / 1.1,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    image: DecorationImage(
-                                        fit: BoxFit.fill,
-                                        image: NetworkImage(
-                                            'https://www.x-eats.com' +
-                                                data_from_api[index]
-                                                    ['image']))),
+                                  borderRadius: BorderRadius.circular(20),
+                                  image: DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: NetworkImage(
+                                      'https://www.x-eats.com' +
+                                          data_from_api[index]['image'],
+                                    ),
+                                  ),
+                                ),
                               ),
                             );
                           },

@@ -1,20 +1,14 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
-import 'dart:math';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:xeats/controllers/AuthCubit/States.dart';
 import 'package:xeats/controllers/AuthCubit/cubit.dart';
 
 import 'package:xeats/controllers/Components/Components.dart';
+import 'package:xeats/controllers/Components/Global%20Components/DefaultButton.dart';
+import 'package:xeats/controllers/Components/Global%20Components/defaultFormField.dart';
 import 'package:xeats/controllers/Cubit.dart';
-import 'package:xeats/controllers/Dio/DioHelper.dart';
-import 'package:xeats/views/HomePage/HomePage.dart';
 import 'package:xeats/views/LoginSuccess/loginSuccess.dart';
 import 'package:xeats/views/SignUp/SignUp.dart';
 
@@ -64,7 +58,8 @@ class SignIn extends StatelessWidget {
                           ),
                         ),
                         // SocialAuth(),
-                        defultformfield(
+                        DefaultFormField(
+                            isPassword: false,
                             prefix: Icons.email_outlined,
                             controller: cubit.email,
                             label: 'Email',
@@ -75,7 +70,7 @@ class SignIn extends StatelessWidget {
                         SizedBox(
                           height: 15.h,
                         ),
-                        defultformfield(
+                        DefaultFormField(
                             prefix: Icons.lock_open,
                             controller: cubit.password,
                             label: 'Password',
@@ -93,7 +88,7 @@ class SignIn extends StatelessWidget {
                         SizedBox(
                           height: 15.h,
                         ),
-                        defultbutton(
+                        DefaultButton(
                             function: () {
                               if (cubit.signin_formkey.currentState!
                                   .validate()) {
@@ -105,6 +100,7 @@ class SignIn extends StatelessWidget {
                                 )
                                     .catchError((e) {
                                   var dioException = e as DioError;
+
                                   var status =
                                       dioException.response!.statusCode;
                                   if (e.runtimeType == DioError) {

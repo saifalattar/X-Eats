@@ -1,18 +1,13 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, unrelated_type_equality_checks
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:xeats/controllers/AuthCubit/States.dart';
 import 'package:xeats/controllers/AuthCubit/cubit.dart';
-import 'package:xeats/controllers/States.dart';
+import 'package:xeats/controllers/Components/Global%20Components/DefaultButton.dart';
+import 'package:xeats/controllers/Components/Global%20Components/defaultFormField.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/views/CompleteProfile/Complete_Profile.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
-import 'package:xeats/views/SignUp/SignUp.dart';
 
 import '../../controllers/Cubit.dart';
 
@@ -62,7 +57,8 @@ class Signup extends StatelessWidget {
                           ),
                         ),
                         // SocialAuth(),
-                        defultformfield(
+                        DefaultFormField(
+                            isPassword: false,
                             prefix: Icons.email_outlined,
                             controller: cubit.email,
                             label: 'Email',
@@ -73,7 +69,7 @@ class Signup extends StatelessWidget {
                         SizedBox(
                           height: 15.h,
                         ),
-                        defultformfield(
+                        DefaultFormField(
                             prefix: Icons.lock_open,
                             controller: cubit.password,
                             label: 'Password',
@@ -91,7 +87,7 @@ class Signup extends StatelessWidget {
                         SizedBox(
                           height: 15.h,
                         ),
-                        defultformfield(
+                        DefaultFormField(
                             prefix: Icons.lock_open,
                             controller: cubit.signup_confirm_password,
                             label: 'Confirm Password',
@@ -110,7 +106,7 @@ class Signup extends StatelessWidget {
                         SizedBox(
                           height: 15.h,
                         ),
-                        defultbutton(
+                        DefaultButton(
                             function: (() {
                               NavigateAndRemov(context, Complete_Profile());
                             }),

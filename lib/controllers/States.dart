@@ -19,3 +19,11 @@ class ProductsFail extends SuperXeats {
 
   ProductsFail(this.error);
 }
+
+class AddQuantity extends SuperXeats {}
+
+class RemoveQuantity extends SuperXeats {}
+
+class LoadedCartItems extends SuperXeats {}
+
+class SetTiming extends SuperXeats {}

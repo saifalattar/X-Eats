@@ -38,6 +38,10 @@ dependencies:
   google_fonts: ^3.0.1
   carousel_slider:
   flutter_spinkit:
+  connectivity_plus: ^2.0.2
+  data_connection_checker:
+  internet_connection_checker:
+
   flutter:
     sdk: flutter
 

@@ -1,21 +1,13 @@
-// ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors
-
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/AuthCubit/States.dart';
 import 'package:xeats/controllers/AuthCubit/cubit.dart';
-
-import 'package:xeats/controllers/States.dart';
+import 'package:xeats/controllers/Components/Auth%20Components/Otp.dart';
+import 'package:xeats/controllers/Components/Global%20Components/DefaultButton.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/views/LoginSuccess/loginSuccess.dart';
-import 'package:xeats/views/SignIn/SignIn.dart';
-import 'package:xeats/views/SignUp/SignUp.dart';
 
 import '../../controllers/Cubit.dart';
 
@@ -86,9 +78,9 @@ class Verify extends StatelessWidget {
                           child: Row(
                             children: [
                               Expanded(
-                                child: OtpField(
-                                  context,
-                                  Action: TextInputAction.next,
+                                child: OTP(
+                                  context: context,
+                                  action: TextInputAction.next,
                                   controller: Xeatscubit.get(context).XeatOtp1,
                                   type: TextInputType.phone,
                                 ),
@@ -97,9 +89,9 @@ class Verify extends StatelessWidget {
                                 width: 26.w,
                               ),
                               Expanded(
-                                child: OtpField(
-                                  context,
-                                  Action: TextInputAction.next,
+                                child: OTP(
+                                  context: context,
+                                  action: TextInputAction.next,
                                   controller: Xeatscubit.get(context).XeatOtp2,
                                   type: TextInputType.phone,
                                 ),
@@ -108,9 +100,9 @@ class Verify extends StatelessWidget {
                                 width: 26.w,
                               ),
                               Expanded(
-                                child: OtpField(
-                                  context,
-                                  Action: TextInputAction.next,
+                                child: OTP(
+                                  context: context,
+                                  action: TextInputAction.next,
                                   controller: Xeatscubit.get(context).XeatOtp3,
                                   type: TextInputType.phone,
                                 ),
@@ -119,9 +111,9 @@ class Verify extends StatelessWidget {
                                 width: 26.w,
                               ),
                               Expanded(
-                                child: OtpField(
-                                  context,
-                                  Action: TextInputAction.done,
+                                child: OTP(
+                                  context: context,
+                                  action: TextInputAction.done,
                                   controller: Xeatscubit.get(context).XeatOtp4,
                                   type: TextInputType.phone,
                                 ),
@@ -140,7 +132,7 @@ class Verify extends StatelessWidget {
                         const SizedBox(
                           height: 20,
                         ),
-                        defultbutton(
+                        DefaultButton(
                           text: 'Verify now',
                           function: () {
                             Navigation(context, LoginSuccess());

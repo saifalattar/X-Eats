@@ -11,6 +11,7 @@ import 'package:xeats/controllers/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/views/HomePage/HomePage.dart';
+import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/SignUp/SignUp.dart';
 
 class LoginSuccess extends StatelessWidget {
@@ -135,7 +136,7 @@ class LoginSuccess extends StatelessWidget {
               ),
               FloatingActionButton(
                 onPressed: () {
-                  Navigation(context, Xeatscubit().Screens[0]);
+                  Navigation(context, Layout());
                 },
                 backgroundColor: Colors.black,
                 child: const Icon(Icons.arrow_forward_ios),

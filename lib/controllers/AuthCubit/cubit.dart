@@ -87,7 +87,9 @@ class AuthCubit extends Cubit<AuthStates> {
     });
   }
 
-  login(
+  List<dynamic> user = [];
+
+  Future<void> login(
     context, {
     String? email,
     String? password,
@@ -97,12 +99,8 @@ class AuthCubit extends Cubit<AuthStates> {
       "email": email,
     }, url: "login_users_API/")
         .then((value) async {
-      SharedPreferences Auth = await SharedPreferences.getInstance();
-      Auth.setString("token", value.data['token'])
-          .then((value) => NavigateAndRemov(context, HomePage()))
-          .catchError((error) {
-        // print(error.toString());
-      });
+      user = value.data['Names'];
+      print(user);
     });
   }
 
@@ -116,6 +114,7 @@ class AuthCubit extends Cubit<AuthStates> {
   }
 
   //-------------Show password method-------------------//
+
   void changepasswordVisablityLogin() {
     isPassword_lpgin = !isPassword_lpgin;
     emit(ShowPassState());

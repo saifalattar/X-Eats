@@ -7,6 +7,7 @@ class Loading extends StatelessWidget {
     return Container(
         child: const SpinKitFadingCircle(
       color: Colors.lightBlue,
+      duration: Duration(seconds: 3),
       size: 30,
     ));
   }

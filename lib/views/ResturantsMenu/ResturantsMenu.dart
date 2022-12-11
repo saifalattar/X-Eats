@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Components/Components.dart';
+import 'package:xeats/controllers/Components/TopPage.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/controllers/States.dart';
@@ -39,27 +40,28 @@ class ResturantsMenu extends StatelessWidget {
                 child: Column(
                   children: [
                     Stack(children: [
-                      Container(
-                        width: width,
-                        height: height / 5,
-                        decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: BorderRadius.circular(12)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(35.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Discover',
-                                style: GoogleFonts.kanit(
-                                    fontWeight: FontWeight.bold, fontSize: 35),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      SafeArea(child: TopPage()),
+                      // Container(
+                      //   width: width,
+                      //   height: height / 5,
+                      //   decoration: BoxDecoration(
+                      //       color: Colors.blue,
+                      //       borderRadius: BorderRadius.circular(12)),
+                      //   child: Padding(
+                      //     padding: const EdgeInsets.all(35.0),
+                      //     child: Column(
+                      //       crossAxisAlignment: CrossAxisAlignment.start,
+                      //       mainAxisAlignment: MainAxisAlignment.start,
+                      //       children: [
+                      //         Text(
+                      //           'Discover',
+                      //           style: GoogleFonts.kanit(
+                      //               fontWeight: FontWeight.bold, fontSize: 35),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
                       Row(
                         children: [
                           Column(
@@ -101,7 +103,7 @@ class ResturantsMenu extends StatelessWidget {
                                 padding: const EdgeInsets.all(0.0),
                                 child: Text(
                                   data['Name'],
-                                  style: GoogleFonts.kanit(fontSize: 25),
+                                  style: GoogleFonts.kanit(fontSize: 16),
                                 ),
                               ),
                               const SizedBox(
@@ -109,18 +111,25 @@ class ResturantsMenu extends StatelessWidget {
                               ),
                               Row(
                                 children: [
-                                  const Icon(
-                                    Icons.delivery_dining_sharp,
-                                    size: 45,
+                                  Container(
+                                    width: width / 7,
+                                    height: height / 13,
+                                    child: const Image(
+                                        image: AssetImage(
+                                      'assets/Images/First.png',
+                                    )),
                                   ),
                                   SizedBox(
                                     width: width / 72,
                                   ),
                                   Text(
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
                                     'X-Eats Delivery',
                                     style: GoogleFonts.kanit(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.bold),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 10,
+                                    ),
                                   )
                                 ],
                               )

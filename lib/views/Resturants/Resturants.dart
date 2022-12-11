@@ -8,12 +8,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
+import 'package:xeats/controllers/Components/Products%20Components/ProductView.dart';
+import 'package:xeats/controllers/Components/TopPage.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
+
+import '../../controllers/Components/Products Components/NewProducts.dart';
 
 class Resturantss extends StatelessWidget {
   const Resturantss({super.key});
@@ -39,206 +43,262 @@ class Resturantss extends StatelessWidget {
               body: SingleChildScrollView(
                 child: SafeArea(
                   child: Column(children: [
+                    TopPage(),
                     Container(
-                        width: width,
-                        height: 170.h,
-                        decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(12),
-                                bottomRight: Radius.circular(12)),
-                            color: Color.fromARGB(255, 9, 134, 211)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Text(
-                            "Resturants",
-                            style: GoogleFonts.kanit(
-                                fontWeight: FontWeight.normal, fontSize: 28),
-                          ),
-                        )),
-                    Padding(
-                      padding: EdgeInsets.all(25.h),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ConditionalBuilder(
-                            condition:
-                                data_from_api.isNotEmpty && Connection == false,
-                            fallback: (context) => Center(child: Loading()),
-                            builder: (context) => ListView.separated(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                if (data_from_api[index]['image'] == null) {
-                                  return Loading();
-                                } else {
-                                  return InkWell(
-                                    onTap: () {
-                                      if (index == 0) {
-                                        Navigation(
-                                            context,
-                                            ResturantsMenu(
-                                                data: data_from_api[index]));
-                                      } else if (index == 1) {}
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8),
-                                      child: Row(children: [
-                                        Container(
-                                          height: 130.h,
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: Color.fromARGB(
-                                                    74, 158, 158, 158)),
-                                            borderRadius:
-                                                BorderRadius.circular(10.0),
-                                          ),
-                                          child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(16.0),
-                                              child: Image.network(
-                                                'https://www.x-eats.com' +
-                                                    data_from_api[index]
-                                                        ['image'],
-                                                loadingBuilder: (context, child,
-                                                    loadingProgress) {
-                                                  if (loadingProgress == null)
-                                                    return child;
-                                                  return Center(
-                                                    child:
-                                                        CircularProgressIndicator(
-                                                      value: loadingProgress
-                                                                  .expectedTotalBytes !=
-                                                              null
-                                                          ? loadingProgress
-                                                                  .cumulativeBytesLoaded /
-                                                              loadingProgress
-                                                                  .expectedTotalBytes!
-                                                          : null,
-                                                    ),
-                                                  );
-                                                },
-                                              )),
-                                        ),
-                                        SizedBox(
-                                          width: 20.w,
-                                        ),
-                                        Expanded(
-                                          child: Container(
-                                            height: 120,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Column(children: [
-                                                  Text(
-                                                      '${data_from_api[index]['Name']}',
-                                                      style: GoogleFonts.kanit(
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        fontSize: 20,
-                                                      )),
-                                                ]),
-                                                if (data_from_api[index]
-                                                        ['Name'] ==
-                                                    Salama) ...[
-                                                  Text(
-                                                      "Egyptian,Kebda,Sandwichs",
-                                                      style: GoogleFonts.kanit(
-                                                        color: Color.fromARGB(
-                                                            150, 0, 0, 0),
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        fontSize: 12,
-                                                      ))
-                                                ] else if (data_from_api[index]
-                                                        ['Name'] ==
-                                                    Koshry) ...[
-                                                  Text("Egyptian,Koshry,Tagen",
-                                                      style: GoogleFonts.kanit(
-                                                        color: Color.fromARGB(
-                                                            150, 0, 0, 0),
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        fontSize: 12,
-                                                      ))
-                                                ] else if (data_from_api[index]
-                                                        ['Name'] ==
-                                                    mac) ...[
-                                                  Text("Chicken,Meat,Sandwichs",
-                                                      style: GoogleFonts.kanit(
-                                                        color: Color.fromARGB(
-                                                            150, 0, 0, 0),
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        fontSize: 12,
-                                                      ))
-                                                ] else if (data_from_api[index]
-                                                        ['Name'] ==
-                                                    Rosto) ...[
-                                                  Text("Chicken,Meat,Fast Food",
-                                                      style: GoogleFonts.kanit(
-                                                        color: Color.fromARGB(
-                                                            150, 0, 0, 0),
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        fontSize: 12,
-                                                      ))
-                                                ],
-                                                SizedBox(
-                                                  height: 10.h,
-                                                ),
-                                                Row(children: const [
-                                                  Icon(
-                                                    Icons.star,
-                                                    color: Colors.amber,
-                                                  ),
-                                                  Text(' 4.1'),
-                                                  Text(' (100+)')
-                                                ]),
-                                                Row(
-                                                  children: [
-                                                    const Icon(
-                                                        Icons.timer_sharp),
-                                                    Text(
-                                                      ' 36 mins',
-                                                      style: GoogleFonts.kanit(
-                                                          fontWeight:
-                                                              FontWeight.w400),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 25.w,
-                                                    ),
-                                                    Icon(Icons
-                                                        .delivery_dining_outlined),
-                                                    SizedBox(
-                                                      width: 2.w,
-                                                    ),
-                                                    Text(
-                                                      'EGP 10',
-                                                      style: GoogleFonts.kanit(
-                                                          fontWeight:
-                                                              FontWeight.w400),
-                                                    )
-                                                  ],
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ]),
-                                    ),
-                                  );
-                                }
-                              },
-                              separatorBuilder: ((context, index) =>
-                                  Dividerr()),
-                              itemCount: data_from_api.length,
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Text(
+                              'New Products',
+                              style: GoogleFonts.kanit(fontSize: 16),
                             ),
-                          )
+                          ),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Container(
+                              child: Row(
+                                children: [
+                                  // ...List.generate(
+                                  //   product_api.length,
+                                  //   (index) {
+                                  //     return GestureDetector(
+                                  //       child: ProductView(
+                                  //           image: product_api[index]
+                                  //               ["image"],
+                                  //           width: width / 2.0,
+                                  //           height: height / 4.2,
+                                  //           data: product_api[index]
+                                  //                   ["name"] +
+                                  //               "\n",
+                                  //           Colors: Colors.white,
+                                  //           Navigate: () => {}),
+                                  //       onTap: () {
+                                  //         print(product_api[0]["name"]);
+                                  //       },
+                                  //     );
+                                  //   },
+                                  // ),
+
+                                  NewProducts(
+                                      Colors: Colors.white,
+                                      image: const Image(
+                                        image: AssetImage(
+                                          'assets/Images/Shawrma.png',
+                                        ),
+                                      ),
+                                      Navigate: () => {}),
+                                  NewProducts(
+                                      Colors: Colors.white,
+                                      image: const Image(
+                                        image: AssetImage(
+                                          'assets/Images/Shawrma.png',
+                                        ),
+                                      ),
+                                      Navigate: () => {}),
+                                  NewProducts(
+                                      Colors: Colors.white,
+                                      image: const Image(
+                                        image: AssetImage(
+                                          'assets/Images/Shawrma.png',
+                                        ),
+                                      ),
+                                      Navigate: () => {}),
+
+                                  //
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
-                    )
+                    ),
+                    Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Text(
+                                'Restaurants',
+                                style: GoogleFonts.kanit(fontSize: 16),
+                              ),
+                            ),
+                          ],
+                        ),
+                        ConditionalBuilder(
+                          condition:
+                              data_from_api.isNotEmpty && Connection == false,
+                          fallback: (context) => Center(child: Loading()),
+                          builder: (context) => ListView.separated(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              if (data_from_api[index]['image'] == null) {
+                                return Loading();
+                              } else {
+                                return InkWell(
+                                  onTap: () {
+                                    Navigation(
+                                        context,
+                                        ResturantsMenu(
+                                            data: data_from_api[index]));
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8),
+                                    child: Row(children: [
+                                      Container(
+                                        height: 130.h,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Color.fromARGB(
+                                                  74, 158, 158, 158)),
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                        ),
+                                        child: Padding(
+                                            padding: const EdgeInsets.all(16.0),
+                                            child: Image.network(
+                                              'https://www.x-eats.com' +
+                                                  data_from_api[index]['image'],
+                                              loadingBuilder: (context, child,
+                                                  loadingProgress) {
+                                                if (loadingProgress == null)
+                                                  return child;
+                                                return Center(
+                                                  child: Loading(
+                                                      // value: loadingProgress
+                                                      //             .expectedTotalBytes !=
+                                                      //         null
+                                                      //     ? loadingProgress
+                                                      //             .cumulativeBytesLoaded /
+                                                      //         loadingProgress
+                                                      //             .expectedTotalBytes!
+                                                      //     : null,
+                                                      ),
+                                                );
+                                              },
+                                            )),
+                                      ),
+                                      SizedBox(
+                                        width: 20.w,
+                                      ),
+                                      Expanded(
+                                        child: Container(
+                                          height: 120,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Column(children: [
+                                                Text(
+                                                    '${data_from_api[index]['Name']}',
+                                                    style: GoogleFonts.kanit(
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontSize: 20,
+                                                    )),
+                                              ]),
+                                              if (data_from_api[index]
+                                                      ['Name'] ==
+                                                  Salama) ...[
+                                                Text("Egyptian,Kebda,Sandwichs",
+                                                    style: GoogleFonts.kanit(
+                                                      color: Color.fromARGB(
+                                                          150, 0, 0, 0),
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontSize: 12,
+                                                    ))
+                                              ] else if (data_from_api[index]
+                                                      ['Name'] ==
+                                                  Koshry) ...[
+                                                Text("Egyptian,Koshry,Tagen",
+                                                    style: GoogleFonts.kanit(
+                                                      color: Color.fromARGB(
+                                                          150, 0, 0, 0),
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontSize: 12,
+                                                    ))
+                                              ] else if (data_from_api[index]
+                                                      ['Name'] ==
+                                                  mac) ...[
+                                                Text("Chicken,Meat,Sandwichs",
+                                                    style: GoogleFonts.kanit(
+                                                      color: Color.fromARGB(
+                                                          150, 0, 0, 0),
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontSize: 12,
+                                                    ))
+                                              ] else if (data_from_api[index]
+                                                      ['Name'] ==
+                                                  Rosto) ...[
+                                                Text("Chicken,Meat,Fast Food",
+                                                    style: GoogleFonts.kanit(
+                                                      color: Color.fromARGB(
+                                                          150, 0, 0, 0),
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontSize: 12,
+                                                    ))
+                                              ],
+                                              SizedBox(
+                                                height: 10.h,
+                                              ),
+                                              Row(children: const [
+                                                Icon(
+                                                  Icons.star,
+                                                  color: Colors.amber,
+                                                ),
+                                                Text(' 4.1'),
+                                                Text(' (100+)')
+                                              ]),
+                                              Row(
+                                                children: [
+                                                  const Icon(Icons.timer_sharp),
+                                                  Text(
+                                                    ' 36 mins',
+                                                    style: GoogleFonts.kanit(
+                                                        fontWeight:
+                                                            FontWeight.w400),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 25.w,
+                                                  ),
+                                                  Icon(Icons
+                                                      .delivery_dining_outlined),
+                                                  SizedBox(
+                                                    width: 2.w,
+                                                  ),
+                                                  Text(
+                                                    'EGP 10',
+                                                    style: GoogleFonts.kanit(
+                                                        fontWeight:
+                                                            FontWeight.w400),
+                                                  )
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ]),
+                                  ),
+                                );
+                              }
+                            },
+                            separatorBuilder: ((context, index) => Dividerr()),
+                            itemCount: data_from_api.length,
+                          ),
+                        )
+                      ],
+                    ),
                   ]),
                 ),
               ),

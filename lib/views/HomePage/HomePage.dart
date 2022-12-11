@@ -44,27 +44,12 @@ class HomePage extends StatelessWidget {
                         SizedBox(
                           height: height / 15,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Container(
-                            child: Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  TopPage(),
-                                  IconButton(
-                                    onPressed: () {
-                                      Navigation(context, const Cart());
-                                    },
-                                    icon: Icon(Icons.shopping_cart,
-                                        color: const Color.fromARGB(
-                                            255, 9, 134, 211)),
-                                  ),
-                                ],
-                              ),
-                            ),
+                        Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TopPage(),
+                            ],
                           ),
                         ),
                         Padding(

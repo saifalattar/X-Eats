@@ -7,7 +7,7 @@ import 'package:xeats/controllers/Components/DiscountBanner.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Components/Products%20Components/ProductView.dart';
 import 'package:xeats/controllers/Components/Restaurant%20Components/RestaurantView.dart';
-import 'package:xeats/controllers/Components/search.dart';
+import 'package:xeats/controllers/Components/TopPage.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/controllers/States.dart';
@@ -53,7 +53,7 @@ class HomePage extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  SearchField(),
+                                  TopPage(),
                                   IconButton(
                                     onPressed: () {
                                       Navigation(context, const Cart());

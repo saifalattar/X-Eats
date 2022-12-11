@@ -1,3 +1,4 @@
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,14 +21,19 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    var restaurant_api = Xeatscubit.ResturantsList;
-    print(restaurant_api);
-    var product_api = Xeatscubit.Get_Products;
+
     return BlocProvider(
-        create: (context) => Xeatscubit(),
+        create: (context) => Xeatscubit()
+          ..GetProducts()
+          ..getPoster()
+          ..GetResturants(),
         child: BlocConsumer<Xeatscubit, XeatsStates>(
           builder: ((context, state) {
             var cubit = Xeatscubit.get(context);
+            var product_api = Xeatscubit.Get_Products;
+            var restaurant_api = Xeatscubit.ResturantsList;
+            print(restaurant_api);
+
             return Scaffold(
               body: Container(
                 child: SingleChildScrollView(
@@ -85,7 +91,12 @@ class HomePage extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Container(
-                            child: DiscountBanner(),
+                            child: ConditionalBuilder(
+                                condition: Xeatscubit.getimages.isNotEmpty,
+                                fallback: (context) => Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                builder: (context) => DiscountBanner()),
                           ),
                         ),
                         Container(
@@ -107,15 +118,19 @@ class HomePage extends StatelessWidget {
                                     ...List.generate(
                                       restaurant_api.length,
                                       (index) {
-                                        return RestaurantView(
-                                          data: restaurant_api[index]['Name'] ??
-                                              Loading(),
-                                          Colors: const Color.fromARGB(
-                                              255, 5, 95, 9),
-                                          image: Image(
-                                            image: NetworkImage(DioHelper
-                                                    .dio!.options.baseUrl +
-                                                restaurant_api[index]['image']),
+                                        return GestureDetector(
+                                          child: RestaurantView(
+                                            data: restaurant_api[index]
+                                                    ['Name'] ??
+                                                Loading(),
+                                            Colors: const Color.fromARGB(
+                                                255, 5, 95, 9),
+                                            image: Image(
+                                              image: NetworkImage(DioHelper
+                                                      .dio!.options.baseUrl +
+                                                  restaurant_api[index]
+                                                      ['image']),
+                                            ),
                                           ),
                                         );
                                       },
@@ -147,6 +162,8 @@ class HomePage extends StatelessWidget {
                                         (index) {
                                           return GestureDetector(
                                             child: ProductView(
+                                                image: product_api[index]
+                                                    ["image"],
                                                 width: width / 2.0,
                                                 height: height / 4.2,
                                                 data: product_api[index]

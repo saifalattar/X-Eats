@@ -12,6 +12,8 @@ class ChangeSuccefully extends SuperXeats {}
 
 class ShoowLabel extends SuperXeats {}
 
+class ProductsLoading extends SuperXeats {}
+
 class ProductsSuccess extends SuperXeats {}
 
 class ProductsFail extends SuperXeats {

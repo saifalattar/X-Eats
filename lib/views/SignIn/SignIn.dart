@@ -108,6 +108,14 @@ class SignIn extends StatelessWidget {
                                   }
                                   if (status == 302) {
                                     Navigation(context, LoginSuccess());
+                                  } else if (status == 404) {
+                                    const snackBar = SnackBar(
+                                      backgroundColor: Colors.red,
+                                      content: Text(
+                                          'Please Put The Right Credentials'),
+                                    );
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
                                   }
                                 });
                               }

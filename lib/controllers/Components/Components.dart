@@ -22,6 +22,17 @@ Widget CircularNotchBottom(
         Function(int)? ontap}) =>
     BottomNavigationBar(currentIndex: currentindex, onTap: ontap, items: Items);
 
+Widget Dividerr() => Padding(
+      padding: const EdgeInsetsDirectional.only(
+        start: 5.0,
+      ),
+      child: Container(
+        width: double.infinity,
+        height: 1.0,
+        color: Colors.grey[300],
+      ),
+    );
+
 getTimings() {
   var hour = DateTime.now().hour;
   List<DropdownMenuItem> timings = [];

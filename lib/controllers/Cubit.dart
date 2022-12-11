@@ -127,11 +127,13 @@ class Xeatscubit extends Cubit<XeatsStates> {
   static List<dynamic> ResturantsList = [];
 
   void GetResturants() async {
+    emit(ProductsLoading());
     DioHelper.getdata(
       url: 'get_restaurants/',
       query: {},
     ).then((value) {
       ResturantsList = value.data['Names'];
+      emit(ProductsSuccess());
       print(ResturantsList);
     }).catchError((error) {
       emit(ProductsFail(error.toString()));

@@ -25,9 +25,7 @@ class Layout extends StatelessWidget {
 
   Layout({super.key}) {
     sum123 = int.parse(Hour + minute);
-    print(Hour);
-    print(minute);
-    print(sum123);
+
     Hour1 = Hour.substring(0, 1);
     Hour2 = Hour.substring(1);
     Minute1 = minute.substring(0, 1);

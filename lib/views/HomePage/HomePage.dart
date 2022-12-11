@@ -24,15 +24,15 @@ class HomePage extends StatelessWidget {
 
     return BlocProvider(
         create: (context) => Xeatscubit()
-          ..GetProducts()
+          ..GetMostSoldProducts()
           ..getPoster()
           ..GetResturants(),
         child: BlocConsumer<Xeatscubit, XeatsStates>(
           builder: ((context, state) {
             var cubit = Xeatscubit.get(context);
-            var product_api = Xeatscubit.Get_Products;
+            var product_api = Xeatscubit.MostSold;
+            var category_api = Xeatscubit.Get_Category;
             var restaurant_api = Xeatscubit.ResturantsList;
-            print(restaurant_api);
 
             return Scaffold(
               body: Container(
@@ -67,34 +67,13 @@ class HomePage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Container(
-                          color: Colors.transparent,
-                          width: width,
-                          height: height / 4,
-                          child: Padding(
-                            padding: const EdgeInsets.all(40.0),
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Delivering to',
-                                    style: GoogleFonts.kanit(fontSize: 15),
-                                  ),
-                                  Text(
-                                    'User (Zayed-Nile University)',
-                                    style: GoogleFonts.kanit(fontSize: 20),
-                                  ),
-                                ]),
-                          ),
-                        ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Container(
                             child: ConditionalBuilder(
                                 condition: Xeatscubit.getimages.isNotEmpty,
                                 fallback: (context) => Center(
-                                      child: CircularProgressIndicator(),
+                                      child: Loading(),
                                     ),
                                 builder: (context) => DiscountBanner()),
                           ),
@@ -108,7 +87,7 @@ class HomePage extends StatelessWidget {
                                 padding: const EdgeInsets.all(15.0),
                                 child: Text(
                                   'Resturants',
-                                  style: GoogleFonts.kanit(fontSize: 26),
+                                  style: GoogleFonts.kanit(fontSize: 16),
                                 ),
                               ),
                               SingleChildScrollView(
@@ -119,6 +98,13 @@ class HomePage extends StatelessWidget {
                                       restaurant_api.length,
                                       (index) {
                                         return GestureDetector(
+                                          onTap: () {
+                                            Navigation(
+                                                context,
+                                                ResturantsMenu(
+                                                    data:
+                                                        restaurant_api[index]));
+                                          },
                                           child: RestaurantView(
                                             data: restaurant_api[index]
                                                     ['Name'] ??
@@ -149,7 +135,7 @@ class HomePage extends StatelessWidget {
                                 padding: const EdgeInsets.all(15.0),
                                 child: Text(
                                   'Most Ordered',
-                                  style: GoogleFonts.kanit(fontSize: 24),
+                                  style: GoogleFonts.kanit(fontSize: 16),
                                 ),
                               ),
                               SingleChildScrollView(

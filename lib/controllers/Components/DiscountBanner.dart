@@ -11,7 +11,6 @@ class DiscountBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var data_from_api = Xeatscubit.getimages;
-    // print(data_from_api[0]['name']);
     return Column(
       children: [
         CarouselSlider.builder(

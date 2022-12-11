@@ -87,11 +87,34 @@ class Xeatscubit extends Cubit<XeatsStates> {
     emit(SuperXeatsOff(isPassword1));
   }
 
+  static List<dynamic> Get_Category = [];
+  void GetCategory() {
+    DioHelper.getdata(url: 'get_category/', query: {}).then((value) {
+      Get_Products = value.data['Names'];
+
+      emit(ProductsSuccess());
+    }).catchError((error) {
+      print(ProductsFail(error.toString()));
+    });
+  }
+
   static List<dynamic> Get_Products = [];
+
   void GetProducts() {
     DioHelper.getdata(url: 'get_products/', query: {}).then((value) {
       Get_Products = value.data['Names'];
+      print(Get_Products);
+      emit(ProductsSuccess());
+    }).catchError((error) {
+      print(ProductsFail(error.toString()));
+    });
+  }
 
+  static List<dynamic> MostSold = [];
+  void GetMostSoldProducts() {
+    DioHelper.getdata(url: 'get_products_mostSold_products/', query: {})
+        .then((value) {
+      MostSold = value.data['Names'];
       emit(ProductsSuccess());
     }).catchError((error) {
       print(ProductsFail(error.toString()));
@@ -134,7 +157,6 @@ class Xeatscubit extends Cubit<XeatsStates> {
     ).then((value) {
       ResturantsList = value.data['Names'];
       emit(ProductsSuccess());
-      print(ResturantsList);
     }).catchError((error) {
       emit(ProductsFail(error.toString()));
     });

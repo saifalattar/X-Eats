@@ -107,6 +107,7 @@ class SignIn extends StatelessWidget {
                                     print(dioException.response!.statusCode);
                                   }
                                   if (status == 302) {
+                                    print(cubit.user);
                                     Navigation(context, LoginSuccess());
                                   } else if (status == 404) {
                                     const snackBar = SnackBar(

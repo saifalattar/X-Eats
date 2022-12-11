@@ -7,6 +7,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Components/Components.dart';
+import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -61,19 +62,21 @@ class Resturantss extends StatelessWidget {
                           ConditionalBuilder(
                             condition:
                                 data_from_api.isNotEmpty && Connection == false,
-                            fallback: (context) =>
-                                Center(child: CircularProgressIndicator()),
+                            fallback: (context) => Center(child: Loading()),
                             builder: (context) => ListView.separated(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) {
                                 if (data_from_api[index]['image'] == null) {
-                                  return CircularProgressIndicator();
+                                  return Loading();
                                 } else {
                                   return InkWell(
                                     onTap: () {
                                       if (index == 0) {
-                                        Navigation(context, ResturantsMenu());
+                                        Navigation(
+                                            context,
+                                            ResturantsMenu(
+                                                data: data_from_api[index]));
                                       } else if (index == 1) {}
                                     },
                                     child: Padding(

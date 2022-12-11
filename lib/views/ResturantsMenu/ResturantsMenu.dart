@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/controllers/Cubit.dart';
+import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/views/HomePage/HomePage.dart';
 import 'package:xeats/views/Layout/Layout.dart';
@@ -13,7 +14,9 @@ import 'package:xeats/views/Resturants/Resturants.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
 
 class ResturantsMenu extends StatelessWidget {
-  ResturantsMenu({super.key});
+  ResturantsMenu({super.key, required this.data});
+  var data;
+
   String title1 = "Shawrma Frakh";
   String title2 = "Meals";
 
@@ -78,8 +81,9 @@ class ResturantsMenu extends StatelessWidget {
                                           border: Border.all(
                                               width: 20, color: Colors.white)),
                                       child: Image(
-                                        image: AssetImage(
-                                            'assets/Images/karmElsham.png'),
+                                        image: NetworkImage(
+                                            DioHelper.dio!.options.baseUrl +
+                                                data['image']),
                                       ),
                                     ),
                                   ),
@@ -96,7 +100,7 @@ class ResturantsMenu extends StatelessWidget {
                               Padding(
                                 padding: const EdgeInsets.all(0.0),
                                 child: Text(
-                                  'Karam Elsham',
+                                  data['Name'],
                                   style: GoogleFonts.kanit(fontSize: 25),
                                 ),
                               ),

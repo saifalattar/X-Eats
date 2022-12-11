@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SearchField extends StatelessWidget {
   const SearchField({
@@ -7,31 +8,27 @@ class SearchField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Container(
-      width: MediaQuery.of(context).size.width * 0.8,
-      decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: TextField(
-        onSubmitted: (pattern) async {
-          // if (app.search == SearchBy.PRODUCTS) {
-
-          //   await productProvider.search(productName: pattern);
-          //   Navigator.pushNamed(
-          //     context,
-          //     ProductSearchScreen.routeName,
-          //   );
-          // }
-        },
-        onChanged: (value) => print(value),
-        decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 9),
-            border: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            hintText: "Search For Restaaurants",
-            prefixIcon: Icon(Icons.search)),
+      color: Colors.transparent,
+      width: width / 1.5,
+      height: height / 13,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Delivering to',
+                style: GoogleFonts.kanit(fontSize: 11, color: Colors.grey),
+              ),
+              Text(
+                'Shiekh Zayed (Nile University)',
+                style: GoogleFonts.kanit(fontSize: 13),
+              ),
+            ]),
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/controllers/Components/DiscountBanner.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
@@ -21,6 +22,34 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    final BannerAd bannerAd = BannerAd(
+        size: AdSize.banner,
+        adUnitId: "ca-app-pub-5674432343391353/7700576837",
+        listener: BannerAdListener(
+          // Called when an ad is successfully received.
+          onAdLoaded: (Ad ad) => print('Ad loaded.'),
+          // Called when an ad request failed.
+          onAdFailedToLoad: (Ad ad, LoadAdError error) {
+            // Dispose the ad here to free resources.
+            print('Ad failed to load: $error');
+          },
+        ),
+        request: AdRequest());
+    final BannerAd bannerAd2 = BannerAd(
+        size: AdSize.banner,
+        adUnitId: "ca-app-pub-5674432343391353/4883815579",
+        listener: BannerAdListener(
+          // Called when an ad is successfully received.
+          onAdLoaded: (Ad ad) => print('Ad loaded.'),
+          // Called when an ad request failed.
+          onAdFailedToLoad: (Ad ad, LoadAdError error) {
+            // Dispose the ad here to free resources.
+            print('Ad failed to load: $error');
+          },
+        ),
+        request: AdRequest());
+    bannerAd.load();
+    bannerAd2.load();
 
     return BlocProvider(
         create: (context) => Xeatscubit()
@@ -108,6 +137,14 @@ class HomePage extends StatelessWidget {
                                     ),
                                   ],
                                 ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                child: AdWidget(ad: bannerAd),
+                                height: 50,
+                                width: double.maxFinite,
                               )
                             ],
                           ),
@@ -190,6 +227,11 @@ class HomePage extends StatelessWidget {
                             ],
                           ),
                         ),
+                        SizedBox(
+                          height: 50,
+                          width: double.maxFinite,
+                          child: AdWidget(ad: bannerAd2),
+                        )
                       ]),
                 ),
               ),

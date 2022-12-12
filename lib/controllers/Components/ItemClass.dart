@@ -1,5 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/controllers/Components/Components.dart';
@@ -179,9 +183,81 @@ class FoodItem extends StatelessWidget {
     });
   }
 
+  Widget itemCard(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigation(context, preview(context));
+      },
+      child: Column(
+        children: [
+          Row(
+            children: [
+              FutureBuilder(
+                builder: ((context, AsyncSnapshot snapshot) {
+                  if (snapshot.hasData) {
+                    var image = snapshot.data;
+                    this.itemImage = image.data["Names"][0]["image"];
+                    print(id);
+                    return Image.network(
+                      "https://x-eats.com${image.data["Names"][0]["image"]}",
+                      width: 100,
+                    );
+                  } else {
+                    return Loading();
+                  }
+                }),
+                future: Dio().get("https://x-eats.com/get_category_by_id/$id"),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 4,
+              ),
+              Expanded(
+                child: SizedBox(
+                  height: 100,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          englishName!,
+                          style: GoogleFonts.kanit(fontSize: 20),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Text(
+                        price.toString(),
+                        style: GoogleFonts.kanit(color: Colors.black),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget preview(BuildContext context) {
     String? shift;
     return BlocBuilder<Xeatscubit, XeatsStates>(builder: (context, states) {
+      final BannerAd bannerAd = BannerAd(
+          size: AdSize.banner,
+          adUnitId: "ca-app-pub-5674432343391353/3216382829",
+          listener: BannerAdListener(
+            // Called when an ad is successfully received.
+            onAdLoaded: (Ad ad) => print('Ad loaded.'),
+            // Called when an ad request failed.
+            onAdFailedToLoad: (Ad ad, LoadAdError error) {
+              // Dispose the ad here to free resources.
+              print('Ad failed to load: $error');
+            },
+          ),
+          request: AdRequest());
+      bannerAd.load();
       return Scaffold(
         floatingActionButton: FloatingActionButton(
           backgroundColor: const Color.fromARGB(255, 9, 134, 211),
@@ -224,8 +300,18 @@ class FoodItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Container(
-                      child: Image.network(
-                          "https://x-eats.com${this.restaurantImage}"),
+                      child: FutureBuilder(
+                        builder: ((context, AsyncSnapshot snapshot) {
+                          if (snapshot.hasData) {
+                            return Image.network(
+                                "https://x-eats.com${snapshot.data.data["Names"][0]["image"]}");
+                          } else {
+                            return Loading();
+                          }
+                        }),
+                        future: Dio().get(
+                            "https://x-eats.com/get_restaurants_by_id/$restaurant"),
+                      ),
                       width: 120,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
@@ -345,8 +431,16 @@ class FoodItem extends StatelessWidget {
                 ),
               ),
               const SizedBox(
-                height: 80,
-              )
+                height: 40,
+              ),
+              SizedBox(
+                height: 50,
+                width: double.maxFinite,
+                child: AdWidget(ad: bannerAd),
+              ),
+              const SizedBox(
+                height: 40,
+              ),
             ],
           ),
         ),

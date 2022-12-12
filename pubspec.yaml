@@ -41,6 +41,8 @@ dependencies:
   connectivity_plus: ^2.0.2
   data_connection_checker:
   internet_connection_checker:
+  google_mobile_ads: ^2.3.0
+
 
   flutter:
     sdk: flutter

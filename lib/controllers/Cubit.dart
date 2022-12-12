@@ -1,10 +1,9 @@
-// ignore_for_file: non_constant_identifier_names
-
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Components/ItemClass.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/controllers/States.dart';
@@ -13,6 +12,7 @@ import 'package:xeats/views/HomePage/HomePage.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/Resturants/Resturants.dart';
 import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
+import 'package:xeats/views/ResturantsMenu/categoryView.dart';
 
 class Xeatscubit extends Cubit<XeatsStates> {
   Xeatscubit() : super(SuperXeats());
@@ -40,6 +40,10 @@ class Xeatscubit extends Cubit<XeatsStates> {
     Resturantss(),
     Profile(),
   ];
+
+  ////////////////////////////////////////////////
+
+  ///////////////////////////////////////////////
 
   // user data retrieved after logging in
 
@@ -309,5 +313,84 @@ class Xeatscubit extends Cubit<XeatsStates> {
         })
         .then((value) => print(value))
         .catchError((onError) => print(onError));
+  }
+
+  Future<Widget> getCurrentCategories(BuildContext context,
+      {required String? restaurantId}) async {
+    Widget result = Container();
+    await Dio()
+        .get("$BASEURL/get_category_of_restaurants/$restaurantId")
+        .then((value) {
+      result = ListView.separated(
+          itemBuilder: ((context, index) {
+            return GestureDetector(
+              onTap: () {
+                Navigation(
+                    context,
+                    CategoriesView(
+                        restaurantId,
+                        value.data["Names"][index]["id"].toString(),
+                        value.data["Names"][index]["display_name"].toString()));
+              },
+              child: SizedBox(
+                height: 100,
+                child: Card(
+                  child: Center(
+                      child: Text(
+                          "${value.data["Names"][index]["display_name"]}")),
+                ),
+              ),
+            );
+          }),
+          separatorBuilder: ((context, index) {
+            return SizedBox(
+              height: 20,
+            );
+          }),
+          itemCount: value.data["Names"].length);
+    }).catchError((onError) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Something error try again later !!"),
+        backgroundColor: Colors.red,
+      ));
+    });
+    return result;
+  }
+
+  Future getCurrentProducts(BuildContext context,
+      {required String? id, required String? CatId}) async {
+    var data;
+    await Dio()
+        .get("$BASEURL/get_products_of_restaurant_by_category/$id/$CatId")
+        .then((value) async {
+      data = ListView.separated(
+          itemBuilder: (context, index) {
+            return FoodItem(
+              englishName: value.data["Names"][index]["name"],
+              arabicName: value.data["Names"][index]["ArabicName"],
+              price: value.data["Names"][index]["price"],
+              id: value.data["Names"][index]["category"],
+              description: value.data["Names"][index]["description"],
+              creationDate: value.data["Names"][index]["created"],
+              restaurant: value.data["Names"][index]["Restaurant"],
+              category: value.data["Names"][index]["category"],
+              isBestOffer: value.data["Names"][index]["Best_Offer"],
+              isMostPopular: value.data["Names"][index]["Most_Popular"],
+              isNewProduct: value.data["Names"][index]["New_Products"],
+            ).itemCard(context);
+          },
+          separatorBuilder: ((context, index) {
+            return const SizedBox(
+              height: 20,
+            );
+          }),
+          itemCount: value.data["Names"].length);
+    }).catchError((e) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Something error try again later !!"),
+        backgroundColor: Colors.red,
+      ));
+    });
+    return data;
   }
 }

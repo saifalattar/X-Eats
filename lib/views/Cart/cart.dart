@@ -8,6 +8,7 @@ import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/views/CartAndCheckout/CheckOut.dart';
 import 'package:xeats/views/HomePage/HomePage.dart';
+import 'package:xeats/views/Layout/Layout.dart';
 
 class Cart extends StatelessWidget {
   const Cart({super.key});
@@ -58,7 +59,7 @@ class Cart extends StatelessWidget {
               children: [
                 ElevatedButton(
                     onPressed: () {
-                      Navigation(context, const HomePage());
+                      Navigation(context, Layout());
                     },
                     style: ButtonStyle(
                         backgroundColor:

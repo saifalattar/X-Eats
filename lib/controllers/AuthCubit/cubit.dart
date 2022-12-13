@@ -9,6 +9,7 @@ import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/views/HomePage/HomePage.dart';
 import 'package:xeats/views/Layout/Layout.dart';
+import 'package:xeats/views/SignIn/SignIn.dart';
 import 'package:xeats/views/Verification/Verification.dart';
 
 class AuthCubit extends Cubit<AuthStates> {
@@ -102,6 +103,43 @@ class AuthCubit extends Cubit<AuthStates> {
       user = value.data['Names'];
       print(user);
     });
+  }
+
+  //--------------------- Function to get Email//-------------
+  List<dynamic> EmailInList = [];
+//This Function Will Call when user Sign In Succefuly
+  Future<void> getEmail(
+    context, {
+    // The Function Will Get The email of user and take it as EndPoint to show his information
+    String? email,
+  }) async {
+    await DioHelper.getdata(url: "get_user_by_id/$email", query: {})
+        .then((value) async {
+      //EmailInformationList
+      EmailInList = value.data['Names'];
+      SharedPreferences userInf = await SharedPreferences.getInstance();
+      //set this email in shared prefrences
+      userInf.setString('Email', EmailInList[0]['email']);
+      emit(SuccessGetInformation());
+    }).catchError((onError) {
+      emit(FailgetInformation());
+      print(FailgetInformation());
+    });
+  }
+
+//-------------------- Function Separated to get his email if his email null then it will go to login if not then it will go to home page
+  String? UserInformation;
+  Future<void> Email() async {
+    SharedPreferences email = await SharedPreferences.getInstance();
+    UserInformation = email.getString('Email');
+    emit(SuccessEmailProfile());
+    print(SuccessEmailProfile());
+  }
+
+  void signOut(context) async {
+    SharedPreferences userInformation = await SharedPreferences.getInstance();
+    userInformation.clear();
+    Navigation(context, SignIn());
   }
 
   void Validate_Cpmplete_profile(BuildContext context) {

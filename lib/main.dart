@@ -6,6 +6,8 @@ import 'package:xeats/controllers/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/views/Layout/Layout.dart';
+import 'package:xeats/views/SignIn/SignIn.dart';
+import 'package:xeats/views/Splash%20Screen/Splach%20Screen.dart';
 
 void main() {
   DioHelper.init();
@@ -42,7 +44,7 @@ class MyApp extends StatelessWidget {
               home: child,
             );
           },
-          child: Layout(),
+          child: SplashScreen(),
         ));
   }
 }

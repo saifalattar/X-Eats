@@ -9,8 +9,11 @@ import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/controllers/Components/Global%20Components/DefaultButton.dart';
 import 'package:xeats/controllers/Components/Global%20Components/defaultFormField.dart';
 import 'package:xeats/controllers/Cubit.dart';
+import 'package:xeats/views/HomePage/HomePage.dart';
+import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/LoginSuccess/loginSuccess.dart';
 import 'package:xeats/views/SignUp/SignUp.dart';
+import 'package:xeats/views/Splash%20Screen/Splach%20Screen.dart';
 
 class SignIn extends StatelessWidget {
   SignIn({super.key});
@@ -107,8 +110,9 @@ class SignIn extends StatelessWidget {
                                     print(dioException.response!.statusCode);
                                   }
                                   if (status == 302) {
-                                    print(cubit.user);
-                                    Navigation(context, LoginSuccess());
+                                    cubit.getEmail(context,
+                                        email: cubit.email.text);
+                                    Navigation(context, Layout());
                                   } else if (status == 404) {
                                     const snackBar = SnackBar(
                                       backgroundColor: Colors.red,

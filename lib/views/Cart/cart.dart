@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:xeats/controllers/Components/Components.dart';
-import 'package:xeats/controllers/Components/Global%20Components/CustomDivider.dart';
 import 'package:xeats/controllers/Components/Global%20Components/DefaultButton.dart';
-import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
+import 'package:xeats/controllers/Components/ItemClass.dart';
+import 'package:xeats/controllers/Components/loading.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/States.dart';
-import 'package:xeats/views/CheckOut/CheckOut.dart';
+import 'package:xeats/views/CartAndCheckout/CheckOut.dart';
 import 'package:xeats/views/HomePage/HomePage.dart';
 
 class Cart extends StatelessWidget {
@@ -36,6 +36,7 @@ class Cart extends StatelessWidget {
                 builder: (ctx, AsyncSnapshot ss) {
                   print(ss.connectionState);
                   if (ss.hasData) {
+                    print(ss.data.length);
                     return SizedBox(
                       height: MediaQuery.of(context).size.height / 1.5,
                       child: ListView.separated(
@@ -43,7 +44,7 @@ class Cart extends StatelessWidget {
                           return ss.data[index];
                         },
                         separatorBuilder: (context, index) {
-                          return CustomDivider();
+                          return Dividerr();
                         },
                         itemCount: ss.data.length,
                       ),
@@ -52,46 +53,30 @@ class Cart extends StatelessWidget {
                     return Loading();
                   }
                 }),
-            CustomDivider(),
-            SizedBox(
-              height: 5,
-            ),
-            Container(
-              width: double.maxFinite,
-              padding: EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      ElevatedButton(
-                          onPressed: () {
-                            Navigation(context, const HomePage());
-                          },
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.white),
-                              shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                      side: const BorderSide(
-                                          color: Color.fromARGB(
-                                              255, 9, 134, 211))))),
-                          child: Text(
-                            "Continue Shopping",
-                            style: TextStyle(color: Colors.black),
-                          )),
-                      DefaultButton(
-                          // width: MediaQuery.of(context).size.width / 2.2,
-                          function: () {
-                            Navigation(context, const CheckOut());
-                          },
-                          text: "Check Out")
-                    ],
-                  )
-                ],
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                    onPressed: () {
+                      Navigation(context, const HomePage());
+                    },
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.white),
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: const BorderSide(
+                                color: Color.fromARGB(255, 9, 134, 211))))),
+                    child: const Text(
+                      "Continue Shopping",
+                      style: TextStyle(color: Colors.black),
+                    )),
+                DefaultButton(
+                    function: () {
+                      Navigation(context, const CheckOut());
+                    },
+                    text: "Check Out")
+              ],
             )
           ],
         ),

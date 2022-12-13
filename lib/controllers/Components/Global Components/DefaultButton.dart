@@ -9,7 +9,6 @@ class DefaultButton extends StatefulWidget {
     required this.text,
   }) : super(key: key);
 
-  double width = double.infinity;
   final bool isUppercase = true;
   final double radius = 20;
   final VoidCallback function;
@@ -23,7 +22,7 @@ class _DefaultButtonState extends State<DefaultButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: widget.width,
+      width: MediaQuery.of(context).size.width / 2,
       height: 55.h,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(

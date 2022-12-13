@@ -17,6 +17,7 @@ class FoodItem extends StatelessWidget {
   final double? price;
   double? totalPrice;
   final bool? isMostPopular, isNewProduct, isBestOffer;
+  String? cartItemId;
 
   static List<FoodItem> CartItems = [
     FoodItem(
@@ -116,6 +117,7 @@ class FoodItem extends StatelessWidget {
       this.itemImage,
       this.restaurantImage,
       this.isNewProduct,
+      this.cartItemId,
       this.isBestOffer}) {
     totalPrice = price;
   }
@@ -131,53 +133,55 @@ class FoodItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<Xeatscubit, XeatsStates>(builder: (context, state) {
-      return Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CircleAvatar(
-                  radius: 15,
-                  backgroundImage:
-                      NetworkImage("https://x-eats.com${this.restaurantImage}"),
-                ),
-                SizedBox(
-                  child: Image.network("https://x-eats.com${this.itemImage}"),
-                  width: 100,
-                ),
-              ],
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  "${this.englishName}",
-                  style: TextStyle(fontSize: 21),
-                ),
-                Text(
-                  "${this.arabicName}",
-                  style: TextStyle(fontSize: 21),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width / 1.6,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("QTY :    ${this.quantity}"),
-                      Text(
-                        "$totalPrice EGP",
-                        style: TextStyle(fontSize: 16),
-                      )
-                    ],
+      return Dismissible(
+        onDismissed: (direction) {
+          Xeatscubit.get(context).deleteCartItem(context, "${this.cartItemId}");
+        },
+        key: Key(""),
+        background: Container(
+          child: Text(
+            "Delete",
+            style: TextStyle(color: Colors.white, fontSize: 25),
+          ),
+          decoration: BoxDecoration(color: Colors.red),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              SizedBox(
+                child: Image.network("https://x-eats.com${this.itemImage}"),
+                width: 100,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "${this.englishName}",
+                    style: TextStyle(fontSize: 21),
                   ),
-                ),
-              ],
-            ),
-          ],
+                  Text(
+                    "${this.arabicName}",
+                    style: TextStyle(fontSize: 21),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width / 1.6,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("QTY :    ${this.quantity}"),
+                        Text(
+                          "$totalPrice EGP",
+                          style: TextStyle(fontSize: 16),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       );
     });
@@ -188,76 +192,92 @@ class FoodItem extends StatelessWidget {
       onTap: () {
         Navigation(context, preview(context));
       },
-      child: Column(
-        children: [
-          Row(
-            children: [
-              FutureBuilder(
-                builder: ((context, AsyncSnapshot snapshot) {
-                  if (snapshot.hasData) {
-                    var image = snapshot.data;
-                    this.itemImage = image.data["Names"][0]["image"];
-                    print(id);
-                    return Image.network(
-                      "https://x-eats.com${image.data["Names"][0]["image"]}",
-                      width: 100,
-                    );
-                  } else {
-                    return Loading();
-                  }
-                }),
-                future: Dio().get("https://x-eats.com/get_category_by_id/$id"),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width / 4,
-              ),
-              Expanded(
-                child: SizedBox(
-                  height: 100,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          englishName!,
-                          style: GoogleFonts.kanit(fontSize: 20),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+      child: Container(
+        padding: EdgeInsets.all(10),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            border:
+                Border.all(color: Color.fromARGB(255, 9, 134, 211), width: 4)),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                FutureBuilder(
+                  builder: ((context, AsyncSnapshot snapshot) {
+                    if (snapshot.hasData) {
+                      var image = snapshot.data;
+                      this.itemImage = image.data["Names"][0]["image"];
+                      return Container(
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                      ),
-                      Text(
-                        price.toString(),
-                        style: GoogleFonts.kanit(color: Colors.black),
-                      ),
-                    ],
+                        child: Image.network(
+                          "https://x-eats.com${image.data["Names"][0]["image"]}",
+                          width: 100,
+                        ),
+                      );
+                    } else {
+                      return Loading();
+                    }
+                  }),
+                  future: Dio().get(
+                      "https://x-eats.com/get_category_by_id/${this.category}"),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 4,
+                ),
+                Expanded(
+                  child: SizedBox(
+                    height: 100,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            englishName!,
+                            style: GoogleFonts.kanit(fontSize: 20),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Text(
+                          price.toString() + "  EGP",
+                          style: GoogleFonts.kanit(
+                              color: Colors.black, fontSize: 15),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget preview(BuildContext context) {
     String? shift;
+    final BannerAd bannerAd = BannerAd(
+        size: AdSize.banner,
+        adUnitId: "ca-app-pub-5674432343391353/3216382829",
+        listener: BannerAdListener(
+          // Called when an ad is successfully received.
+          onAdLoaded: (Ad ad) => print('Ad loaded.'),
+          // Called when an ad request failed.
+          onAdFailedToLoad: (Ad ad, LoadAdError error) {
+            // Dispose the ad here to free resources.
+            print('Ad failed to load: $error');
+          },
+        ),
+        request: AdRequest());
+    bannerAd.load();
+
     return BlocBuilder<Xeatscubit, XeatsStates>(builder: (context, states) {
-      final BannerAd bannerAd = BannerAd(
-          size: AdSize.banner,
-          adUnitId: "ca-app-pub-5674432343391353/3216382829",
-          listener: BannerAdListener(
-            // Called when an ad is successfully received.
-            onAdLoaded: (Ad ad) => print('Ad loaded.'),
-            // Called when an ad request failed.
-            onAdFailedToLoad: (Ad ad, LoadAdError error) {
-              // Dispose the ad here to free resources.
-              print('Ad failed to load: $error');
-            },
-          ),
-          request: AdRequest());
-      bannerAd.load();
       return Scaffold(
         floatingActionButton: FloatingActionButton(
           backgroundColor: const Color.fromARGB(255, 9, 134, 211),

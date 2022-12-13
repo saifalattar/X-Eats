@@ -47,11 +47,11 @@ class Xeatscubit extends Cubit<XeatsStates> {
 
   // user data retrieved after logging in
 
-  int? userId = 224, cartId = 209; // for testing 224, 209
+  int? userId = 191, cartId = 189; // for testing 224, 209
 
   //////////////////////////////////////
   ///// Base url ///////////
-  String BASEURL = "https://x-eats.com";
+  String BASEURL = "https://www.x-eats.com";
 
   List<BottomNavigationBarItem> bottomitems = const [
     BottomNavigationBarItem(
@@ -189,6 +189,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
       String? totalPrice,
       String? restaurantId,
       String? timeShift}) async {
+    print(productId);
     await Dio()
         .post("$BASEURL/get_cartItems/",
             data: {
@@ -204,19 +205,19 @@ class Xeatscubit extends Cubit<XeatsStates> {
             options: Options(
                 headers: {'Content-type': 'application/json; charset=UTF-8'}))
         .then((value) async {
-      await Dio()
-          .put("$BASEURL/get_carts/", data: {
-            "id": cartId.toString(),
-            "total_price": FoodItem.getSubtotal().toString(),
-            "total_after_delivery":
-                (FoodItem.deliveryFee + FoodItem.getSubtotal()).toString(),
-            "user": userId.toString()
-          })
-          .then((value) => print("Added to cart "))
-          .catchError((onError) {
-            print("Errooooooooooooor");
-            print(onError.response.data);
-          });
+      // await Dio()
+      //     .post("$BASEURL/get_carts/", data: {
+      //       "id": cartId.toString(),
+      //       "total_price": FoodItem.getSubtotal().toString(),
+      //       "total_after_delivery":
+      //           (FoodItem.deliveryFee + FoodItem.getSubtotal()).toString(),
+      //       "user": userId.toString()
+      //     })
+      //     .then((value) => print("Added to cart "))
+      //     .catchError((onError) {
+      //       print("Errooooooooooooor");
+      //       print(onError.response.data);
+      // });
     }).catchError((onError) => print(onError));
   }
 
@@ -232,24 +233,30 @@ class Xeatscubit extends Cubit<XeatsStates> {
     FoodItem.CartItems.clear();
     List<Map> items = [];
     Map itemImages = {};
-    Map resImages = {};
     await Dio().get("$BASEURL/get_cartItems/").then((value) async {
       for (var i in value.data["Names"]) {
         if (i["user"] == userId &&
             i["cart"] == cartId &&
             i["ordered"] == false) {
-          items.add({"product": i["product"], "qty": i["quantity"]});
+          items.add({
+            "product": i["product"],
+            "qty": i["quantity"],
+            "cartItemID": i["id"]
+          });
         }
       }
       print(items);
       for (var i in items) {
         FoodItem? theItem;
         await Dio()
-            .get("$BASEURL/get_products/${i["product"]}")
+            .get("$BASEURL/get_products_by_id/${i["product"]}")
             .then((value) async {
+          print(i["product"]);
+
           theItem = FoodItem(
               id: i["product"],
               quantity: i["qty"],
+              cartItemId: i["cartItemID"].toString(),
               englishName: value.data["Names"][0]["name"],
               arabicName: value.data["Names"][0]["ArabicName"],
               productSlug: value.data["Names"][0]["productslug"],
@@ -262,12 +269,14 @@ class Xeatscubit extends Cubit<XeatsStates> {
               isMostPopular: value.data["Names"][0]["Most_Popular"],
               isNewProduct: value.data["Names"][0]["New_Products"],
               creationDate: value.data["Names"][0]["created"]);
+          print(value.data);
           if (!itemImages.containsKey(value.data["Names"][0]["category"])) {
             print("1111");
             await Dio()
                 .get(
-                    "$BASEURL/get_category/${value.data["Names"][0]["category"]}")
+                    "$BASEURL/get_category_by_id/${value.data["Names"][0]["category"]}")
                 .then((v2) {
+              print("2222");
               theItem!.itemImage = v2.data["Names"][0]["image"];
               itemImages.addAll({
                 value.data["Names"][0]["category"]: v2.data["Names"][0]["image"]
@@ -276,24 +285,10 @@ class Xeatscubit extends Cubit<XeatsStates> {
           } else {
             theItem!.itemImage = itemImages[value.data["Names"][0]["category"]];
           }
-
-          if (!resImages.containsKey(value.data["Names"][0]["Restaurant"])) {
-            print(2222);
-            await Dio()
-                .get(
-                    "$BASEURL/get_restaurants/${value.data["Names"][0]["Restaurant"]}")
-                .then((v3) {
-              theItem!.restaurantImage = v3.data["Names"][0]["image"];
-              resImages.addAll({
-                value.data["Names"][0]["Restaurant"]: v3.data["Names"][0]
-                    ["image"]
-              });
-            });
-          } else {
-            theItem!.restaurantImage =
-                resImages[value.data["Names"][0]["Restaurant"]];
-          }
+        }).catchError((onError) {
+          print(onError);
         });
+        print("caaaaaaaaaaaaaaaaaaaaaaaaaaaaart");
         FoodItem.CartItems.add(theItem!);
       }
     }).catchError((onError) => print(onError));
@@ -313,6 +308,41 @@ class Xeatscubit extends Cubit<XeatsStates> {
         })
         .then((value) => print(value))
         .catchError((onError) => print(onError));
+  }
+
+  void deleteCartItem(BuildContext context, String cartItemId) async {
+    await Dio().delete("$BASEURL/delete_cartItems/$cartItemId").then((value) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.green,
+          content: Row(
+            children: [
+              Icon(
+                Icons.done,
+                color: Colors.white,
+              ),
+              Text(
+                "Item deleted successfully",
+                style: TextStyle(color: Colors.white),
+              ),
+            ],
+          )));
+    }).catchError((onError) {
+      print(onError);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.red,
+          content: Row(
+            children: [
+              Icon(
+                Icons.error,
+                color: Colors.white,
+              ),
+              Text(
+                "Something error happened try again !!",
+                style: TextStyle(color: Colors.white),
+              ),
+            ],
+          )));
+    });
   }
 
   Future<Widget> getCurrentCategories(BuildContext context,
@@ -369,7 +399,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
               englishName: value.data["Names"][index]["name"],
               arabicName: value.data["Names"][index]["ArabicName"],
               price: value.data["Names"][index]["price"],
-              id: value.data["Names"][index]["category"],
+              id: value.data["Names"][index]["id"],
               description: value.data["Names"][index]["description"],
               creationDate: value.data["Names"][index]["created"],
               restaurant: value.data["Names"][index]["Restaurant"],

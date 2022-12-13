@@ -21,16 +21,19 @@ class CategoriesView extends StatelessWidget {
               child: Text("${this.name}"),
             ),
           ),
-          body: FutureBuilder(
-              future: Xeatscubit.get(context).getCurrentProducts(context,
-                  id: restaurantID, CatId: categoryId),
-              builder: ((context, snapshot) {
-                if (snapshot.hasData) {
-                  return snapshot.data!;
-                } else {
-                  return Loading();
-                }
-              })));
+          body: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: FutureBuilder(
+                future: Xeatscubit.get(context).getCurrentProducts(context,
+                    id: restaurantID, CatId: categoryId),
+                builder: ((context, snapshot) {
+                  if (snapshot.hasData) {
+                    return snapshot.data!;
+                  } else {
+                    return Loading();
+                  }
+                })),
+          ));
     }));
   }
 }

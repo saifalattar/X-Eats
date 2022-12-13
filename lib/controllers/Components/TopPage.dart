@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Components/Components.dart';
-import 'package:xeats/views/Cart/cart.dart';
+import 'package:xeats/views/Cart/Cart.dart';
 
 class TopPage extends StatelessWidget {
   const TopPage({
@@ -42,7 +42,7 @@ class TopPage extends StatelessWidget {
             ),
             IconButton(
               onPressed: () {
-                Navigation(context, const Cart());
+                Navigation(context, Cart());
               },
               icon: Icon(Icons.shopping_cart,
                   color: const Color.fromARGB(255, 9, 134, 211)),

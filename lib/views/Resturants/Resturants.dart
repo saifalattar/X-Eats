@@ -27,12 +27,14 @@ class Resturantss extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return BlocProvider(
-        create: (context) => Xeatscubit(),
+        create: (context) => Xeatscubit()..NewProducts(),
         child: BlocConsumer<Xeatscubit, XeatsStates>(
           listener: (context, state) {},
           builder: (context, state) {
             var cubit = Xeatscubit.get(context);
             var data_from_api = Xeatscubit.ResturantsList;
+            var newProducts = Xeatscubit.new_products;
+
             String Salama = "Salama";
             String Koshry = "Koshary El-Tahrir";
             String mac = "Mac";
@@ -60,53 +62,35 @@ class Resturantss extends StatelessWidget {
                             child: Container(
                               child: Row(
                                 children: [
-                                  // ...List.generate(
-                                  //   product_api.length,
-                                  //   (index) {
-                                  //     return GestureDetector(
-                                  //       child: ProductView(
-                                  //           image: product_api[index]
-                                  //               ["image"],
-                                  //           width: width / 2.0,
-                                  //           height: height / 4.2,
-                                  //           data: product_api[index]
-                                  //                   ["name"] +
-                                  //               "\n",
-                                  //           Colors: Colors.white,
-                                  //           Navigate: () => {}),
-                                  //       onTap: () {
-                                  //         print(product_api[0]["name"]);
-                                  //       },
-                                  //     );
-                                  //   },
-                                  // ),
+                                  ...List.generate(
+                                    newProducts.length,
+                                    (index) {
+                                      return GestureDetector(
+                                        child: NewProducts(
+                                            title: newProducts[index]["name"],
+                                            Colors: Colors.white,
+                                            image: const Image(
+                                              image: AssetImage(
+                                                'assets/Images/Shawrma.png',
+                                              ),
+                                            ),
+                                            Navigate: () => {}),
 
-                                  NewProducts(
-                                      Colors: Colors.white,
-                                      image: const Image(
-                                        image: AssetImage(
-                                          'assets/Images/Shawrma.png',
-                                        ),
-                                      ),
-                                      Navigate: () => {}),
-                                  NewProducts(
-                                      Colors: Colors.white,
-                                      image: const Image(
-                                        image: AssetImage(
-                                          'assets/Images/Shawrma.png',
-                                        ),
-                                      ),
-                                      Navigate: () => {}),
-                                  NewProducts(
-                                      Colors: Colors.white,
-                                      image: const Image(
-                                        image: AssetImage(
-                                          'assets/Images/Shawrma.png',
-                                        ),
-                                      ),
-                                      Navigate: () => {}),
-
-                                  //
+                                        // ProductView(
+                                        //     // image: newProducts[index]
+                                        //     //     ["image"],
+                                        //     width: width / 2.0,
+                                        //     height: height / 4.2,
+                                        //     data: newProducts[index]["name"] +
+                                        //         "\n",
+                                        //     Colors: Colors.white,
+                                        //     Navigate: () => {}),
+                                        // onTap: () {
+                                        //   print(newProducts[0]["name"]);
+                                        // },
+                                      );
+                                    },
+                                  ),
                                 ],
                               ),
                             ),

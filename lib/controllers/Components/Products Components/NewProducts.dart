@@ -7,11 +7,12 @@ class NewProducts extends StatefulWidget {
     this.image,
     this.Colors,
     this.Navigate,
+    required this.title,
   }) : super(key: key);
 
   final double raduisPadding = 8.0;
   final double raduisButton = 10.0;
-
+  final String title;
   final Image? image;
   final Color? Colors;
   final VoidCallback? Navigate;
@@ -42,6 +43,7 @@ class _NewProductsState extends State<NewProducts> {
                 child: widget.image),
           ),
         ),
+        Text(widget.title),
       ],
     );
   }

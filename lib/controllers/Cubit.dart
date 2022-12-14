@@ -156,6 +156,17 @@ class Xeatscubit extends Cubit<XeatsStates> {
     });
   }
 
+  static List<dynamic> new_products = [];
+  void NewProducts() {
+    DioHelper.getdata(url: 'get_products_new_products/', query: {})
+        .then((value) {
+      new_products = value.data['Names'];
+      emit(ProductsSuccess());
+    }).catchError((error) {
+      print(ProductsFail(error.toString()));
+    });
+  }
+
   static List<dynamic> getposters = [];
   void getPoster() {
     DioHelper.getdata(url: 'get_poster/', query: {}).then((value) {

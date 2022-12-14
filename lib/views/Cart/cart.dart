@@ -16,7 +16,9 @@ class Cart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) => Xeatscubit()..CartData(),
+        create: (context) => Xeatscubit()
+          ..CartData()
+          ..Email(),
         child: BlocConsumer<Xeatscubit, XeatsStates>(
             listener: (context, state) {},
             builder: (context, state) {

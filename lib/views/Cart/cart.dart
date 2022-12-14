@@ -6,7 +6,7 @@ import 'package:xeats/controllers/Components/ItemClass.dart';
 import 'package:xeats/controllers/Components/loading.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/States.dart';
-import 'package:xeats/views/CartAndCheckout/CheckOut.dart';
+import 'package:xeats/views/Checkout/CheckOut.dart';
 import 'package:xeats/views/HomePage/HomePage.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 
@@ -15,73 +15,90 @@ class Cart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<Xeatscubit, XeatsStates>(builder: (context, state) {
-      return Scaffold(
-        appBar: AppBar(
-          actions: [Image.asset("assets/Images/shopping-cart.png")],
-          backgroundColor: const Color.fromARGB(255, 9, 134, 211),
-          toolbarHeight: 120,
-          leadingWidth: 400,
-          leading: const Padding(
-            padding: EdgeInsets.all(25.0),
-            child: Text(
-              "Cart",
-              style: TextStyle(fontSize: 38, fontWeight: FontWeight.bold),
-            ),
-          ),
-        ),
-        body: Column(
-          children: [
-            FutureBuilder(
-                future: Xeatscubit.get(context).getCartItems(),
-                builder: (ctx, AsyncSnapshot ss) {
-                  print(ss.connectionState);
-                  if (ss.hasData) {
-                    print(ss.data.length);
-                    return SizedBox(
-                      height: MediaQuery.of(context).size.height / 1.5,
-                      child: ListView.separated(
-                        itemBuilder: (context, index) {
-                          return ss.data[index];
-                        },
-                        separatorBuilder: (context, index) {
-                          return Dividerr();
-                        },
-                        itemCount: ss.data.length,
-                      ),
-                    );
-                  } else {
-                    return Loading();
-                  }
-                }),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                ElevatedButton(
-                    onPressed: () {
-                      Navigation(context, Layout());
-                    },
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.white),
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            side: const BorderSide(
-                                color: Color.fromARGB(255, 9, 134, 211))))),
-                    child: const Text(
-                      "Continue Shopping",
-                      style: TextStyle(color: Colors.black),
-                    )),
-                DefaultButton(
-                    function: () {
-                      Navigation(context, const CheckOut());
-                    },
-                    text: "Check Out")
-              ],
-            )
-          ],
-        ),
-      );
-    });
+    return BlocProvider(
+        create: (context) => Xeatscubit()..CartData(),
+        child: BlocConsumer<Xeatscubit, XeatsStates>(
+            listener: (context, state) {},
+            builder: (context, state) {
+              var cubit = Xeatscubit.get(context);
+
+              var userId = cubit.idInformation;
+              var cartId = cubit.cartID;
+
+              return Scaffold(
+                appBar: AppBar(
+                  actions: [Image.asset("assets/Images/shopping-cart.png")],
+                  backgroundColor: const Color.fromARGB(255, 9, 134, 211),
+                  toolbarHeight: 120,
+                  leadingWidth: 400,
+                  leading: const Padding(
+                    padding: EdgeInsets.all(25.0),
+                    child: Text(
+                      "Cart",
+                      style:
+                          TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                body: Column(
+                  children: [
+                    FutureBuilder(
+                        future: Xeatscubit.get(context).getCartItems(
+                          context,
+                          users: userId,
+                        ),
+                        builder: (ctx, AsyncSnapshot snapshot) {
+                          print(snapshot.connectionState);
+                          if (snapshot.hasData) {
+                            print(snapshot.data.length);
+                            return SizedBox(
+                              height: MediaQuery.of(context).size.height / 1.5,
+                              child: ListView.separated(
+                                itemBuilder: (context, index) {
+                                  return snapshot.data[index];
+                                },
+                                separatorBuilder: (context, index) {
+                                  return Dividerr();
+                                },
+                                itemCount: snapshot.data.length,
+                              ),
+                            );
+                          } else {
+                            return Loading();
+                          }
+                        }),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        DefaultButton(
+                            function: () {
+                              Navigation(context, const CheckOut());
+                            },
+                            text: "Check Out"),
+                        ElevatedButton(
+                            onPressed: () {
+                              Navigation(context, Layout());
+                            },
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.white),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  side: const BorderSide(
+                                      color: Color.fromARGB(255, 9, 134, 211)),
+                                ),
+                              ),
+                            ),
+                            child: const Text(
+                              "Continue Shopping",
+                              style: TextStyle(color: Colors.black),
+                            )),
+                      ],
+                    )
+                  ],
+                ),
+              );
+            }));
   }
 }

@@ -1,12 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
+import 'package:xeats/controllers/Components/AppBarCustomized.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/controllers/Components/Components.dart';
+import 'package:xeats/views/CheckOut/CheckOut.dart';
 
 class FoodItem extends StatelessWidget {
   static double deliveryFee = 10;
@@ -139,11 +142,11 @@ class FoodItem extends StatelessWidget {
         },
         key: Key(""),
         background: Container(
-          child: Text(
+          decoration: const BoxDecoration(color: Colors.red),
+          child: const Text(
             "Delete",
             style: TextStyle(color: Colors.white, fontSize: 25),
           ),
-          decoration: BoxDecoration(color: Colors.red),
         ),
         child: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -187,80 +190,95 @@ class FoodItem extends StatelessWidget {
     });
   }
 
-  Widget itemCard(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigation(context, preview(context));
-      },
-      child: Container(
-        padding: EdgeInsets.all(10),
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            border:
-                Border.all(color: Color.fromARGB(255, 9, 134, 211), width: 4)),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                FutureBuilder(
-                  builder: ((context, AsyncSnapshot snapshot) {
-                    if (snapshot.hasData) {
-                      var image = snapshot.data;
-                      this.itemImage = image.data["Names"][0]["image"];
-                      return Container(
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Image.network(
-                          "https://x-eats.com${image.data["Names"][0]["image"]}",
-                          width: 100,
-                        ),
-                      );
-                    } else {
-                      return Loading();
-                    }
-                  }),
-                  future: Dio().get(
-                      "https://x-eats.com/get_category_by_id/${this.category}"),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width / 4,
-                ),
-                Expanded(
-                  child: SizedBox(
-                    height: 100,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            englishName!,
-                            style: GoogleFonts.kanit(fontSize: 20),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+  Widget productsOfCategory(BuildContext context) {
+    return SafeArea(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          InkWell(
+            onTap: () {
+              Navigation(context, productDetails(context));
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Row(
+                children: [
+                  FutureBuilder(
+                    builder: ((context, AsyncSnapshot snapshot) {
+                      if (snapshot.hasData) {
+                        var image = snapshot.data;
+                        this.itemImage = image.data["Names"][0]["image"];
+                        return Container(
+                          height: 130.h,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Color.fromARGB(74, 158, 158, 158)),
+                            borderRadius: BorderRadius.circular(10.0),
                           ),
-                        ),
-                        Text(
-                          price.toString() + "  EGP",
-                          style: GoogleFonts.kanit(
-                              color: Colors.black, fontSize: 15),
-                        ),
-                      ],
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Image.network(
+                              "https://x-eats.com${image.data["Names"][0]["image"]}",
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return Center(
+                                  child: Loading(),
+                                );
+                              },
+                            ),
+                          ),
+                        );
+                      } else {
+                        return Loading();
+                      }
+                    }),
+                    future: Dio().get(
+                        "https://x-eats.com/get_category_by_id/${this.category}"),
+                  ),
+                  SizedBox(
+                    width: 20.w,
+                  ),
+                  Expanded(
+                    child: Container(
+                      height: MediaQuery.of(context).size.height / 9,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              englishName!,
+                              style: GoogleFonts.kanit(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Text(
+                            category.toString(),
+                            style: GoogleFonts.kanit(
+                                color: Colors.grey, fontSize: 11),
+                          ),
+                          Text(
+                            price.toString() + "  EGP",
+                            style: GoogleFonts.kanit(
+                                color: Colors.black, fontSize: 16),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget preview(BuildContext context) {
+  Widget productDetails(BuildContext context) {
     String? shift;
     final BannerAd bannerAd = BannerAd(
         size: AdSize.banner,
@@ -278,18 +296,24 @@ class FoodItem extends StatelessWidget {
     bannerAd.load();
 
     return BlocBuilder<Xeatscubit, XeatsStates>(builder: (context, states) {
+      var cubit = Xeatscubit.get(context);
+      var userId = cubit.idInformation;
+      double width = MediaQuery.of(context).size.width;
+      double height = MediaQuery.of(context).size.height;
       return Scaffold(
         floatingActionButton: FloatingActionButton(
           backgroundColor: const Color.fromARGB(255, 9, 134, 211),
           //add to cart button
           onPressed: () {
             Xeatscubit.get(context).addToCart(
+                id: userId,
                 productId: id.toString(),
                 quantity: quantity.toString(),
                 price: price.toString(),
                 totalPrice: totalPrice.toString(),
                 restaurantId: restaurant.toString(),
                 timeShift: currentTiming);
+            Navigation(context, const CheckOut());
           },
           child: const Icon(Icons.add_shopping_cart_rounded),
         ),
@@ -304,7 +328,7 @@ class FoodItem extends StatelessWidget {
               "Preview",
               style: TextStyle(
                   color: Colors.white,
-                  fontSize: 30,
+                  fontSize: 24,
                   fontWeight: FontWeight.bold),
             ),
           ),
@@ -313,51 +337,27 @@ class FoodItem extends StatelessWidget {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
-                height: 170,
-                color: const Color.fromARGB(255, 9, 134, 211),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
-                      child: FutureBuilder(
-                        builder: ((context, AsyncSnapshot snapshot) {
-                          if (snapshot.hasData) {
-                            return Image.network(
-                                "https://x-eats.com${snapshot.data.data["Names"][0]["image"]}");
-                          } else {
-                            return Loading();
-                          }
-                        }),
-                        future: Dio().get(
-                            "https://x-eats.com/get_restaurants_by_id/$restaurant"),
-                      ),
-                      width: 120,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                    ),
-                    Text(
-                      "Res Name",
-                      style: TextStyle(fontSize: 25, color: Colors.white),
-                    )
-                  ],
-                ),
-              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SizedBox(
                   width: double.maxFinite,
                   child: Column(
                     children: [
-                      Image.network(
-                        "https://x-eats.com${this.itemImage}",
+                      Image(
                         width: 200,
+                        image: NetworkImage(
+                          'https://x-eats.com${this.itemImage}',
+                        ),
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                            child: Loading(),
+                          );
+                        },
                       ),
                       Text(
                         "${this.englishName}\n${this.arabicName}",
-                        style: TextStyle(fontSize: 23),
+                        style: TextStyle(fontSize: 22),
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(
@@ -365,7 +365,8 @@ class FoodItem extends StatelessWidget {
                       ),
                       Text(
                         "${this.price} EGP",
-                        style: TextStyle(fontSize: 23),
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: 30,
@@ -376,76 +377,85 @@ class FoodItem extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Description:",
+                              "Description:\n",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 22),
                             ),
-                            Text(
-                              "${this.description}",
-                              style: TextStyle(fontSize: 19),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "${this.description}",
+                                style:
+                                    TextStyle(fontSize: 12, color: Colors.grey),
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Text(
+                                  "Order Time :",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 22),
+                                ),
+                                DropdownButton(
+                                    hint: shift == null
+                                        ? Text("Time Shift")
+                                        : Text("$shift"),
+                                    items: getTimings(),
+                                    onChanged: (data) {
+                                      shift = data as String?;
+                                      currentTiming = data as String?;
+                                      // Xeatscubit.get(context).emit(SetTiming());
+                                    }),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Text(
+                                  "QTY :",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 22),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    IconButton(
+                                        onPressed: () {
+                                          if (quantity != 1) {
+                                            quantity--;
+                                            totalPrice = quantity * price!;
+                                            Xeatscubit.get(context)
+                                                .emit(RemoveQuantity());
+                                          }
+                                        },
+                                        icon: Icon(
+                                          Icons.remove,
+                                          color:
+                                              Color.fromARGB(255, 9, 134, 211),
+                                        )),
+                                    Text("${this.quantity}"),
+                                    IconButton(
+                                        onPressed: () {
+                                          quantity++;
+                                          totalPrice = quantity * price!;
+                                          Xeatscubit.get(context)
+                                              .emit(AddQuantity());
+                                        },
+                                        icon: Icon(
+                                          Icons.add,
+                                          color:
+                                              Color.fromARGB(255, 9, 134, 211),
+                                        )),
+                                  ],
+                                ),
+                              ],
                             )
                           ],
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            "Order Time :",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 22),
-                          ),
-                          DropdownButton(
-                              hint: shift == null
-                                  ? Text("Time Shift")
-                                  : Text("$shift"),
-                              items: getTimings(),
-                              onChanged: (data) {
-                                shift = data as String?;
-                                currentTiming = data as String?;
-                                // Xeatscubit.get(context).emit(SetTiming());
-                              }),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            "QTY :",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 22),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconButton(
-                                  onPressed: () {
-                                    quantity++;
-                                    totalPrice = quantity * price!;
-                                    Xeatscubit.get(context).emit(AddQuantity());
-                                  },
-                                  icon: Icon(
-                                    Icons.add,
-                                    color: Color.fromARGB(255, 9, 134, 211),
-                                  )),
-                              Text("${this.quantity}"),
-                              IconButton(
-                                  onPressed: () {
-                                    if (quantity != 1) {
-                                      quantity--;
-                                      totalPrice = quantity * price!;
-                                      Xeatscubit.get(context)
-                                          .emit(RemoveQuantity());
-                                    }
-                                  },
-                                  icon: Icon(
-                                    Icons.remove,
-                                    color: Color.fromARGB(255, 9, 134, 211),
-                                  ))
-                            ],
-                          ),
-                        ],
-                      )
                     ],
                   ),
                 ),

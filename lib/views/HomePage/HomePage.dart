@@ -8,8 +8,9 @@ import 'package:xeats/controllers/Components/DiscountBanner.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Components/Products%20Components/ProductView.dart';
 import 'package:xeats/controllers/Components/Restaurant%20Components/RestaurantView.dart';
-import 'package:xeats/controllers/Components/TopPage.dart';
+import 'package:xeats/controllers/Components/AppBarCustomized.dart';
 import 'package:xeats/controllers/Cubit.dart';
+import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/views/Cart/cart.dart';
@@ -55,15 +56,22 @@ class HomePage extends StatelessWidget {
         create: (context) => Xeatscubit()
           ..GetMostSoldProducts()
           ..getPoster()
-          ..GetResturants(),
+          ..GetResturants()
+          ..Email()
+          ..CartData(),
         child: BlocConsumer<Xeatscubit, XeatsStates>(
           builder: ((context, state) {
             var cubit = Xeatscubit.get(context);
+            var userEmail = cubit.EmailInforamtion;
+            var userId = cubit.idInformation;
             var product_api = Xeatscubit.MostSold;
             var category_api = Xeatscubit.Get_Category;
             var restaurant_api = Xeatscubit.ResturantsList;
 
+            var cart = cubit.cartID;
+
             return Scaffold(
+              appBar: appBar(context),
               body: Container(
                 child: SingleChildScrollView(
                   child: Column(
@@ -73,19 +81,11 @@ class HomePage extends StatelessWidget {
                         SizedBox(
                           height: height / 15,
                         ),
-                        Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              TopPage(),
-                            ],
-                          ),
-                        ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Container(
                             child: ConditionalBuilder(
-                                condition: Xeatscubit.getimages.isNotEmpty,
+                                condition: Xeatscubit.getposters.isNotEmpty,
                                 fallback: (context) => Center(
                                       child: Loading(),
                                     ),
@@ -100,7 +100,7 @@ class HomePage extends StatelessWidget {
                               Padding(
                                 padding: const EdgeInsets.all(15.0),
                                 child: Text(
-                                  'Resturants',
+                                  userId.toString(),
                                   style: GoogleFonts.kanit(fontSize: 16),
                                 ),
                               ),

@@ -9,7 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Components/Products%20Components/ProductView.dart';
-import 'package:xeats/controllers/Components/TopPage.dart';
+import 'package:xeats/controllers/Components/AppBarCustomized.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -40,10 +40,10 @@ class Resturantss extends StatelessWidget {
             var Connection = false;
 
             return Scaffold(
+              appBar: appBar(context),
               body: SingleChildScrollView(
                 child: SafeArea(
                   child: Column(children: [
-                    TopPage(),
                     Container(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,16 +168,7 @@ class Resturantss extends StatelessWidget {
                                                 if (loadingProgress == null)
                                                   return child;
                                                 return Center(
-                                                  child: Loading(
-                                                      // value: loadingProgress
-                                                      //             .expectedTotalBytes !=
-                                                      //         null
-                                                      //     ? loadingProgress
-                                                      //             .cumulativeBytesLoaded /
-                                                      //         loadingProgress
-                                                      //             .expectedTotalBytes!
-                                                      //     : null,
-                                                      ),
+                                                  child: Loading(),
                                                 );
                                               },
                                             )),

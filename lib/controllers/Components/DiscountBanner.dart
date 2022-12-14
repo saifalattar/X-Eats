@@ -10,7 +10,7 @@ class DiscountBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var data_from_api = Xeatscubit.getimages;
+    var data_from_api = Xeatscubit.getposters;
     return Column(
       children: [
         CarouselSlider.builder(
@@ -37,15 +37,3 @@ class DiscountBanner extends StatelessWidget {
     );
   }
 }
-
-
-// BoxDecoration(
-//                   borderRadius: BorderRadius.circular(20),
-//                   image: DecorationImage(
-//                     fit: BoxFit.fill,
-//                     image: NetworkImage(
-//                       'https://www.x-eats.com' +
-//                           data_from_api[itemIndex]['background_image'],
-//                     ),
-//                   ),
-//                 ),

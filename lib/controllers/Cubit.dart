@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Components/ItemClass.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/controllers/States.dart';
@@ -12,7 +14,11 @@ import 'package:xeats/views/HomePage/HomePage.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/Resturants/Resturants.dart';
 import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
-import 'package:xeats/views/ResturantsMenu/categoryView.dart';
+import 'package:xeats/views/CategoryView/categoryView.dart';
+import 'package:xeats/views/SignIn/SignIn.dart';
+
+import 'Components/Categories Components/CategoryCard.dart';
+import 'Components/Global Components/loading.dart';
 
 class Xeatscubit extends Cubit<XeatsStates> {
   Xeatscubit() : super(SuperXeats());
@@ -30,16 +36,11 @@ class Xeatscubit extends Cubit<XeatsStates> {
   var Lastname = TextEditingController();
   var Phone = TextEditingController();
   var datecontroller = TextEditingController();
-  bool ShowLabel = true;
-  bool ShowLabel2 = true;
-  bool ShowLabel3 = true;
-  bool ShowLabel4 = true;
-  int currentindex = 0;
-  List<Widget> Screens = [
-    HomePage(),
-    Resturantss(),
-    Profile(),
-  ];
+
+  // bool ShowLabel = true;
+  // bool ShowLabel2 = true;
+  // bool ShowLabel3 = true;
+  // bool ShowLabel4 = true;
 
   ////////////////////////////////////////////////
 
@@ -47,48 +48,79 @@ class Xeatscubit extends Cubit<XeatsStates> {
 
   // user data retrieved after logging in
 
-  int? userId = 191, cartId = 189; // for testing 224, 209
-
-  //////////////////////////////////////
-  ///// Base url ///////////
-  String BASEURL = "https://www.x-eats.com";
-
-  List<BottomNavigationBarItem> bottomitems = const [
-    BottomNavigationBarItem(
-      backgroundColor: Colors.blue,
-      icon: Icon(
-        Icons.home_outlined,
-        color: Color.fromARGB(193, 0, 0, 0),
-      ),
-      label: 'Home',
-    ),
-    BottomNavigationBarItem(
-        backgroundColor: Colors.blue,
-        icon: Icon(
-          Icons.restaurant,
-          color: Colors.black,
-        ),
-        label: 'Resturants'),
-    BottomNavigationBarItem(
-        backgroundColor: Colors.blue,
-        icon: Icon(
-          Icons.account_circle,
-          color: Colors.black,
-        ),
-        label: 'Profile'),
-  ];
-
   static Xeatscubit get(context) => BlocProvider.of(context);
 
-  void changebottomnavindex(int index) {
-    currentindex = index;
+  // int? userId = 1, cartId = 7; // for testing 224, 209
 
-    emit(ChangeSuccefully());
+  String BASEURL = "https://www.x-eats.com";
+
+  static List<dynamic> EmailInList = [];
+
+//This Function Will Call when user Sign In Succefuly
+  Future<List> getEmail(
+    context, {
+    // The Function Will Get The email of user and take it as EndPoint to show his information
+    String? email,
+  }) async {
+    await DioHelper.getdata(url: "get_user_by_id/$email", query: {})
+        .then((value) async {
+      //EmailInformationList
+      EmailInList = value.data['Names'];
+      print(EmailInList[0]);
+      SharedPreferences userInf = await SharedPreferences.getInstance();
+      userInf.setString('EmailInf', EmailInList[0]['email']);
+      userInf.setInt("Id", EmailInList[0]['id']);
+      emit(SuccessGetInformation());
+    }).catchError((onError) {
+      emit(FailgetInformation());
+      print(FailgetInformation());
+    });
+    return EmailInList;
   }
 
-  void changepasswordVisablity1() {
-    isPassword1 = !isPassword1;
-    emit(SuperXeatsOff(isPassword1));
+//-------------------- Function Separated to get his email if his email null then it will go to login if not then it will go to home page
+  String? EmailInforamtion;
+  int? idInformation;
+  int? cartID;
+
+  Future<void> Email() async {
+    SharedPreferences User = await SharedPreferences.getInstance();
+    EmailInforamtion = User.getString('EmailInf');
+    idInformation = User.getInt('Id');
+    emit(SuccessEmailProfile());
+    print(SuccessEmailProfile());
+  }
+
+  void signOut(context) async {
+    SharedPreferences userInformation = await SharedPreferences.getInstance();
+    userInformation.clear();
+    Navigation(context, SignIn());
+  }
+
+  static List<dynamic> cartList = [];
+  Future<List> getCart() async {
+    await DioHelper.getdata(url: "get_carts_by_id/admin@admin.com", query: {})
+        .then((value) async {
+      //EmailInformationList
+      cartList = value.data['Names'];
+      print(cartList);
+      SharedPreferences userCartID = await SharedPreferences.getInstance();
+      userCartID.setInt("cartIDSaved", cartList[0]['id']);
+      emit(SuccessGetInformation());
+    }).catchError((onError) {
+      emit(FailgetInformation());
+      print(FailgetInformation());
+    });
+    return cartList;
+  }
+
+//-------------------- Function Separated to get his email if his email null then it will go to login if not then it will go to home page
+
+  Future<void> CartData() async {
+    SharedPreferences cart = await SharedPreferences.getInstance();
+    cartID = cart.getInt('cartIDSaved');
+    emit(SuccessEmailProfile());
+    print(SuccessEmailProfile());
   }
 
   static List<dynamic> Get_Category = [];
@@ -103,7 +135,6 @@ class Xeatscubit extends Cubit<XeatsStates> {
   }
 
   static List<dynamic> Get_Products = [];
-
   void GetProducts() {
     DioHelper.getdata(url: 'get_products/', query: {}).then((value) {
       Get_Products = value.data['Names'];
@@ -125,29 +156,14 @@ class Xeatscubit extends Cubit<XeatsStates> {
     });
   }
 
-  static List<dynamic> getimages = [];
-
+  static List<dynamic> getposters = [];
   void getPoster() {
     DioHelper.getdata(url: 'get_poster/', query: {}).then((value) {
-      getimages = value.data['Names'];
-      print(getimages);
+      getposters = value.data['Names'];
+      print(getposters);
       emit(ProductsSuccess());
     }).catchError((error) {
       print(ProductsFail(error.toString()));
-    });
-  }
-
-  static List<dynamic> users = [];
-
-  get_users() async {
-    DioHelper.getdata(
-      url: 'get_user_by_id/',
-      query: {},
-    ).then((value) {
-      users = value.data['Names'];
-      print(users);
-    }).catchError((error) {
-      print(error);
     });
   }
 
@@ -166,24 +182,10 @@ class Xeatscubit extends Cubit<XeatsStates> {
     });
   }
 
-  Map k = {
-    "user": 115,
-    "cart": 113,
-    "orderId": 273,
-    "ordered": true,
-    "paid": false,
-    "product": 165,
-    "price": 100.0,
-    "quantity": 1,
-    "created": "2022-12-08T13:25:07.395263+02:00",
-    "totalOrderItemPrice": 100,
-    "Restaurant": 6,
-    "order_shift": "1:00 PM"
-  };
-
   // function to add item to the cart
   void addToCart(
-      {String? productId,
+      {int? id,
+      String? productId,
       String? quantity,
       String? price,
       String? totalPrice,
@@ -193,31 +195,31 @@ class Xeatscubit extends Cubit<XeatsStates> {
     await Dio()
         .post("$BASEURL/get_cartItems/",
             data: {
-              "user": userId,
-              "cart": cartId,
+              "user": id,
+              "cart": 7,
               "product": productId,
               "price": price,
               "quantity": quantity,
               "totalOrderItemPrice": totalPrice,
               "Restaurant": restaurantId,
-              "order_shift": timeShift
+              "order_shift": "25"
             },
             options: Options(
                 headers: {'Content-type': 'application/json; charset=UTF-8'}))
         .then((value) async {
-      // await Dio()
-      //     .post("$BASEURL/get_carts/", data: {
-      //       "id": cartId.toString(),
-      //       "total_price": FoodItem.getSubtotal().toString(),
-      //       "total_after_delivery":
-      //           (FoodItem.deliveryFee + FoodItem.getSubtotal()).toString(),
-      //       "user": userId.toString()
-      //     })
-      //     .then((value) => print("Added to cart "))
-      //     .catchError((onError) {
-      //       print("Errooooooooooooor");
-      //       print(onError.response.data);
-      // });
+      await Dio()
+          .post("$BASEURL/get_carts/", data: {
+            "id": 7.toString(),
+            "total_price": FoodItem.getSubtotal().toString(),
+            "total_after_delivery":
+                (FoodItem.deliveryFee + FoodItem.getSubtotal()).toString(),
+            "user": id.toString()
+          })
+          .then((value) => print("Added to cart "))
+          .catchError((onError) {
+            print("Errooooooooooooor");
+            print(onError.response.data);
+          });
     }).catchError((onError) => print(onError));
   }
 
@@ -229,15 +231,18 @@ class Xeatscubit extends Cubit<XeatsStates> {
         .catchError((onError) => print(onError));
   }
 
-  Future<List<Widget>> getCartItems() async {
+  Future<List<Widget>> getCartItems(
+    context, {
+    // The Function Will Get The email of user and take it as EndPoint to show his information
+    int? users,
+  }) async {
     FoodItem.CartItems.clear();
     List<Map> items = [];
     Map itemImages = {};
+
     await Dio().get("$BASEURL/get_cartItems/").then((value) async {
       for (var i in value.data["Names"]) {
-        if (i["user"] == userId &&
-            i["cart"] == cartId &&
-            i["ordered"] == false) {
+        if (i["user"] == users && i["cart"] == 7 && i["ordered"] == false) {
           items.add({
             "product": i["product"],
             "qty": i["quantity"],
@@ -245,7 +250,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
           });
         }
       }
-      print(items);
+      print(email);
       for (var i in items) {
         FoodItem? theItem;
         await Dio()
@@ -289,6 +294,8 @@ class Xeatscubit extends Cubit<XeatsStates> {
           print(onError);
         });
         print("caaaaaaaaaaaaaaaaaaaaaaaaaaaaart");
+
+        print("caaaaaaaaaaaaaaaaaaaaaaaaaaaaart");
         FoodItem.CartItems.add(theItem!);
       }
     }).catchError((onError) => print(onError));
@@ -296,15 +303,18 @@ class Xeatscubit extends Cubit<XeatsStates> {
   }
 
   // a function to confirm and checkout
-  void confirmOrder() async {
+  void confirmOrder(
+    context, {
+    int? id,
+  }) async {
     await Dio()
         .post("$BASEURL/get_orders/", data: {
-          "user": userId,
+          "user": id,
           "total_price_after_delivery":
               FoodItem.deliveryFee + FoodItem.getSubtotal(),
           "paid": false,
           "totalPrice": FoodItem.getSubtotal(),
-          "cart": cartId
+          "cart": 7
         })
         .then((value) => print(value))
         .catchError((onError) => print(onError));
@@ -345,35 +355,44 @@ class Xeatscubit extends Cubit<XeatsStates> {
     });
   }
 
-  Future<Widget> getCurrentCategories(BuildContext context,
-      {required String? restaurantId}) async {
+  Future<Widget> getCurrentCategories(
+    BuildContext context, {
+    required String? restaurantId,
+  }) async {
     Widget result = Container();
     await Dio()
         .get("$BASEURL/get_category_of_restaurants/$restaurantId")
         .then((value) {
       result = ListView.separated(
           itemBuilder: ((context, index) {
-            return GestureDetector(
-              onTap: () {
-                Navigation(
-                    context,
-                    CategoriesView(
+            if (value.data["Names"][index] == null) {
+              return Loading();
+            } else {
+              return SizedBox(
+                height: MediaQuery.of(context).size.height / 5,
+                child: CategoryCard(
+                  press: () {
+                    Navigation(
+                      context,
+                      CategoriesView(
                         restaurantId,
                         value.data["Names"][index]["id"].toString(),
-                        value.data["Names"][index]["display_name"].toString()));
-              },
-              child: SizedBox(
-                height: 100,
-                child: Card(
-                  child: Center(
-                      child: Text(
-                          "${value.data["Names"][index]["display_name"]}")),
+                        value.data["Names"][index]["display_name"].toString(),
+                      ),
+                    );
+                  },
+                  category: value.data["Names"][index]['display_name'],
+                  image: DioHelper.dio!.options.baseUrl +
+                      value.data["Names"][index]['image'],
+                  description: "",
                 ),
-              ),
-            );
+              );
+            }
+            // "${value.data["Names"][index]["display_name"]}")),
           }),
           separatorBuilder: ((context, index) {
             return SizedBox(
+              child: Divider(),
               height: 20,
             );
           }),
@@ -407,12 +426,10 @@ class Xeatscubit extends Cubit<XeatsStates> {
               isBestOffer: value.data["Names"][index]["Best_Offer"],
               isMostPopular: value.data["Names"][index]["Most_Popular"],
               isNewProduct: value.data["Names"][index]["New_Products"],
-            ).itemCard(context);
+            ).productsOfCategory(context);
           },
           separatorBuilder: ((context, index) {
-            return const SizedBox(
-              height: 20,
-            );
+            return Divider();
           }),
           itemCount: value.data["Names"].length);
     }).catchError((e) {

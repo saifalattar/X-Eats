@@ -8,8 +8,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/controllers/Cubit.dart';
-import 'package:xeats/controllers/States.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
+
+import '../../controllers/Cubits/ButtomNavigationBarCubit/NavStates.dart';
+import '../../controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
 
 class Layout extends StatelessWidget {
   String Hour = DateFormat("HH").format(DateTime.now());
@@ -37,20 +39,21 @@ class Layout extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return BlocProvider(
-      create: ((context) => Xeatscubit()),
-      child: BlocConsumer<Xeatscubit, XeatsStates>(
+      create: ((context) => NavBarCubitcubit()),
+      child: BlocConsumer<NavBarCubitcubit, NavBarCubitStates>(
           builder: ((context, state) {
             {
-              var cubit = Xeatscubit.get(context);
+              // var cubit = Xeatscubit.get(context);
+              var navcubit = NavBarCubitcubit.get(context);
               return Scaffold(
-                  body: cubit.Screens[cubit.currentindex],
+                  body: navcubit.Screens[navcubit.currentindex],
                   bottomNavigationBar: BottomNavigationBar(
                     selectedLabelStyle: GoogleFonts.kanit(),
                     backgroundColor: Colors.white,
-                    items: cubit.bottomitems,
-                    currentIndex: cubit.currentindex,
+                    items: navcubit.bottomitems,
+                    currentIndex: navcubit.currentindex,
                     onTap: (index) {
-                      cubit.changebottomnavindex(index);
+                      navcubit.changebottomnavindex(index);
                     },
                   ));
             }

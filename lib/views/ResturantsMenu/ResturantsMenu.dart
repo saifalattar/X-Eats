@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
-import 'package:xeats/controllers/Components/TopPage.dart';
+import 'package:xeats/controllers/Components/AppBarCustomized.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/controllers/States.dart';
@@ -15,6 +15,8 @@ import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/Resturants/Resturants.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
+
+import '../../controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
 
 class ResturantsMenu extends StatelessWidget {
   ResturantsMenu({super.key, required this.data});
@@ -47,112 +49,124 @@ class ResturantsMenu extends StatelessWidget {
         listener: (context, state) {},
         builder: (context, state) {
           var cubit = Xeatscubit.get(context);
+          var navcubit = NavBarCubitcubit.get(context);
           return Scaffold(
-            body: Column(
-              children: [
-                Stack(children: [
-                  SafeArea(child: TopPage()),
-                  Row(
-                    children: [
-                      Column(
+            appBar: appBar(context),
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  SafeArea(
+                    child: Stack(children: [
+                      Row(
                         children: [
-                          SizedBox(
-                            height: height / 9.5,
-                          ),
-                          Row(
+                          Column(
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.all(12.0),
-                                child: Container(
-                                  height: height / 5,
-                                  width: width / 2.4,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      color: Colors.amber,
-                                      border: Border.all(
-                                          width: 20, color: Colors.white)),
-                                  child: Image(
-                                    image: NetworkImage(
-                                        DioHelper.dio!.options.baseUrl +
-                                            data['image']),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(0.0),
+                                    child: Container(
+                                      height: height / 5,
+                                      width: width / 2.4,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          color: Colors.transparent,
+                                          border: Border.all(
+                                              width: 20, color: Colors.white)),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(20),
+                                        child: Image(
+                                          image: NetworkImage(
+                                              DioHelper.dio!.options.baseUrl +
+                                                  data['image']),
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: width / 45,
+                                  SizedBox(
+                                    width: width / 45,
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          SizedBox(height: height / 9),
-                          Padding(
-                            padding: const EdgeInsets.all(0.0),
-                            child: Text(
-                              data['Name'],
-                              style: GoogleFonts.kanit(fontSize: 16),
-                            ),
-                          ),
-                          Row(
+                          Column(
                             children: [
-                              Container(
-                                width: width / 7,
-                                height: height / 13,
-                                child: const Image(
-                                    image: AssetImage(
-                                  'assets/Images/First.png',
-                                )),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(0.0),
+                                    child: Text(
+                                      data['Name'] + " " + "Categories",
+                                      style: GoogleFonts.kanit(fontSize: 12),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              SizedBox(
-                                width: width / 79,
+                              Row(
+                                children: [
+                                  Container(
+                                    width: width / 7,
+                                    height: height / 13,
+                                    child: const Image(
+                                        image: AssetImage(
+                                      'assets/Images/First.png',
+                                    )),
+                                  ),
+                                  SizedBox(
+                                    width: width / 79,
+                                  ),
+                                  Text(
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    'X-Eats Delivery',
+                                    style: GoogleFonts.kanit(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 10,
+                                    ),
+                                  )
+                                ],
                               ),
-                              Text(
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                'X-Eats Delivery',
-                                style: GoogleFonts.kanit(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 10,
-                                ),
-                              )
                             ],
-                          ),
+                          )
                         ],
                       )
-                    ],
-                  )
-                ]),
-                SizedBox(
-                  height: 50,
-                  width: double.maxFinite,
-                  child: AdWidget(ad: bannerAd),
-                ),
-                SizedBox(
-                  height: height / 75.6,
-                ),
-                SizedBox(
-                  height: height / 1.995,
-                  child: FutureBuilder(
-                    builder: ((context, snapshot) {
-                      if (snapshot.hasData) {
-                        return snapshot.data!;
-                      } else {
-                        return Loading();
-                      }
-                    }),
-                    future: Xeatscubit.get(context).getCurrentCategories(
-                        context,
-                        restaurantId: data["id"].toString()),
+                    ]),
                   ),
-                ),
-              ],
+                  SizedBox(
+                    height: 50,
+                    width: double.maxFinite,
+                    child: AdWidget(ad: bannerAd),
+                  ),
+                  SizedBox(
+                    height: height / 75.6,
+                  ),
+                  SizedBox(
+                    height: height / 1.995,
+                    child: FutureBuilder(
+                      builder: ((context, snapshot) {
+                        if (snapshot.hasData) {
+                          return snapshot.data!;
+                        } else {
+                          return Loading();
+                        }
+                      }),
+                      future: Xeatscubit.get(context).getCurrentCategories(
+                          context,
+                          restaurantId: data["id"].toString()),
+                    ),
+                  ),
+                ],
+              ),
             ),
             bottomNavigationBar: BottomNavigationBar(
               selectedLabelStyle: GoogleFonts.kanit(),
               backgroundColor: Colors.white,
-              items: cubit.bottomitems,
+              items: navcubit.bottomitems,
               currentIndex: 1,
               onTap: (index) {
                 if (index == 1) {

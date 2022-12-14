@@ -29,3 +29,9 @@ class RemoveQuantity extends SuperXeats {}
 class LoadedCartItems extends SuperXeats {}
 
 class SetTiming extends SuperXeats {}
+
+class FailgetInformation extends SuperXeats {}
+
+class SuccessGetInformation extends SuperXeats {}
+
+class SuccessEmailProfile extends SuperXeats {}

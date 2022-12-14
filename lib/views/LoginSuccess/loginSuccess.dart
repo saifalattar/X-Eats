@@ -5,8 +5,8 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:xeats/controllers/AuthCubit/States.dart';
-import 'package:xeats/controllers/AuthCubit/cubit.dart';
+import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
+import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/controllers/Cubit.dart';

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:xeats/controllers/AuthCubit/cubit.dart';
+import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubit.dart';
+import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
@@ -26,7 +27,8 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => Xeatscubit()),
-          BlocProvider(create: (context) => AuthCubit())
+          BlocProvider(create: (context) => AuthCubit()),
+          BlocProvider(create: (context) => NavBarCubitcubit()),
         ],
         child: ScreenUtilInit(
           designSize: const Size(415, 900),

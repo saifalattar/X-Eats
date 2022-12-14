@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/container.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/controllers/Components/Global%20Components/DefaultButton.dart';
 import 'package:xeats/controllers/Components/ItemClass.dart';
 import 'package:xeats/controllers/Cubit.dart';
 
 class CheckOut extends StatelessWidget {
-  const CheckOut({
-    super.key,
-  });
+  const CheckOut({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var cubit = Xeatscubit.get(context);
+    var userId = cubit.idInformation;
     return Scaffold(
       appBar: AppBar(
         actions: [Image.asset("assets/Images/shopping-cart.png")],
@@ -92,9 +95,11 @@ class CheckOut extends StatelessWidget {
                       style: TextStyle(color: Colors.black),
                     )),
                 DefaultButton(
-                    // width: MediaQuery.of(context).size.width / 2.2,
                     function: () {
-                      Xeatscubit.get(context).confirmOrder();
+                      Xeatscubit.get(context).confirmOrder(
+                        context,
+                        id: userId,
+                      );
                     },
                     text: "Order Now")
               ],

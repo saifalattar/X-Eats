@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:xeats/controllers/AuthCubit/States.dart';
+import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/views/HomePage/HomePage.dart';
@@ -105,10 +105,10 @@ class AuthCubit extends Cubit<AuthStates> {
     });
   }
 
-  //--------------------- Function to get Email//-------------
   List<dynamic> EmailInList = [];
+
 //This Function Will Call when user Sign In Succefuly
-  Future<void> getEmail(
+  Future<List> getEmail(
     context, {
     // The Function Will Get The email of user and take it as EndPoint to show his information
     String? email,
@@ -117,30 +117,19 @@ class AuthCubit extends Cubit<AuthStates> {
         .then((value) async {
       //EmailInformationList
       EmailInList = value.data['Names'];
+      print(EmailInList[0]);
       SharedPreferences userInf = await SharedPreferences.getInstance();
-      //set this email in shared prefrences
-      userInf.setString('Email', EmailInList[0]['email']);
+      userInf.setString('EmailInf', EmailInList[0]['email']);
+      userInf.setInt("Id", EmailInList[0]['id']);
       emit(SuccessGetInformation());
     }).catchError((onError) {
       emit(FailgetInformation());
       print(FailgetInformation());
     });
+    return EmailInList;
   }
 
-//-------------------- Function Separated to get his email if his email null then it will go to login if not then it will go to home page
-  String? UserInformation;
-  Future<void> Email() async {
-    SharedPreferences email = await SharedPreferences.getInstance();
-    UserInformation = email.getString('Email');
-    emit(SuccessEmailProfile());
-    print(SuccessEmailProfile());
-  }
-
-  void signOut(context) async {
-    SharedPreferences userInformation = await SharedPreferences.getInstance();
-    userInformation.clear();
-    Navigation(context, SignIn());
-  }
+  //--------------------- Function to get Email//-------------
 
   void Validate_Cpmplete_profile(BuildContext context) {
     if (complee_profile_formkey.currentState!.validate()) {

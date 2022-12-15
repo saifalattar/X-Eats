@@ -9,6 +9,7 @@ import 'package:xeats/controllers/Components/AppBarCustomized.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/controllers/Components/Components.dart';
+import 'package:xeats/views/Cart/cart.dart';
 import 'package:xeats/views/CheckOut/CheckOut.dart';
 
 class FoodItem extends StatelessWidget {
@@ -22,88 +23,7 @@ class FoodItem extends StatelessWidget {
   final bool? isMostPopular, isNewProduct, isBestOffer;
   String? cartItemId;
 
-  static List<FoodItem> CartItems = [
-    FoodItem(
-        id: 43,
-        restaurantImage: "/uploads/Restaurant/Untitled_design_5.png",
-        itemImage: "/uploads/Catgories/8.png",
-        englishName: "Alexandrian Liver Sandwich",
-        arabicName:
-            "\u0643\u0628\u062f\u0629 \u0627\u0633\u0643\u0646\u0631\u0627\u0646\u064a",
-        productSlug: "alexandrian-liver-sandwich",
-        restaurant: 2,
-        description: "",
-        price: 20.0,
-        category: 10,
-        isBestOffer: false,
-        isMostPopular: false,
-        isNewProduct: false,
-        creationDate: "2022-11-05T14:22:07.990140+02:00"),
-    FoodItem(
-        id: 43,
-        restaurantImage: "/uploads/Restaurant/Untitled_design_5.png",
-        itemImage: "/uploads/Catgories/8.png",
-        englishName: "Alexandrian Liver Sandwich",
-        arabicName:
-            "\u0643\u0628\u062f\u0629 \u0627\u0633\u0643\u0646\u0631\u0627\u0646\u064a",
-        productSlug: "alexandrian-liver-sandwich",
-        restaurant: 2,
-        description: "",
-        price: 20.0,
-        category: 10,
-        isBestOffer: false,
-        isMostPopular: false,
-        isNewProduct: false,
-        creationDate: "2022-11-05T14:22:07.990140+02:00"),
-    FoodItem(
-        id: 43,
-        restaurantImage: "/uploads/Restaurant/Untitled_design_5.png",
-        itemImage: "/uploads/Catgories/8.png",
-        englishName: "Alexandrian Liver Sandwich",
-        arabicName:
-            "\u0643\u0628\u062f\u0629 \u0627\u0633\u0643\u0646\u0631\u0627\u0646\u064a",
-        productSlug: "alexandrian-liver-sandwich",
-        restaurant: 2,
-        description: "",
-        price: 20.0,
-        category: 10,
-        isBestOffer: false,
-        isMostPopular: false,
-        isNewProduct: false,
-        creationDate: "2022-11-05T14:22:07.990140+02:00"),
-    FoodItem(
-        id: 43,
-        restaurantImage: "/uploads/Restaurant/Untitled_design_5.png",
-        itemImage: "/uploads/Catgories/8.png",
-        englishName: "Alexandrian Liver Sandwich",
-        arabicName:
-            "\u0643\u0628\u062f\u0629 \u0627\u0633\u0643\u0646\u0631\u0627\u0646\u064a",
-        productSlug: "alexandrian-liver-sandwich",
-        restaurant: 2,
-        description: "",
-        price: 20.0,
-        category: 10,
-        isBestOffer: false,
-        isMostPopular: false,
-        isNewProduct: false,
-        creationDate: "2022-11-05T14:22:07.990140+02:00"),
-    FoodItem(
-        id: 43,
-        restaurantImage: "/uploads/Restaurant/Untitled_design_5.png",
-        itemImage: "/uploads/Catgories/8.png",
-        englishName: "Alexandrian Liver Sandwich",
-        arabicName:
-            "\u0643\u0628\u062f\u0629 \u0627\u0633\u0643\u0646\u0631\u0627\u0646\u064a",
-        productSlug: "alexandrian-liver-sandwich",
-        restaurant: 2,
-        description: "",
-        price: 20.0,
-        category: 10,
-        isBestOffer: false,
-        isMostPopular: false,
-        isNewProduct: false,
-        creationDate: "2022-11-05T14:22:07.990140+02:00")
-  ];
+  static List<FoodItem> CartItems = [];
 
   FoodItem(
       {this.id,
@@ -249,7 +169,7 @@ class FoodItem extends StatelessWidget {
                           Expanded(
                             child: Text(
                               englishName!,
-                              style: GoogleFonts.kanit(
+                              style: GoogleFonts.poppins(
                                   fontSize: 18, fontWeight: FontWeight.bold),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -257,12 +177,12 @@ class FoodItem extends StatelessWidget {
                           ),
                           Text(
                             category.toString(),
-                            style: GoogleFonts.kanit(
+                            style: GoogleFonts.poppins(
                                 color: Colors.grey, fontSize: 11),
                           ),
                           Text(
                             price.toString() + "  EGP",
-                            style: GoogleFonts.kanit(
+                            style: GoogleFonts.poppins(
                                 color: Colors.black, fontSize: 16),
                           ),
                         ],
@@ -306,14 +226,13 @@ class FoodItem extends StatelessWidget {
           //add to cart button
           onPressed: () {
             Xeatscubit.get(context).addToCart(
-                id: userId,
                 productId: id.toString(),
                 quantity: quantity.toString(),
                 price: price.toString(),
                 totalPrice: totalPrice.toString(),
                 restaurantId: restaurant.toString(),
                 timeShift: currentTiming);
-            Navigation(context, const CheckOut());
+            Navigation(context, const Cart());
           },
           child: const Icon(Icons.add_shopping_cart_rounded),
         ),

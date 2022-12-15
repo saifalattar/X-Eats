@@ -33,7 +33,7 @@ class _SecondaryButtonState extends State<SecondaryButton> {
             width: 117,
           ),
           Text(widget.isUppercase ? widget.text : widget.text,
-              style: GoogleFonts.kanit(
+              style: GoogleFonts.poppins(
                 textStyle: const TextStyle(
                   fontFamily: 'UberMoveTextBold',
                   fontSize: 25.0,

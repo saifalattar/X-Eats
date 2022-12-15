@@ -40,7 +40,7 @@ class Boarding extends StatelessWidget {
                       ),
                       Text(
                         "ON TIME!!!",
-                        style: GoogleFonts.kanit(
+                        style: GoogleFonts.poppins(
                             fontSize: 40,
                             textStyle: TextStyle(color: Colors.black)),
                       ),

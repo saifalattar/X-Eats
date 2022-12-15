@@ -56,7 +56,7 @@ class _DefaultFormFieldState extends State<DefaultFormField> {
           onTap: widget.onTap,
           onFieldSubmitted: onsubmit,
           keyboardType: widget.type,
-          style: GoogleFonts.kanit(
+          style: GoogleFonts.poppins(
             height: 1.5,
           ),
           decoration: InputDecoration(

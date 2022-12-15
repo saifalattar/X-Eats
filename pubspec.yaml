@@ -42,6 +42,9 @@ dependencies:
   data_connection_checker:
   internet_connection_checker:
   google_mobile_ads: ^2.3.0
+  flutter_svg:
+  animated_text_kit:
+  page_transition:
 
 
   flutter:

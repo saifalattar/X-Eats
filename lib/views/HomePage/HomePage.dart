@@ -57,17 +57,18 @@ class HomePage extends StatelessWidget {
           ..GetMostSoldProducts()
           ..getPoster()
           ..GetResturants()
-          ..Email()
+          ..GettingUserData()
+          ..getCart()
           ..CartData(),
         child: BlocConsumer<Xeatscubit, XeatsStates>(
           builder: ((context, state) {
             var cubit = Xeatscubit.get(context);
-            var userEmail = cubit.EmailInforamtion;
-            var userId = cubit.idInformation;
             var product_api = Xeatscubit.MostSold;
             var category_api = Xeatscubit.Get_Category;
             var restaurant_api = Xeatscubit.ResturantsList;
-
+            var userEmail = cubit.EmailInforamtion;
+            var userId = cubit.idInformation;
+            var firstName = cubit.FirstName ?? 'Loading..';
             var cart = cubit.cartID;
 
             return Scaffold(
@@ -79,17 +80,39 @@ class HomePage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         SizedBox(
-                          height: height / 15,
+                          height: height / 20,
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            child: ConditionalBuilder(
-                                condition: Xeatscubit.getposters.isNotEmpty,
-                                fallback: (context) => Center(
-                                      child: Loading(),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 12, bottom: 12),
+                                    child: Text(
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      "Hey," + " " + '$firstName',
+                                      style: GoogleFonts.poppins(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                builder: (context) => DiscountBanner()),
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                child: ConditionalBuilder(
+                                    condition: Xeatscubit.getposters.isNotEmpty,
+                                    fallback: (context) => Center(
+                                          child: Loading(),
+                                        ),
+                                    builder: (context) => DiscountBanner()),
+                              ),
+                            ],
                           ),
                         ),
                         Container(
@@ -100,8 +123,10 @@ class HomePage extends StatelessWidget {
                               Padding(
                                 padding: const EdgeInsets.all(15.0),
                                 child: Text(
-                                  userId.toString(),
-                                  style: GoogleFonts.kanit(fontSize: 16),
+                                  'Restaurant',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
                               SingleChildScrollView(
@@ -157,7 +182,9 @@ class HomePage extends StatelessWidget {
                                 padding: const EdgeInsets.all(15.0),
                                 child: Text(
                                   'Most Ordered',
-                                  style: GoogleFonts.kanit(fontSize: 16),
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
                               SingleChildScrollView(
@@ -170,8 +197,7 @@ class HomePage extends StatelessWidget {
                                         (index) {
                                           return GestureDetector(
                                             child: ProductView(
-                                                image: product_api[index]
-                                                    ["image"],
+                                                image: 'images',
                                                 width: width / 2.0,
                                                 height: height / 4.2,
                                                 data: product_api[index]
@@ -185,41 +211,6 @@ class HomePage extends StatelessWidget {
                                           );
                                         },
                                       ),
-
-                                      ProductView(
-                                          width: width / 2.0,
-                                          height: height / 4.2,
-                                          data: "Shawrma Frakh" + "\n",
-                                          Colors: Colors.white,
-                                          image: const Image(
-                                            image: AssetImage(
-                                              'assets/Images/Shawrma.png',
-                                            ),
-                                          ),
-                                          Navigate: () => {}),
-                                      ProductView(
-                                          width: width / 2.0,
-                                          height: height / 4.2,
-                                          data: "Shawrma Frakh" + "\n",
-                                          Colors: Colors.white,
-                                          image: const Image(
-                                            image: AssetImage(
-                                              'assets/Images/Shawrma.png',
-                                            ),
-                                          ),
-                                          Navigate: () => {}),
-                                      ProductView(
-                                          width: width / 2.0,
-                                          height: height / 4.2,
-                                          data: "Shawrma Frakh" + "\n",
-                                          Colors: Colors.white,
-                                          image: const Image(
-                                            image: AssetImage(
-                                              'assets/Images/Shawrma.png',
-                                            ),
-                                          ),
-                                          Navigate: () => {}),
-                                      //
                                     ],
                                   ),
                                 ),

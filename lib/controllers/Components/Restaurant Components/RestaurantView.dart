@@ -46,7 +46,7 @@ class _RestaurantViewState extends State<RestaurantView> {
         Text(
           "${widget.data}",
           // semanticsLabel: data,
-          style: GoogleFonts.kanit(),
+          style: GoogleFonts.poppins(),
         )
       ],
     );

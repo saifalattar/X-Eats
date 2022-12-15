@@ -45,7 +45,7 @@ class _DropDownListGenderState extends State<DropDownListGender> {
       ),
       onTap: widget.onTap,
       onChanged: widget.changed,
-      style: GoogleFonts.kanit(height: 1.5),
+      style: GoogleFonts.poppins(height: 1.5),
       decoration: InputDecoration(
         enabledBorder: const OutlineInputBorder(
             borderRadius: const BorderRadius.all(Radius.circular(20)),
@@ -74,7 +74,7 @@ class _DropDownListGenderState extends State<DropDownListGender> {
         border: const OutlineInputBorder(borderSide: BorderSide()),
       ),
       hint: Text('Gender',
-          style: GoogleFonts.kanit(
+          style: GoogleFonts.poppins(
               textStyle: TextStyle(
             fontFamily: 'UberMoveTextBold',
             fontSize: 20.0.sp,
@@ -88,7 +88,7 @@ class _DropDownListGenderState extends State<DropDownListGender> {
                 : Icon(Icons.female),
             Text(
               genderr.toString(),
-              style: GoogleFonts.kanit(
+              style: GoogleFonts.poppins(
                   textStyle: TextStyle(
                 fontFamily: 'UberMoveTextBold',
                 fontSize: 20.0,

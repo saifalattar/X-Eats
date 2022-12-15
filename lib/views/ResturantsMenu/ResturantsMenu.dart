@@ -100,7 +100,7 @@ class ResturantsMenu extends StatelessWidget {
                                     padding: const EdgeInsets.all(0.0),
                                     child: Text(
                                       data['Name'] + " " + "Categories",
-                                      style: GoogleFonts.kanit(fontSize: 12),
+                                      style: GoogleFonts.poppins(fontSize: 12),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -124,7 +124,7 @@ class ResturantsMenu extends StatelessWidget {
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
                                     'X-Eats Delivery',
-                                    style: GoogleFonts.kanit(
+                                    style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 10,
                                     ),
@@ -164,7 +164,7 @@ class ResturantsMenu extends StatelessWidget {
               ),
             ),
             bottomNavigationBar: BottomNavigationBar(
-              selectedLabelStyle: GoogleFonts.kanit(),
+              selectedLabelStyle: GoogleFonts.poppins(),
               backgroundColor: Colors.white,
               items: navcubit.bottomitems,
               currentIndex: 1,

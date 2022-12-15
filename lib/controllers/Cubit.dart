@@ -1,19 +1,14 @@
-import 'package:bloc/bloc.dart';
+import 'dart:ffi';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Components/ItemClass.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/controllers/Components/Components.dart';
-import 'package:xeats/views/HomePage/HomePage.dart';
-import 'package:xeats/views/Profile/Profile.dart';
-import 'package:xeats/views/Resturants/Resturants.dart';
-import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
 import 'package:xeats/views/CategoryView/categoryView.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
 
@@ -50,8 +45,6 @@ class Xeatscubit extends Cubit<XeatsStates> {
 
   static Xeatscubit get(context) => BlocProvider.of(context);
 
-  // int? userId = 1, cartId = 7; // for testing 224, 209
-
   String BASEURL = "https://www.x-eats.com";
 
   static List<dynamic> EmailInList = [];
@@ -61,6 +54,10 @@ class Xeatscubit extends Cubit<XeatsStates> {
     context, {
     // The Function Will Get The email of user and take it as EndPoint to show his information
     String? email,
+    String? FirstName,
+    String? LastName,
+    int? idInformation,
+    Double? wallet,
   }) async {
     await DioHelper.getdata(url: "get_user_by_id/$email", query: {})
         .then((value) async {
@@ -69,7 +66,11 @@ class Xeatscubit extends Cubit<XeatsStates> {
       print(EmailInList[0]);
       SharedPreferences userInf = await SharedPreferences.getInstance();
       userInf.setString('EmailInf', EmailInList[0]['email']);
+      userInf.setString('FirstName', EmailInList[0]['first_name']);
+      userInf.setString('LastName', EmailInList[0]['last_name']);
       userInf.setInt("Id", EmailInList[0]['id']);
+      userInf.setDouble("wallet", EmailInList[0]['Wallet']);
+
       emit(SuccessGetInformation());
     }).catchError((onError) {
       emit(FailgetInformation());
@@ -80,13 +81,19 @@ class Xeatscubit extends Cubit<XeatsStates> {
 
 //-------------------- Function Separated to get his email if his email null then it will go to login if not then it will go to home page
   String? EmailInforamtion;
+  String? FirstName;
+  String? LastName;
   int? idInformation;
-  int? cartID;
+  Double? wallet;
 
-  Future<void> Email() async {
+  Future<void> GettingUserData() async {
     SharedPreferences User = await SharedPreferences.getInstance();
     EmailInforamtion = User.getString('EmailInf');
+    FirstName = User.getString('FirstName');
+    LastName = User.getString('LastName');
     idInformation = User.getInt('Id');
+    wallet = User.getDouble('wallet') as Double?;
+
     emit(SuccessEmailProfile());
     print(SuccessEmailProfile());
   }
@@ -98,9 +105,11 @@ class Xeatscubit extends Cubit<XeatsStates> {
   }
 
   static List<dynamic> cartList = [];
+
   Future<List> getCart() async {
-    await DioHelper.getdata(url: "get_carts_by_id/admin@admin.com", query: {})
-        .then((value) async {
+    await DioHelper.getdata(
+        url: "get_carts_by_id/'${EmailInforamtion}'",
+        query: {}).then((value) async {
       //EmailInformationList
       cartList = value.data['Names'];
       print(cartList);
@@ -115,7 +124,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
   }
 
 //-------------------- Function Separated to get his email if his email null then it will go to login if not then it will go to home page
-
+  int? cartID;
   Future<void> CartData() async {
     SharedPreferences cart = await SharedPreferences.getInstance();
     cartID = cart.getInt('cartIDSaved');
@@ -146,10 +155,35 @@ class Xeatscubit extends Cubit<XeatsStates> {
   }
 
   static List<dynamic> MostSold = [];
+  Map itemImages = {};
+
   void GetMostSoldProducts() {
     DioHelper.getdata(url: 'get_products_mostSold_products/', query: {})
-        .then((value) {
+        .then((value) async {
       MostSold = value.data['Names'];
+      FoodItem? theItem;
+      theItem = FoodItem(
+          category: value.data["Names"][0]["category"],
+          isBestOffer: value.data["Names"][0]["Best_Offer"],
+          isMostPopular: value.data["Names"][0]["Most_Popular"],
+          isNewProduct: value.data["Names"][0]["New_Products"]);
+
+      if (!itemImages.containsKey(value.data["Names"][0]["category"])) {
+        print("1111");
+        await Dio()
+            .get(
+                "$BASEURL/get_category_by_id/${value.data["Names"][0]["category"]}")
+            .then((value2) {
+          print("2222");
+          theItem!.itemImage = value2.data["Names"][0]["image"];
+          itemImages.addAll({
+            value.data["Names"][0]["category"]: value2.data["Names"][0]["image"]
+          });
+        });
+      } else {
+        theItem.itemImage = itemImages[value.data["Names"][0]["category"]];
+      }
+
       emit(ProductsSuccess());
     }).catchError((error) {
       print(ProductsFail(error.toString()));
@@ -206,8 +240,8 @@ class Xeatscubit extends Cubit<XeatsStates> {
     await Dio()
         .post("$BASEURL/get_cartItems/",
             data: {
-              "user": id,
-              "cart": 7,
+              "user": idInformation,
+              "cart": cartID,
               "product": productId,
               "price": price,
               "quantity": quantity,
@@ -220,7 +254,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
         .then((value) async {
       await Dio()
           .post("$BASEURL/get_carts/", data: {
-            "id": 7.toString(),
+            "id": cartID,
             "total_price": FoodItem.getSubtotal().toString(),
             "total_after_delivery":
                 (FoodItem.deliveryFee + FoodItem.getSubtotal()).toString(),
@@ -253,7 +287,9 @@ class Xeatscubit extends Cubit<XeatsStates> {
 
     await Dio().get("$BASEURL/get_cartItems/").then((value) async {
       for (var i in value.data["Names"]) {
-        if (i["user"] == users && i["cart"] == 7 && i["ordered"] == false) {
+        if (i["user"] == users &&
+            i["cart"] == cartID &&
+            i["ordered"] == false) {
           items.add({
             "product": i["product"],
             "qty": i["quantity"],
@@ -286,16 +322,18 @@ class Xeatscubit extends Cubit<XeatsStates> {
               isNewProduct: value.data["Names"][0]["New_Products"],
               creationDate: value.data["Names"][0]["created"]);
           print(value.data);
+
           if (!itemImages.containsKey(value.data["Names"][0]["category"])) {
             print("1111");
             await Dio()
                 .get(
                     "$BASEURL/get_category_by_id/${value.data["Names"][0]["category"]}")
-                .then((v2) {
+                .then((value2) {
               print("2222");
-              theItem!.itemImage = v2.data["Names"][0]["image"];
+              theItem!.itemImage = value2.data["Names"][0]["image"];
               itemImages.addAll({
-                value.data["Names"][0]["category"]: v2.data["Names"][0]["image"]
+                value.data["Names"][0]["category"]: value2.data["Names"][0]
+                    ["image"]
               });
             });
           } else {
@@ -325,7 +363,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
               FoodItem.deliveryFee + FoodItem.getSubtotal(),
           "paid": false,
           "totalPrice": FoodItem.getSubtotal(),
-          "cart": 7
+          "cart": cartID
         })
         .then((value) => print(value))
         .catchError((onError) => print(onError));

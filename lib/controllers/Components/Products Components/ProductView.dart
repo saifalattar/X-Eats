@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 class ProductView extends StatefulWidget {
   ProductView(
       {Key? key,
-      this.image,
+      required this.image,
       this.Colors,
       this.Navigate,
       this.data,
@@ -16,7 +16,7 @@ class ProductView extends StatefulWidget {
   final double raduisButton = 10.0;
   double height = 100;
   double width = 100;
-  final Image? image;
+  final String image;
   final Color? Colors;
   final VoidCallback? Navigate;
   final String? data;
@@ -42,13 +42,13 @@ class _ProductViewState extends State<ProductView> {
                         borderRadius: BorderRadius.all(
                             Radius.circular(widget.raduisButton)))),
                 onPressed: widget.Navigate,
-                child: widget.image),
+                child: Text(widget.image)),
           ),
         ),
         Text(
           "${widget.data}",
           // semanticsLabel: data,
-          style: GoogleFonts.kanit(),
+          style: GoogleFonts.poppins(),
         )
       ],
     );

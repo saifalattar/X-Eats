@@ -35,10 +35,6 @@ class Resturantss extends StatelessWidget {
             var data_from_api = Xeatscubit.ResturantsList;
             var newProducts = Xeatscubit.new_products;
 
-            String Salama = "Salama";
-            String Koshry = "Koshary El-Tahrir";
-            String mac = "Mac";
-            String Rosto = "Rosto";
             var Connection = false;
 
             return Scaffold(
@@ -54,7 +50,10 @@ class Resturantss extends StatelessWidget {
                             padding: const EdgeInsets.all(15.0),
                             child: Text(
                               'New Products',
-                              style: GoogleFonts.kanit(fontSize: 16),
+                              style: GoogleFonts.poppins(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           SingleChildScrollView(
@@ -76,17 +75,6 @@ class Resturantss extends StatelessWidget {
                                             ),
                                             Navigate: () => {}),
 
-                                        // ProductView(
-                                        //     // image: newProducts[index]
-                                        //     //     ["image"],
-                                        //     width: width / 2.0,
-                                        //     height: height / 4.2,
-                                        //     data: newProducts[index]["name"] +
-                                        //         "\n",
-                                        //     Colors: Colors.white,
-                                        //     Navigate: () => {}),
-                                        // onTap: () {
-                                        //   print(newProducts[0]["name"]);
                                         // },
                                       );
                                     },
@@ -107,7 +95,8 @@ class Resturantss extends StatelessWidget {
                               padding: const EdgeInsets.all(15.0),
                               child: Text(
                                 'Restaurants',
-                                style: GoogleFonts.kanit(fontSize: 16),
+                                style: GoogleFonts.poppins(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
                               ),
                             ),
                           ],
@@ -162,7 +151,7 @@ class Resturantss extends StatelessWidget {
                                       ),
                                       Expanded(
                                         child: Container(
-                                          height: 120,
+                                          height: height / 7,
                                           child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
@@ -171,58 +160,16 @@ class Resturantss extends StatelessWidget {
                                             children: [
                                               Column(children: [
                                                 Text(
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 1,
                                                     '${data_from_api[index]['Name']}',
-                                                    style: GoogleFonts.kanit(
+                                                    style: GoogleFonts.poppins(
                                                       fontWeight:
-                                                          FontWeight.w400,
-                                                      fontSize: 20,
+                                                          FontWeight.bold,
+                                                      fontSize: 18,
                                                     )),
                                               ]),
-                                              if (data_from_api[index]
-                                                      ['Name'] ==
-                                                  Salama) ...[
-                                                Text("Egyptian,Kebda,Sandwichs",
-                                                    style: GoogleFonts.kanit(
-                                                      color: Color.fromARGB(
-                                                          150, 0, 0, 0),
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      fontSize: 12,
-                                                    ))
-                                              ] else if (data_from_api[index]
-                                                      ['Name'] ==
-                                                  Koshry) ...[
-                                                Text("Egyptian,Koshry,Tagen",
-                                                    style: GoogleFonts.kanit(
-                                                      color: Color.fromARGB(
-                                                          150, 0, 0, 0),
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      fontSize: 12,
-                                                    ))
-                                              ] else if (data_from_api[index]
-                                                      ['Name'] ==
-                                                  mac) ...[
-                                                Text("Chicken,Meat,Sandwichs",
-                                                    style: GoogleFonts.kanit(
-                                                      color: Color.fromARGB(
-                                                          150, 0, 0, 0),
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      fontSize: 12,
-                                                    ))
-                                              ] else if (data_from_api[index]
-                                                      ['Name'] ==
-                                                  Rosto) ...[
-                                                Text("Chicken,Meat,Fast Food",
-                                                    style: GoogleFonts.kanit(
-                                                      color: Color.fromARGB(
-                                                          150, 0, 0, 0),
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      fontSize: 12,
-                                                    ))
-                                              ],
                                               SizedBox(
                                                 height: 10.h,
                                               ),
@@ -238,8 +185,8 @@ class Resturantss extends StatelessWidget {
                                                 children: [
                                                   const Icon(Icons.timer_sharp),
                                                   Text(
-                                                    ' 36 mins',
-                                                    style: GoogleFonts.kanit(
+                                                    ' 45 mins',
+                                                    style: GoogleFonts.poppins(
                                                         fontWeight:
                                                             FontWeight.w400),
                                                   ),
@@ -253,7 +200,7 @@ class Resturantss extends StatelessWidget {
                                                   ),
                                                   Text(
                                                     'EGP 10',
-                                                    style: GoogleFonts.kanit(
+                                                    style: GoogleFonts.poppins(
                                                         fontWeight:
                                                             FontWeight.w400),
                                                   )

@@ -42,7 +42,7 @@ class _SelectedTitleState extends State<SelectedTitle> {
       ),
       onTap: widget.onTap,
       onChanged: widget.changed,
-      style: GoogleFonts.kanit(height: 1.5),
+      style: GoogleFonts.poppins(height: 1.5),
       decoration: InputDecoration(
         enabledBorder: const OutlineInputBorder(
             borderRadius: const BorderRadius.all(Radius.circular(20)),
@@ -64,7 +64,7 @@ class _SelectedTitleState extends State<SelectedTitle> {
         border: const OutlineInputBorder(borderSide: BorderSide()),
       ),
       hint: Text('title',
-          style: GoogleFonts.kanit(
+          style: GoogleFonts.poppins(
               textStyle: TextStyle(
             fontFamily: 'UberMoveTextBold',
             fontSize: 20.0.sp,
@@ -75,7 +75,7 @@ class _SelectedTitleState extends State<SelectedTitle> {
           child: Row(children: [
             Text(
               titlee.toString(),
-              style: GoogleFonts.kanit(
+              style: GoogleFonts.poppins(
                   textStyle: TextStyle(
                 fontFamily: 'UberMoveTextBold',
                 fontSize: 20.0,

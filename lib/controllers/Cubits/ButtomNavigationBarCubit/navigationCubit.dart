@@ -67,22 +67,22 @@ class NavBarCubitcubit extends Cubit<NavBarCubitStates> {
 
   List<BottomNavigationBarItem> bottomitems = const [
     BottomNavigationBarItem(
-      backgroundColor: Colors.blue,
+      backgroundColor: Color.fromRGBO(4, 137, 204, 1),
       icon: Icon(
-        Icons.home_outlined,
-        color: Color.fromARGB(193, 0, 0, 0),
+        Icons.home_filled,
+        color: Colors.black,
       ),
       label: 'Home',
     ),
     BottomNavigationBarItem(
-        backgroundColor: Colors.blue,
+        backgroundColor: Color.fromRGBO(4, 137, 204, 1),
         icon: Icon(
           Icons.restaurant,
           color: Colors.black,
         ),
         label: 'Resturants'),
     BottomNavigationBarItem(
-        backgroundColor: Colors.blue,
+        backgroundColor: Color.fromRGBO(4, 137, 204, 1),
         icon: Icon(
           Icons.account_circle,
           color: Colors.black,

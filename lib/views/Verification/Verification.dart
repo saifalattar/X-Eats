@@ -125,7 +125,7 @@ class Verify extends StatelessWidget {
                             onPressed: () {},
                             child: Text(
                               'Resend Code',
-                              style: GoogleFonts.kanit(
+                              style: GoogleFonts.poppins(
                                   fontWeight: FontWeight.w600,
                                   textStyle: TextStyle(color: Colors.blue)),
                             )),

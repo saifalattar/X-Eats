@@ -43,7 +43,12 @@ class _NewProductsState extends State<NewProducts> {
                 child: widget.image),
           ),
         ),
-        Text(widget.title),
+        Text(
+          widget.title,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ],
     );
   }

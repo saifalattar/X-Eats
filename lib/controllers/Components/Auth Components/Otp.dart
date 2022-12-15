@@ -41,7 +41,7 @@ class _OTPState extends State<OTP> {
         controller: widget.controller,
         textAlign: TextAlign.center,
         keyboardType: widget.type,
-        style: GoogleFonts.kanit(
+        style: GoogleFonts.poppins(
             height: 1.5,
             color: Colors.black,
             textStyle: TextStyle(fontSize: 25)),

@@ -56,7 +56,7 @@ class _ProductState extends State<Product> {
                         Expanded(
                           child: Text(
                             "${widget.Data}",
-                            style: GoogleFonts.kanit(fontSize: 20),
+                            style: GoogleFonts.poppins(fontSize: 20),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),

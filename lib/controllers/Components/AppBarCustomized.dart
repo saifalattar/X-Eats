@@ -28,12 +28,12 @@ AppBar appBar(BuildContext context) {
                       children: [
                         Text(
                           'Delivering to',
-                          style: GoogleFonts.kanit(
+                          style: GoogleFonts.poppins(
                               fontSize: 11, color: Colors.grey),
                         ),
                         Text(
                           'Shiekh Zayed (Nile University)',
-                          style: GoogleFonts.kanit(
+                          style: GoogleFonts.poppins(
                               fontSize: 13, color: Colors.black),
                         ),
                       ]),

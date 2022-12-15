@@ -30,11 +30,11 @@ class _DefaultButtonState extends State<DefaultButton> {
                 borderRadius: BorderRadius.circular(widget.radius))),
         onPressed: widget.function,
         child: Text(widget.isUppercase ? widget.text : widget.text,
-            style: GoogleFonts.kanit(
+            style: GoogleFonts.poppins(
               textStyle: TextStyle(
-                fontFamily: 'UberMoveTextBold',
-                fontSize: 25.0.sp,
+                fontSize: 16.0.sp,
                 fontStyle: FontStyle.normal,
+                fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
             )),

@@ -43,12 +43,11 @@ class Layout extends StatelessWidget {
       child: BlocConsumer<NavBarCubitcubit, NavBarCubitStates>(
           builder: ((context, state) {
             {
-              // var cubit = Xeatscubit.get(context);
               var navcubit = NavBarCubitcubit.get(context);
               return Scaffold(
                   body: navcubit.Screens[navcubit.currentindex],
                   bottomNavigationBar: BottomNavigationBar(
-                    selectedLabelStyle: GoogleFonts.kanit(),
+                    selectedLabelStyle: GoogleFonts.poppins(),
                     backgroundColor: Colors.white,
                     items: navcubit.bottomitems,
                     currentIndex: navcubit.currentindex,

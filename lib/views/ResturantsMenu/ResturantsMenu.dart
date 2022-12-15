@@ -157,6 +157,7 @@ class ResturantsMenu extends StatelessWidget {
                       }),
                       future: Xeatscubit.get(context).getCurrentCategories(
                           context,
+                          image: data["image"].toString(),
                           restaurantId: data["id"].toString()),
                     ),
                   ),

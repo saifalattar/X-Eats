@@ -6,12 +6,15 @@ import 'package:xeats/controllers/Components/AppBarCustomized.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/States.dart';
+import 'package:http/http.dart';
 
 class CategoriesView extends StatelessWidget {
-  final String? restaurantID, categoryId, name;
-  const CategoriesView(this.restaurantID, this.categoryId, this.name,
-      {super.key});
+  final String? image;
 
+  const CategoriesView(this.restaurantID, this.categoryId, this.name,
+      {required this.image});
+
+  final String? restaurantID, categoryId, name;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<Xeatscubit, XeatsStates>(
@@ -22,7 +25,7 @@ class CategoriesView extends StatelessWidget {
             padding: const EdgeInsets.all(15.0),
             child: FutureBuilder(
               future: Xeatscubit.get(context).getCurrentProducts(context,
-                  id: restaurantID, CatId: categoryId),
+                  id: restaurantID, CatId: categoryId, image: image),
               builder: ((context, snapshot) {
                 if (snapshot.hasData) {
                   return snapshot.data!;

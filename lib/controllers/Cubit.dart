@@ -124,7 +124,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
   }
 
 //-------------------- Function Separated to get his email if his email null then it will go to login if not then it will go to home page
-  int? cartID;
+  int? cartID = 7;
   Future<void> CartData() async {
     SharedPreferences cart = await SharedPreferences.getInstance();
     cartID = cart.getInt('cartIDSaved');
@@ -161,28 +161,8 @@ class Xeatscubit extends Cubit<XeatsStates> {
     DioHelper.getdata(url: 'get_products_mostSold_products/', query: {})
         .then((value) async {
       MostSold = value.data['Names'];
+      var data;
       FoodItem? theItem;
-      theItem = FoodItem(
-          category: value.data["Names"][0]["category"],
-          isBestOffer: value.data["Names"][0]["Best_Offer"],
-          isMostPopular: value.data["Names"][0]["Most_Popular"],
-          isNewProduct: value.data["Names"][0]["New_Products"]);
-
-      if (!itemImages.containsKey(value.data["Names"][0]["category"])) {
-        print("1111");
-        await Dio()
-            .get(
-                "$BASEURL/get_category_by_id/${value.data["Names"][0]["category"]}")
-            .then((value2) {
-          print("2222");
-          theItem!.itemImage = value2.data["Names"][0]["image"];
-          itemImages.addAll({
-            value.data["Names"][0]["category"]: value2.data["Names"][0]["image"]
-          });
-        });
-      } else {
-        theItem.itemImage = itemImages[value.data["Names"][0]["category"]];
-      }
 
       emit(ProductsSuccess());
     }).catchError((error) {
@@ -230,35 +210,34 @@ class Xeatscubit extends Cubit<XeatsStates> {
   // function to add item to the cart
   void addToCart(
       {int? id,
-      String? productId,
-      String? quantity,
-      String? price,
-      String? totalPrice,
-      String? restaurantId,
+      int? productId,
+      int? quantity,
+      double? price,
+      double? totalPrice,
+      int? restaurantId,
       String? timeShift}) async {
     print(productId);
-    await Dio()
-        .post("$BASEURL/get_cartItems/",
-            data: {
-              "user": idInformation,
-              "cart": cartID,
-              "product": productId,
-              "price": price,
-              "quantity": quantity,
-              "totalOrderItemPrice": totalPrice,
-              "Restaurant": restaurantId,
-              "order_shift": "25"
-            },
-            options: Options(
-                headers: {'Content-type': 'application/json; charset=UTF-8'}))
-        .then((value) async {
+    await Dio().post(
+      "$BASEURL/get_cartItems/",
+      data: {
+        "user": idInformation,
+        "cart": cartID,
+        "product": productId,
+        "price": price,
+        "quantity": quantity,
+        "totalOrderItemPrice": totalPrice,
+        "Restaurant": restaurantId,
+        "order_shift": "25"
+      },
+    ).then((value) async {
+      // cartItems.add(value.data["Names"][0]["Restaurant"]);
       await Dio()
-          .post("$BASEURL/get_carts/", data: {
+          .post("$BASEURL/get_carts_by_id/$EmailInforamtion", data: {
             "id": cartID,
-            "total_price": FoodItem.getSubtotal().toString(),
+            "total_price": FoodItem.getSubtotal().toDouble(),
             "total_after_delivery":
-                (FoodItem.deliveryFee + FoodItem.getSubtotal()).toString(),
-            "user": id.toString()
+                (FoodItem.deliveryFee + FoodItem.getSubtotal()).toDouble(),
+            "user": idInformation
           })
           .then((value) => print("Added to cart "))
           .catchError((onError) {
@@ -275,6 +254,8 @@ class Xeatscubit extends Cubit<XeatsStates> {
         .then((value) => print(value.data))
         .catchError((onError) => print(onError));
   }
+
+  List<dynamic> cartItems = [];
 
   Future<List<Widget>> getCartItems(
     context, {
@@ -301,7 +282,9 @@ class Xeatscubit extends Cubit<XeatsStates> {
       for (var i in items) {
         FoodItem? theItem;
         await Dio()
-            .get("$BASEURL/get_products_by_id/${i["product"]}")
+            .get(
+          "$BASEURL/get_products_by_id/${i["product"]}",
+        )
             .then((value) async {
           print(i["product"]);
 
@@ -407,6 +390,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
   Future<Widget> getCurrentCategories(
     BuildContext context, {
     required String? restaurantId,
+    required String? image,
   }) async {
     Widget result = Container();
     await Dio()
@@ -424,6 +408,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
                     Navigation(
                       context,
                       CategoriesView(
+                        image: value.data["Names"][index]["image"].toString(),
                         restaurantId,
                         value.data["Names"][index]["id"].toString(),
                         value.data["Names"][index]["display_name"].toString(),
@@ -455,8 +440,12 @@ class Xeatscubit extends Cubit<XeatsStates> {
     return result;
   }
 
-  Future getCurrentProducts(BuildContext context,
-      {required String? id, required String? CatId}) async {
+  Future getCurrentProducts(
+    BuildContext context, {
+    required String? id,
+    required String? CatId,
+    required String? image,
+  }) async {
     var data;
     await Dio()
         .get("$BASEURL/get_products_of_restaurant_by_category/$id/$CatId")
@@ -464,6 +453,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
       data = ListView.separated(
           itemBuilder: (context, index) {
             return FoodItem(
+              itemImage: image,
               englishName: value.data["Names"][index]["name"],
               arabicName: value.data["Names"][index]["ArabicName"],
               price: value.data["Names"][index]["price"],
@@ -475,7 +465,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
               isBestOffer: value.data["Names"][index]["Best_Offer"],
               isMostPopular: value.data["Names"][index]["Most_Popular"],
               isNewProduct: value.data["Names"][index]["New_Products"],
-            ).productsOfCategory(context);
+            ).productsOfCategory(context, image: image);
           },
           separatorBuilder: ((context, index) {
             return Divider();
@@ -488,5 +478,58 @@ class Xeatscubit extends Cubit<XeatsStates> {
       ));
     });
     return data;
+  }
+
+  Future<Widget> getMostSoldData(
+    BuildContext context, {
+    required String? restaurantId,
+    required String? image,
+  }) async {
+    Widget result = Container();
+    await Dio()
+        .get("$BASEURL/get_category_of_restaurants/$restaurantId")
+        .then((value) {
+      result = ListView.separated(
+          itemBuilder: ((context, index) {
+            if (value.data["Names"][index] == null) {
+              return Loading();
+            } else {
+              return SizedBox(
+                height: MediaQuery.of(context).size.height / 5,
+                child: CategoryCard(
+                  press: () {
+                    Navigation(
+                      context,
+                      CategoriesView(
+                        image: value.data["Names"][index]["image"].toString(),
+                        restaurantId,
+                        value.data["Names"][index]["id"].toString(),
+                        value.data["Names"][index]["display_name"].toString(),
+                      ),
+                    );
+                  },
+                  category: value.data["Names"][index]['display_name'],
+                  image: DioHelper.dio!.options.baseUrl +
+                      value.data["Names"][index]['image'],
+                  description: "",
+                ),
+              );
+            }
+            // "${value.data["Names"][index]["display_name"]}")),
+          }),
+          separatorBuilder: ((context, index) {
+            return SizedBox(
+              child: Divider(),
+              height: 20,
+            );
+          }),
+          itemCount: value.data["Names"].length);
+    }).catchError((onError) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Something error try again later !!"),
+        backgroundColor: Colors.red,
+      ));
+    });
+    return result;
   }
 }

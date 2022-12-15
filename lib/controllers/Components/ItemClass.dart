@@ -11,16 +11,18 @@ import 'package:xeats/controllers/States.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/views/Cart/cart.dart';
 import 'package:xeats/views/CheckOut/CheckOut.dart';
+import 'package:http/http.dart';
 
 class FoodItem extends StatelessWidget {
-  static double deliveryFee = 10;
-  final String? englishName, productSlug, description, creationDate, arabicName;
-  String? itemImage, restaurantImage;
-  final int? restaurant, category, id;
-  int quantity = 1;
-  final double? price;
-  double? totalPrice;
   final bool? isMostPopular, isNewProduct, isBestOffer;
+  static double deliveryFee = 10;
+  final double? price;
+  final int? restaurant, category, id;
+  final String? englishName, productSlug, description, creationDate, arabicName;
+
+  int quantity = 1;
+  double? totalPrice;
+  String? itemImage, restaurantImage;
   String? cartItemId;
 
   static List<FoodItem> CartItems = [];
@@ -110,14 +112,19 @@ class FoodItem extends StatelessWidget {
     });
   }
 
-  Widget productsOfCategory(BuildContext context) {
+  Widget productsOfCategory(
+    BuildContext context, {
+    required String? image,
+  }) {
     return SafeArea(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          // DioHelper.dio!.options.baseUrl +
+          // value.data["Names"][index]['image'],
           InkWell(
             onTap: () {
-              Navigation(context, productDetails(context));
+              Navigation(context, productDetails(context, image: '${image}'));
             },
             child: Padding(
               padding: const EdgeInsets.all(8),
@@ -127,7 +134,7 @@ class FoodItem extends StatelessWidget {
                     builder: ((context, AsyncSnapshot snapshot) {
                       if (snapshot.hasData) {
                         var image = snapshot.data;
-                        this.itemImage = image.data["Names"][0]["image"];
+
                         return Container(
                           height: 130.h,
                           decoration: BoxDecoration(
@@ -198,8 +205,9 @@ class FoodItem extends StatelessWidget {
     );
   }
 
-  Widget productDetails(BuildContext context) {
+  Widget productDetails(BuildContext context, {required String? image}) {
     String? shift;
+
     final BannerAd bannerAd = BannerAd(
         size: AdSize.banner,
         adUnitId: "ca-app-pub-5674432343391353/3216382829",
@@ -225,14 +233,16 @@ class FoodItem extends StatelessWidget {
           backgroundColor: const Color.fromARGB(255, 9, 134, 211),
           //add to cart button
           onPressed: () {
+            // if(restaurant == cubit.) {}
             Xeatscubit.get(context).addToCart(
-                productId: id.toString(),
-                quantity: quantity.toString(),
-                price: price.toString(),
-                totalPrice: totalPrice.toString(),
-                restaurantId: restaurant.toString(),
+                productId: id,
+                quantity: quantity,
+                price: price,
+                totalPrice: totalPrice,
+                restaurantId: restaurant,
                 timeShift: currentTiming);
-            Navigation(context, const Cart());
+            // Navigation(context, const Cart());
+            print(cubit.cartItems);
           },
           child: const Icon(Icons.add_shopping_cart_rounded),
         ),
@@ -265,7 +275,7 @@ class FoodItem extends StatelessWidget {
                       Image(
                         width: 200,
                         image: NetworkImage(
-                          'https://x-eats.com${this.itemImage}',
+                          'https://x-eats.com$image',
                         ),
                         loadingBuilder: (context, child, loadingProgress) {
                           if (loadingProgress == null) return child;

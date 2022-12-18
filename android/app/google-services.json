@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "258167260360",
+    "project_id": "x-eats-15a80",
+    "storage_bucket": "x-eats-15a80.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:258167260360:android:dc77f1a2e465e3628391fd",
+        "android_client_info": {
+          "package_name": "com.example.xeats"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "258167260360-q0dprtvuajdfbbbi8tua8nuntjsmn8qj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpC7dYcusRpLibTAoGa0bI8VCMglX-zfY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "258167260360-q0dprtvuajdfbbbi8tua8nuntjsmn8qj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -45,6 +45,10 @@ dependencies:
   flutter_svg:
   animated_text_kit:
   page_transition:
+  firebase_core:
+  firebase_messaging:
+  cloud_firestore:
+  awesome_notifications:
 
 
   flutter:

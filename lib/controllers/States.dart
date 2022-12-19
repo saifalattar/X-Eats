@@ -35,3 +35,7 @@ class FailgetInformation extends SuperXeats {}
 class SuccessGetInformation extends SuperXeats {}
 
 class SuccessEmailProfile extends SuperXeats {}
+
+class SuccessGetCart extends SuperXeats {}
+
+class Cleared extends SuperXeats {}

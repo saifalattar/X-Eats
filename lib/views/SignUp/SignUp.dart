@@ -13,6 +13,7 @@ import '../../controllers/Cubit.dart';
 
 class Signup extends StatelessWidget {
   Signup({super.key});
+  var formkey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,7 @@ class Signup extends StatelessWidget {
             child: SafeArea(
               child: Form(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                key: cubit.signup_formkey,
+                key: formkey,
                 child: SingleChildScrollView(
                   child: Padding(
                     padding:

@@ -51,7 +51,8 @@ class ResturantsMenu extends StatelessWidget {
           var cubit = Xeatscubit.get(context);
           var navcubit = NavBarCubitcubit.get(context);
           return Scaffold(
-            appBar: appBar(context),
+            appBar:
+                appBar(context, subtitle: 'Products Of', title: data['Name']),
             body: SingleChildScrollView(
               child: Column(
                 children: [
@@ -158,7 +159,8 @@ class ResturantsMenu extends StatelessWidget {
                       future: Xeatscubit.get(context).getCurrentCategories(
                           context,
                           image: data["image"].toString(),
-                          restaurantId: data["id"].toString()),
+                          restaurantId: data["id"].toString(),
+                          restaurantName: data['Name'].toString()),
                     ),
                   ),
                 ],

@@ -14,6 +14,7 @@ import '../../controllers/Cubit.dart';
 class Verify extends StatelessWidget {
   Verify({super.key});
 
+  var formkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -39,7 +40,7 @@ class Verify extends StatelessWidget {
             child: SafeArea(
               child: Form(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                key: cubit.signup_formkey,
+                key: formkey,
                 child: SingleChildScrollView(
                   child: Padding(
                     padding:

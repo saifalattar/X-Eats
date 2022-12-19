@@ -17,8 +17,13 @@ class FoodItem extends StatelessWidget {
   final bool? isMostPopular, isNewProduct, isBestOffer;
   static double deliveryFee = 10;
   final double? price;
-  final int? restaurant, category, id;
-  final String? englishName, productSlug, description, creationDate, arabicName;
+  final int? restaurant, id;
+  final String? englishName,
+      productSlug,
+      description,
+      creationDate,
+      arabicName,
+      category;
 
   int quantity = 1;
   double? totalPrice;
@@ -115,6 +120,8 @@ class FoodItem extends StatelessWidget {
   Widget productsOfCategory(
     BuildContext context, {
     required String? image,
+    required String? category,
+    required String? CatId,
   }) {
     return SafeArea(
       child: Column(
@@ -133,8 +140,7 @@ class FoodItem extends StatelessWidget {
                   FutureBuilder(
                     builder: ((context, AsyncSnapshot snapshot) {
                       if (snapshot.hasData) {
-                        var image = snapshot.data;
-
+                        print("HORAAYY" + '${snapshot.data}');
                         return Container(
                           height: 130.h,
                           decoration: BoxDecoration(
@@ -145,7 +151,7 @@ class FoodItem extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Image.network(
-                              "https://x-eats.com${image.data["Names"][0]["image"]}",
+                              "https://x-eats.com${snapshot.data.data["Names"][0]["image"]}",
                               loadingBuilder:
                                   (context, child, loadingProgress) {
                                 if (loadingProgress == null) return child;
@@ -157,11 +163,12 @@ class FoodItem extends StatelessWidget {
                           ),
                         );
                       } else {
+                        print("HORAAYY" + '${snapshot.data}');
                         return Loading();
                       }
                     }),
-                    future: Dio().get(
-                        "https://x-eats.com/get_category_by_id/${this.category}"),
+                    future: Dio()
+                        .get("https://x-eats.com/get_category_by_id/$CatId"),
                   ),
                   SizedBox(
                     width: 20.w,
@@ -177,7 +184,7 @@ class FoodItem extends StatelessWidget {
                             child: Text(
                               englishName!,
                               style: GoogleFonts.poppins(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
+                                  fontSize: 13, fontWeight: FontWeight.bold),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -190,7 +197,7 @@ class FoodItem extends StatelessWidget {
                           Text(
                             price.toString() + "  EGP",
                             style: GoogleFonts.poppins(
-                                color: Colors.black, fontSize: 16),
+                                color: Colors.black, fontSize: 14),
                           ),
                         ],
                       ),

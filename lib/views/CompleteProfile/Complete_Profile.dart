@@ -13,7 +13,7 @@ import '../../controllers/Components/Global Components/defaultFormField.dart';
 
 class Complete_Profile extends StatelessWidget {
   Complete_Profile({super.key});
-
+  var formkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -34,7 +34,7 @@ class Complete_Profile extends StatelessWidget {
             child: SafeArea(
               child: Form(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                key: cubit.complee_profile_formkey,
+                key: formkey,
                 child: SingleChildScrollView(
                   child: Padding(
                     padding:
@@ -174,8 +174,7 @@ class Complete_Profile extends StatelessWidget {
                         ),
                         DefaultButton(
                             function: () {
-                              if (cubit.complee_profile_formkey.currentState!
-                                  .validate()) {
+                              if (formkey.currentState!.validate()) {
                                 cubit.CreateUser(
                                   context,
                                   password: cubit.password.text,

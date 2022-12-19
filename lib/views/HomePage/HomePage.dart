@@ -59,11 +59,6 @@ class HomePage extends StatelessWidget {
           ..getPoster()
           ..GetResturants()
           ..GettingUserData()
-          ..getCart(
-            context,
-          )
-          ..getEmail(context)
-          ..GettingUserData()
           ..CartData(),
         child: BlocConsumer<Xeatscubit, XeatsStates>(
           builder: ((context, state) {
@@ -73,15 +68,16 @@ class HomePage extends StatelessWidget {
             var restaurant_api = Xeatscubit.ResturantsList;
             var userEmail = cubit.EmailInforamtion;
             var userId = cubit.idInformation;
-            var FirstName = cubit.FirstName ?? ' ';
+            var FirstName = cubit.FirstName ?? Loading();
             var LastName = cubit.LastName ?? ' ';
-            var PhoneNumber = cubit.PhoneNumber ?? ' ';
+            // var PhoneNumber = cubit.PhoneNumber ?? ' ';
             var Wallet = cubit.wallet ?? 100;
 
-            var cart = cubit.cartID ?? ' ';
+            var cart = cubit.cartID;
 
             return Scaffold(
-              appBar: appBar(context),
+              appBar: appBar(context,
+                  subtitle: 'Delivering to', title: 'Nile University, Giza'),
               body: Container(
                 child: SingleChildScrollView(
                   child: Column(
@@ -105,9 +101,9 @@ class HomePage extends StatelessWidget {
                                     child: Text(
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
-                                      "Welcome," + " " + '$userId',
+                                      "Welcome," + " " + '${FirstName}',
                                       style: GoogleFonts.poppins(
-                                          fontSize: 16,
+                                          fontSize: 14,
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),

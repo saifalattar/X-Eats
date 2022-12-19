@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/views/Cart/Cart.dart';
 
-AppBar appBar(BuildContext context) {
+AppBar appBar(BuildContext context, {String? subtitle, String? title}) {
   double width = MediaQuery.of(context).size.width;
   double height = MediaQuery.of(context).size.height;
   return AppBar(
@@ -27,12 +27,12 @@ AppBar appBar(BuildContext context) {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Delivering to',
+                          subtitle ?? 'to',
                           style: GoogleFonts.poppins(
                               fontSize: 11, color: Colors.grey),
                         ),
                         Text(
-                          'Shiekh Zayed (Nile University)',
+                          title ?? 'Giza',
                           style: GoogleFonts.poppins(
                               fontSize: 13, color: Colors.black),
                         ),

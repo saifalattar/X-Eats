@@ -38,7 +38,7 @@ class Resturantss extends StatelessWidget {
             var Connection = false;
 
             return Scaffold(
-              appBar: appBar(context),
+              appBar: appBar(context, subtitle: 'X-Eats', title: 'Restaurants'),
               body: SingleChildScrollView(
                 child: SafeArea(
                   child: Column(children: [

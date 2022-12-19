@@ -50,22 +50,21 @@ class Xeatscubit extends Cubit<XeatsStates> {
   List<dynamic> EmailInList = [];
 
 //This Function Will Call when user Sign In Succefuly
-
   Future<List> getEmail(
-    context,
-  ) async {
-    await DioHelper.getdata(
-        url: "get_user_by_id/${EmailInforamtion}",
-        query: {}).then((value) async {
+    context, {
+    // The Function Will Get The email of user and take it as EndPoint to show his information
+    String? email,
+  }) async {
+    await DioHelper.getdata(url: "get_user_by_id/$email", query: {})
+        .then((value) async {
+      //EmailInformationList
       EmailInList = value.data['Names'];
-      print("LISTOOO" + '${EmailInList[0]['email']}');
       SharedPreferences userInf = await SharedPreferences.getInstance();
       userInf.setString('EmailInf', EmailInList[0]['email']);
+      userInf.setString('FirstName', EmailInList[0]['first_name']);
+      userInf.setString('LastName', EmailInList[0]['last_name']);
       userInf.setInt("Id", EmailInList[0]['id']);
-      userInf.setString('first', EmailInList[0]['first_name']);
-      userInf.setString('last', EmailInList[0]['last_name']);
-      userInf.setString('mob', EmailInList[0]['PhoneNumber']);
-      userInf.setDouble('wal', EmailInList[0]['Wallet']);
+      userInf.setDouble("wallet", EmailInList[0]['Wallet']);
 
       emit(SuccessGetInformation());
     }).catchError((onError) {
@@ -77,30 +76,26 @@ class Xeatscubit extends Cubit<XeatsStates> {
 
 //-------------------- Function Separated to get his email if his email null then it will go to login if not then it will go to home page
   String? EmailInforamtion;
-  int? idInformation;
   String? FirstName;
   String? LastName;
-  String? PhoneNumber;
-  Double? wallet;
+  int? idInformation;
+  double? wallet;
 
   Future<void> GettingUserData() async {
     SharedPreferences User = await SharedPreferences.getInstance();
     EmailInforamtion = User.getString('EmailInf');
+    FirstName = User.getString('FirstName');
+    LastName = User.getString('LastName');
     idInformation = User.getInt('Id');
-    FirstName = User.getString('first');
-    LastName = User.getString('last');
-    PhoneNumber = User.getString('mob');
-    wallet = User.getDouble('wal') as Double?;
+    wallet = User.getDouble('wallet');
     emit(SuccessEmailProfile());
-    print(SuccessEmailProfile());
-
-    print("LISTOOO" + '${EmailInList[0]['email']}');
   }
 
-  void signOut(context) async {
+  Future<void> signOut(context) async {
     SharedPreferences userInformation = await SharedPreferences.getInstance();
     userInformation.clear();
     Navigation(context, SignIn());
+    emit(Cleared());
   }
 
   static List<dynamic> cartList = [];
@@ -112,7 +107,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
         .then((value) async {
       //EmailInformationList
       cartList = value.data['Names'];
-      print(cartList);
+      print("CART" + " " + '$cartList');
       SharedPreferences userCartID = await SharedPreferences.getInstance();
       userCartID.setInt("cartIDSaved", cartList[0]['id']);
       emit(SuccessGetInformation());
@@ -128,8 +123,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
   Future<void> CartData() async {
     SharedPreferences cart = await SharedPreferences.getInstance();
     cartID = cart.getInt('cartIDSaved');
-    emit(SuccessEmailProfile());
-    print(SuccessEmailProfile());
+    emit(SuccessGetCart());
     print("LISTOOO" + '${cartList[0]}');
   }
 
@@ -392,6 +386,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
     BuildContext context, {
     required String? restaurantId,
     required String? image,
+    required String? restaurantName,
   }) async {
     Widget result = Container();
     await Dio()
@@ -409,14 +404,16 @@ class Xeatscubit extends Cubit<XeatsStates> {
                     Navigation(
                       context,
                       CategoriesView(
-                        image: value.data["Names"][index]["image"].toString(),
+                        category: value.data["Names"][index]['display_name'],
+                        categoryId: value.data["Names"][index]['id'].toString(),
+                        image: value.data["Names"][index]["image"],
+                        restaurantName: restaurantName,
                         restaurantId,
-                        value.data["Names"][index]["id"].toString(),
-                        value.data["Names"][index]["display_name"].toString(),
                       ),
                     );
                   },
-                  category: value.data["Names"][index]['display_name'],
+                  category:
+                      value.data["Names"][index]['display_name'].toString(),
                   image: DioHelper.dio!.options.baseUrl +
                       value.data["Names"][index]['image'],
                   description: "",
@@ -446,6 +443,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
     required String? id,
     required String? CatId,
     required String? image,
+    required String? category,
   }) async {
     var data;
     await Dio()
@@ -462,11 +460,11 @@ class Xeatscubit extends Cubit<XeatsStates> {
               description: value.data["Names"][index]["description"],
               creationDate: value.data["Names"][index]["created"],
               restaurant: value.data["Names"][index]["Restaurant"],
-              category: value.data["Names"][index]["category"],
               isBestOffer: value.data["Names"][index]["Best_Offer"],
               isMostPopular: value.data["Names"][index]["Most_Popular"],
               isNewProduct: value.data["Names"][index]["New_Products"],
-            ).productsOfCategory(context, image: image);
+            ).productsOfCategory(context,
+                image: image, category: category, CatId: CatId);
           },
           separatorBuilder: ((context, index) {
             return Divider();
@@ -485,6 +483,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
     BuildContext context, {
     required String? restaurantId,
     required String? image,
+    required String? restaurantName,
   }) async {
     Widget result = Container();
     await Dio()
@@ -502,10 +501,12 @@ class Xeatscubit extends Cubit<XeatsStates> {
                     Navigation(
                       context,
                       CategoriesView(
+                        categoryId: value.data["Names"][index]["id"].toString(),
+                        category: value.data["Names"][index]["display_name"]
+                            .toString(),
                         image: value.data["Names"][index]["image"].toString(),
+                        restaurantName: restaurantName,
                         restaurantId,
-                        value.data["Names"][index]["id"].toString(),
-                        value.data["Names"][index]["display_name"].toString(),
                       ),
                     );
                   },

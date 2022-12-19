@@ -77,7 +77,7 @@ class CategoryCard extends StatelessWidget {
                         ),
                         children: [
                           TextSpan(
-                            text: "$category\n",
+                            text: '$category',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,

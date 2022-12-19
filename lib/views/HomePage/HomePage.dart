@@ -1,4 +1,5 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -58,7 +59,11 @@ class HomePage extends StatelessWidget {
           ..getPoster()
           ..GetResturants()
           ..GettingUserData()
-          ..getCart()
+          ..getCart(
+            context,
+          )
+          ..getEmail(context)
+          ..GettingUserData()
           ..CartData(),
         child: BlocConsumer<Xeatscubit, XeatsStates>(
           builder: ((context, state) {
@@ -68,8 +73,12 @@ class HomePage extends StatelessWidget {
             var restaurant_api = Xeatscubit.ResturantsList;
             var userEmail = cubit.EmailInforamtion;
             var userId = cubit.idInformation;
-            var firstName = cubit.FirstName ?? 'Loading..';
-            var cart = cubit.cartID;
+            var FirstName = cubit.FirstName ?? ' ';
+            var LastName = cubit.LastName ?? ' ';
+            var PhoneNumber = cubit.PhoneNumber ?? ' ';
+            var Wallet = cubit.wallet ?? 100;
+
+            var cart = cubit.cartID ?? ' ';
 
             return Scaffold(
               appBar: appBar(context),
@@ -96,7 +105,7 @@ class HomePage extends StatelessWidget {
                                     child: Text(
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
-                                      "Hey," + " " + '$firstName',
+                                      "Welcome," + " " + '$userId',
                                       style: GoogleFonts.poppins(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold),

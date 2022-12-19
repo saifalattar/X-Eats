@@ -47,29 +47,25 @@ class Xeatscubit extends Cubit<XeatsStates> {
 
   String BASEURL = "https://www.x-eats.com";
 
-  static List<dynamic> EmailInList = [];
+  List<dynamic> EmailInList = [];
 
 //This Function Will Call when user Sign In Succefuly
+
   Future<List> getEmail(
-    context, {
-    // The Function Will Get The email of user and take it as EndPoint to show his information
-    String? email,
-    String? FirstName,
-    String? LastName,
-    int? idInformation,
-    Double? wallet,
-  }) async {
-    await DioHelper.getdata(url: "get_user_by_id/$email", query: {})
-        .then((value) async {
-      //EmailInformationList
+    context,
+  ) async {
+    await DioHelper.getdata(
+        url: "get_user_by_id/${EmailInforamtion}",
+        query: {}).then((value) async {
       EmailInList = value.data['Names'];
-      print(EmailInList[0]);
+      print("LISTOOO" + '${EmailInList[0]['email']}');
       SharedPreferences userInf = await SharedPreferences.getInstance();
       userInf.setString('EmailInf', EmailInList[0]['email']);
-      userInf.setString('FirstName', EmailInList[0]['first_name']);
-      userInf.setString('LastName', EmailInList[0]['last_name']);
       userInf.setInt("Id", EmailInList[0]['id']);
-      userInf.setDouble("wallet", EmailInList[0]['Wallet']);
+      userInf.setString('first', EmailInList[0]['first_name']);
+      userInf.setString('last', EmailInList[0]['last_name']);
+      userInf.setString('mob', EmailInList[0]['PhoneNumber']);
+      userInf.setDouble('wal', EmailInList[0]['Wallet']);
 
       emit(SuccessGetInformation());
     }).catchError((onError) {
@@ -81,21 +77,24 @@ class Xeatscubit extends Cubit<XeatsStates> {
 
 //-------------------- Function Separated to get his email if his email null then it will go to login if not then it will go to home page
   String? EmailInforamtion;
+  int? idInformation;
   String? FirstName;
   String? LastName;
-  int? idInformation;
+  String? PhoneNumber;
   Double? wallet;
 
   Future<void> GettingUserData() async {
     SharedPreferences User = await SharedPreferences.getInstance();
     EmailInforamtion = User.getString('EmailInf');
-    FirstName = User.getString('FirstName');
-    LastName = User.getString('LastName');
     idInformation = User.getInt('Id');
-    wallet = User.getDouble('wallet') as Double?;
-
+    FirstName = User.getString('first');
+    LastName = User.getString('last');
+    PhoneNumber = User.getString('mob');
+    wallet = User.getDouble('wal') as Double?;
     emit(SuccessEmailProfile());
     print(SuccessEmailProfile());
+
+    print("LISTOOO" + '${EmailInList[0]['email']}');
   }
 
   void signOut(context) async {
@@ -106,10 +105,11 @@ class Xeatscubit extends Cubit<XeatsStates> {
 
   static List<dynamic> cartList = [];
 
-  Future<List> getCart() async {
-    await DioHelper.getdata(
-        url: "get_carts_by_id/'${EmailInforamtion}'",
-        query: {}).then((value) async {
+  Future<List> getCart(
+    context,
+  ) async {
+    await DioHelper.getdata(url: "get_carts_by_id/$EmailInforamtion", query: {})
+        .then((value) async {
       //EmailInformationList
       cartList = value.data['Names'];
       print(cartList);
@@ -124,12 +124,13 @@ class Xeatscubit extends Cubit<XeatsStates> {
   }
 
 //-------------------- Function Separated to get his email if his email null then it will go to login if not then it will go to home page
-  int? cartID = 7;
+  int? cartID;
   Future<void> CartData() async {
     SharedPreferences cart = await SharedPreferences.getInstance();
     cartID = cart.getInt('cartIDSaved');
     emit(SuccessEmailProfile());
     print(SuccessEmailProfile());
+    print("LISTOOO" + '${cartList[0]}');
   }
 
   static List<dynamic> Get_Category = [];
@@ -531,5 +532,26 @@ class Xeatscubit extends Cubit<XeatsStates> {
       ));
     });
     return result;
+  }
+
+  void postToken({
+    required String token,
+  }) async {
+    print(token);
+    await Dio()
+        .post(
+          "$BASEURL/notification_tokens",
+          data: {"token": token},
+        )
+        .then((value) => print("WELCOME" + "${value.data}"))
+        .catchError((e) {
+          var dioException = e as DioError;
+
+          print(dioException.response!.statusCode);
+          if (dioException.response!.statusCode == 302) {
+            print(dioException.response!.statusCode);
+            print('Token Exist');
+          }
+        });
   }
 }

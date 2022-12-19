@@ -13,6 +13,7 @@ import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Dio/Cache_Helper.dart';
 import 'package:xeats/controllers/States.dart';
+import 'package:xeats/views/SignIn/SignIn.dart';
 import 'package:xeats/views/Splash%20Screen/Splach%20Screen.dart';
 
 class Profile extends StatelessWidget {
@@ -29,18 +30,13 @@ class Profile extends StatelessWidget {
           builder: (context, state) {
             var cubit = Xeatscubit.get(context);
             var Email = cubit.EmailInforamtion;
-            var lastname = cubit.LastName;
-            var Wallet = cubit.wallet;
             var userId = cubit.idInformation;
-            var firstName = cubit.FirstName ?? 'Loading..';
 
             return SafeArea(
               child: FutureBuilder(
-                future: cubit.getEmail(context,
-                    email: Email,
-                    FirstName: firstName,
-                    LastName: lastname,
-                    wallet: Wallet),
+                future: cubit.getEmail(
+                  context,
+                ),
                 builder: (context, AsyncSnapshot snapshot) {
                   print(snapshot.connectionState);
                   if (snapshot.hasData) {
@@ -48,48 +44,48 @@ class Profile extends StatelessWidget {
                       body: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
-                            width: double.infinity,
-                            margin: EdgeInsets.all(20),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 20.h,
-                              vertical: 15.w,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Text.rich(
-                              TextSpan(
-                                style: TextStyle(color: Colors.black),
-                                children: [
-                                  TextSpan(
-                                    text:
-                                        "Name: ${snapshot.data[0]['FirstName']} ${snapshot.data[0]['LastName']} \n",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.lightBlue),
-                                  ),
-                                  TextSpan(
-                                    text:
-                                        "Email: ${snapshot.data[0]['email']}\n",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.lightBlue),
-                                  ),
-                                  TextSpan(
-                                    text:
-                                        "Wallet: ${snapshot.data[0]['wallet']} \n",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.lightBlue),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                          // Container(
+                          //   width: double.infinity,
+                          //   margin: EdgeInsets.all(20),
+                          //   padding: EdgeInsets.symmetric(
+                          //     horizontal: 20.h,
+                          //     vertical: 15.w,
+                          //   ),
+                          //   decoration: BoxDecoration(
+                          //     borderRadius: BorderRadius.circular(20),
+                          //   ),
+                          //   child: Text.rich(
+                          //     TextSpan(
+                          //       style: TextStyle(color: Colors.black),
+                          //       children: [
+                          //         TextSpan(
+                          //           text:
+                          //               "Name: ${snapshot.data[0]['FirstName']} ${snapshot.data[0]['LastName']} \n",
+                          //           style: TextStyle(
+                          //               fontSize: 14,
+                          //               fontWeight: FontWeight.bold,
+                          //               color: Colors.lightBlue),
+                          //         ),
+                          //         TextSpan(
+                          //           text:
+                          //               "Email: ${snapshot.data[0]['email']}\n",
+                          //           style: TextStyle(
+                          //               fontSize: 14,
+                          //               fontWeight: FontWeight.bold,
+                          //               color: Colors.lightBlue),
+                          //         ),
+                          //         TextSpan(
+                          //           text:
+                          //               "Wallet: ${snapshot.data[0]['wallet']} \n",
+                          //           style: TextStyle(
+                          //               fontSize: 14,
+                          //               fontWeight: FontWeight.bold,
+                          //               color: Colors.lightBlue),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //   ),
+                          // ),
                           Column(
                             children: [
                               Column(
@@ -106,7 +102,7 @@ class Profile extends StatelessWidget {
                                     icon: "assets/icons/Log out.svg",
                                     press: () {
                                       cubit.signOut(context);
-                                      Navigation(context, SplashScreen());
+                                      // Navigation(context, SignIn());
                                     },
                                   ),
                                 ],

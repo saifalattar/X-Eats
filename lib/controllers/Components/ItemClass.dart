@@ -233,7 +233,6 @@ class FoodItem extends StatelessWidget {
           backgroundColor: const Color.fromARGB(255, 9, 134, 211),
           //add to cart button
           onPressed: () {
-            // if(restaurant == cubit.) {}
             Xeatscubit.get(context).addToCart(
                 productId: id,
                 quantity: quantity,

@@ -67,7 +67,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    inittiken();
+    // inittiken();
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage remoteMessage) {
         RemoteNotification? notification = remoteMessage.notification;
@@ -111,10 +111,10 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  void inittiken() async {
-    var token = await FirebaseMessaging.instance.getToken();
-    print("Token is : $token");
-  }
+  // void inittiken() async {
+  //   var token = await FirebaseMessaging.instance.getToken();
+  //   print("Token is : $token");
+  // }
 
   @override
   Widget build(BuildContext context) {

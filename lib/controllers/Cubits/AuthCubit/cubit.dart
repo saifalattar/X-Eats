@@ -121,6 +121,7 @@ class AuthCubit extends Cubit<AuthStates> {
       SharedPreferences userInf = await SharedPreferences.getInstance();
       userInf.setString('EmailInf', EmailInList[0]['email']);
       userInf.setInt("Id", EmailInList[0]['id']);
+      userInf.setInt("firstName", EmailInList[0]['first_name']);
       emit(SuccessGetInformation());
     }).catchError((onError) {
       emit(FailgetInformation());

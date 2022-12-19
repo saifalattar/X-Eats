@@ -1,6 +1,8 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -16,10 +18,72 @@ import 'package:xeats/views/HomePage/HomePage.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  void initState() {
+    super.initState();
+    inittiken();
+    FirebaseMessaging.onMessage.listen(
+      (RemoteMessage remoteMessage) {
+        RemoteNotification? notification = remoteMessage.notification;
+
+        AndroidNotification? android = remoteMessage.notification!.android;
+
+        if (notification != null && android != null) {
+          AwesomeNotifications().createNotification(
+              content: NotificationContent(
+                  id: 1,
+                  channelKey: 'basic_channel',
+                  title: notification.title,
+                  body: notification.body,
+                  showWhen: true,
+                  displayOnBackground: true,
+                  displayOnForeground: true));
+        }
+      },
+    );
+
+    FirebaseMessaging.onMessageOpenedApp.listen(
+      (RemoteMessage remoteMessage) {
+        RemoteNotification? notification = remoteMessage.notification;
+
+        AndroidNotification? android = remoteMessage.notification!.android;
+
+        if (notification != null && android != null) {
+          AwesomeNotifications().createNotification(
+              content: NotificationContent(
+            id: 1,
+            channelKey: 'basic_channel',
+            title: notification.title,
+            body: notification.body,
+            showWhen: true,
+            displayOnBackground: true,
+            displayOnForeground: true,
+            autoDismissible: false,
+          ));
+        }
+      },
+    );
+  }
+
+  void inittiken() async {
+    var token = await FirebaseMessaging.instance.getToken().then(
+      (value) {
+        print("Token is Passed to the POST FUNCTION: $value");
+        Xeatscubit.get(context).postToken(token: "$value");
+      },
+    );
+  }
+
   Future init(context) async {
     Xeatscubit.get(context).GettingUserData();
+
     Future.delayed(Duration(seconds: 7)).then((value) {
       if (Xeatscubit.get(context).EmailInforamtion != null) {
         Navigation(context, Layout());

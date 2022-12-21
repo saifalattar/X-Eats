@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -10,12 +8,7 @@ import 'package:xeats/controllers/Components/AppBarCustomized.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/controllers/States.dart';
-import 'package:xeats/views/HomePage/HomePage.dart';
 import 'package:xeats/views/Layout/Layout.dart';
-import 'package:xeats/views/Profile/Profile.dart';
-import 'package:xeats/views/Resturants/Resturants.dart';
-import 'package:xeats/views/SignIn/SignIn.dart';
-
 import '../../controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
 
 class ResturantsMenu extends StatelessWidget {
@@ -44,7 +37,7 @@ class ResturantsMenu extends StatelessWidget {
         request: AdRequest());
     bannerAd.load();
     return BlocProvider(
-      create: (context) => Xeatscubit(),
+      create: (context) => Xeatscubit()..GettingUserData(),
       child: BlocConsumer<Xeatscubit, XeatsStates>(
         listener: (context, state) {},
         builder: (context, state) {
@@ -56,6 +49,14 @@ class ResturantsMenu extends StatelessWidget {
             body: SingleChildScrollView(
               child: Column(
                 children: [
+                  FutureBuilder(
+                    builder: (context, snapshot) {
+                      print(Xeatscubit.currentRestaurant);
+                      return Container();
+                    },
+                    future: Xeatscubit.get(context)
+                        .getCurrentAvailableOrderRestauant(),
+                  ),
                   SafeArea(
                     child: Stack(children: [
                       Row(

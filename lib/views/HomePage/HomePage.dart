@@ -84,6 +84,13 @@ class HomePage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
+                        FutureBuilder(
+                          builder: (context, snapshot) {
+                            return Container();
+                          },
+                          future: Xeatscubit.get(context)
+                              .getCurrentAvailableOrderRestauant(),
+                        ),
                         SizedBox(
                           height: height / 20,
                         ),

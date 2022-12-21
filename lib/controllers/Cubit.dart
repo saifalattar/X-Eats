@@ -1,9 +1,6 @@
-import 'dart:ffi';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xeats/controllers/Components/ItemClass.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
@@ -39,6 +36,8 @@ class Xeatscubit extends Cubit<XeatsStates> {
 
   ////////////////////////////////////////////////
 
+  /////////////////////////////////////////
+  static int? currentRestaurant;
   ///////////////////////////////////////////////
 
   // user data retrieved after logging in
@@ -113,9 +112,20 @@ class Xeatscubit extends Cubit<XeatsStates> {
       emit(SuccessGetInformation());
     }).catchError((onError) {
       emit(FailgetInformation());
-      print(FailgetInformation());
     });
     return cartList;
+  }
+
+  Future<void> getCurrentAvailableOrderRestauant() async {
+    await Dio()
+        .get("$BASEURL/get_user_cartItems/$EmailInforamtion")
+        .then((value) {
+      if (value.data["Names"].length == 0) {
+        currentRestaurant = null;
+      } else {
+        currentRestaurant = value.data["Names"][0]["Restaurant"];
+      }
+    });
   }
 
 //-------------------- Function Separated to get his email if his email null then it will go to login if not then it will go to home page
@@ -211,9 +221,8 @@ class Xeatscubit extends Cubit<XeatsStates> {
       double? totalPrice,
       int? restaurantId,
       String? timeShift}) async {
-    print(productId);
     await Dio().post(
-      "$BASEURL/get_cartItems/",
+      "$BASEURL/addingToCart/$EmailInforamtion/$restaurantId",
       data: {
         "user": idInformation,
         "cart": cartID,
@@ -227,19 +236,17 @@ class Xeatscubit extends Cubit<XeatsStates> {
     ).then((value) async {
       // cartItems.add(value.data["Names"][0]["Restaurant"]);
       await Dio()
-          .post("$BASEURL/get_carts_by_id/$EmailInforamtion", data: {
-            "id": cartID,
+          .put("$BASEURL/get_carts_by_id/$EmailInforamtion", data: {
             "total_price": FoodItem.getSubtotal().toDouble(),
             "total_after_delivery":
                 (FoodItem.deliveryFee + FoodItem.getSubtotal()).toDouble(),
-            "user": idInformation
           })
           .then((value) => print("Added to cart "))
-          .catchError((onError) {
+          .catchError((DioError onError) {
             print("Errooooooooooooor");
-            print(onError.response.data);
+            print(onError.response!.statusCode);
           });
-    }).catchError((onError) => print(onError));
+    }).catchError((DioError onError) => print(onError.response!.statusCode));
   }
 
   // function to get the food data(image, name in arabic and english, price , category. ...) by (productId)
@@ -252,60 +259,45 @@ class Xeatscubit extends Cubit<XeatsStates> {
 
   List<dynamic> cartItems = [];
 
-  Future<List<Widget>> getCartItems(
+  Future<List> getCartItems(
     context, {
     // The Function Will Get The email of user and take it as EndPoint to show his information
-    int? users,
+    String? email,
   }) async {
     FoodItem.CartItems.clear();
-    List<Map> items = [];
+
     Map itemImages = {};
 
-    await Dio().get("$BASEURL/get_cartItems/").then((value) async {
+    await Dio().get("$BASEURL/get_user_cartItems/$email").then((value) async {
       for (var i in value.data["Names"]) {
-        if (i["user"] == users &&
-            i["cart"] == cartID &&
-            i["ordered"] == false) {
-          items.add({
-            "product": i["product"],
-            "qty": i["quantity"],
-            "cartItemID": i["id"]
-          });
-        }
-      }
-      print(email);
-      for (var i in items) {
         FoodItem? theItem;
         await Dio()
             .get(
           "$BASEURL/get_products_by_id/${i["product"]}",
         )
-            .then((value) async {
-          print(i["product"]);
-
+            .then((v2) async {
           theItem = FoodItem(
               id: i["product"],
-              quantity: i["qty"],
-              cartItemId: i["cartItemID"].toString(),
-              englishName: value.data["Names"][0]["name"],
-              arabicName: value.data["Names"][0]["ArabicName"],
-              productSlug: value.data["Names"][0]["productslug"],
-              restaurant: value.data["Names"][0]["Restaurant"],
-              description: value.data["Names"][0]["description"],
-              price: double.parse(value.data["Names"][0]["price"].toString()) *
-                  double.parse(i["qty"].toString()),
-              category: value.data["Names"][0]["category"],
-              isBestOffer: value.data["Names"][0]["Best_Offer"],
-              isMostPopular: value.data["Names"][0]["Most_Popular"],
-              isNewProduct: value.data["Names"][0]["New_Products"],
-              creationDate: value.data["Names"][0]["created"]);
-          print(value.data);
+              quantity: i["quantity"],
+              cartItemId: i["id"].toString(),
+              englishName: v2.data["Names"][0]["name"],
+              arabicName: v2.data["Names"][0]["ArabicName"],
+              productSlug: v2.data["Names"][0]["productslug"],
+              restaurant: i["Restaurant"],
+              description: v2.data["Names"][0]["description"],
+              price: double.parse(v2.data["Names"][0]["price"].toString()) *
+                  double.parse(i["quantity"].toString()),
+              category: v2.data["Names"][0]["category"],
+              isBestOffer: v2.data["Names"][0]["Best_Offer"],
+              isMostPopular: v2.data["Names"][0]["Most_Popular"],
+              isNewProduct: v2.data["Names"][0]["New_Products"],
+              creationDate: v2.data["Names"][0]["created"]);
 
-          if (!itemImages.containsKey(value.data["Names"][0]["category"])) {
+          if (!itemImages.containsKey(v2.data["Names"][0]["category"])) {
             print("1111");
             await Dio()
                 .get(
-                    "$BASEURL/get_category_by_id/${value.data["Names"][0]["category"]}")
+                    "$BASEURL/get_category_by_id/${v2.data["Names"][0]["category"]}")
                 .then((value2) {
               print("2222");
               theItem!.itemImage = value2.data["Names"][0]["image"];
@@ -315,7 +307,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
               });
             });
           } else {
-            theItem!.itemImage = itemImages[value.data["Names"][0]["category"]];
+            theItem!.itemImage = itemImages[v2.data["Names"][0]["category"]];
           }
         }).catchError((onError) {
           print(onError);
@@ -326,6 +318,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
         FoodItem.CartItems.add(theItem!);
       }
     }).catchError((onError) => print(onError));
+    print(FoodItem.CartItems);
     return FoodItem.CartItems;
   }
 
@@ -463,8 +456,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
               isBestOffer: value.data["Names"][index]["Best_Offer"],
               isMostPopular: value.data["Names"][index]["Most_Popular"],
               isNewProduct: value.data["Names"][index]["New_Products"],
-            ).productsOfCategory(context,
-                image: image, category: category, CatId: CatId);
+            ).productsOfCategory(context, image: image);
           },
           separatorBuilder: ((context, index) {
             return Divider();

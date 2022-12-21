@@ -17,20 +17,15 @@ class FoodItem extends StatelessWidget {
   final bool? isMostPopular, isNewProduct, isBestOffer;
   static double deliveryFee = 10;
   final double? price;
-  final int? restaurant, id;
-  final String? englishName,
-      productSlug,
-      description,
-      creationDate,
-      arabicName,
-      category;
+  final int? restaurant, category, id;
+  final String? englishName, productSlug, description, creationDate, arabicName;
 
   int quantity = 1;
   double? totalPrice;
   String? itemImage, restaurantImage;
   String? cartItemId;
 
-  static List<FoodItem> CartItems = [];
+  static List<Widget> CartItems = [];
 
   FoodItem(
       {this.id,
@@ -55,7 +50,10 @@ class FoodItem extends StatelessWidget {
   static double getSubtotal() {
     double total = 0;
     for (var i in CartItems) {
-      total += i.totalPrice!;
+      try {
+        i = i as FoodItem;
+        total += i.totalPrice!;
+      } catch (e) {}
     }
     return total;
   }
@@ -63,54 +61,60 @@ class FoodItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<Xeatscubit, XeatsStates>(builder: (context, state) {
-      return Dismissible(
-        onDismissed: (direction) {
-          Xeatscubit.get(context).deleteCartItem(context, "${this.cartItemId}");
+      return GestureDetector(
+        onTap: () {
+          Navigation(
+              context, this.productDetails(context, image: this.itemImage));
         },
-        key: Key(""),
-        background: Container(
-          decoration: const BoxDecoration(color: Colors.red),
-          child: const Text(
-            "Delete",
-            style: TextStyle(color: Colors.white, fontSize: 25),
+        child: Dismissible(
+          onDismissed: (direction) {
+            print(direction.index);
+            print(direction.name);
+            Xeatscubit.get(context).deleteCartItem(context, "$cartItemId");
+
+            FoodItem.CartItems.remove(this);
+          },
+          key: Key(""),
+          background: Container(
+            decoration: const BoxDecoration(color: Colors.red),
           ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              SizedBox(
-                child: Image.network("https://x-eats.com${this.itemImage}"),
-                width: 100,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "${this.englishName}",
-                    style: TextStyle(fontSize: 21),
-                  ),
-                  Text(
-                    "${this.arabicName}",
-                    style: TextStyle(fontSize: 21),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width / 1.6,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("QTY :    ${this.quantity}"),
-                        Text(
-                          "$totalPrice EGP",
-                          style: TextStyle(fontSize: 16),
-                        )
-                      ],
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                SizedBox(
+                  child: Image.network("https://x-eats.com${this.itemImage}"),
+                  width: 100,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "${this.englishName}",
+                      style: TextStyle(fontSize: 21),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                    Text(
+                      "${this.arabicName}",
+                      style: TextStyle(fontSize: 21),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width / 1.6,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("QTY :    ${this.quantity}"),
+                          Text(
+                            "$totalPrice EGP",
+                            style: TextStyle(fontSize: 16),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       );
@@ -120,8 +124,6 @@ class FoodItem extends StatelessWidget {
   Widget productsOfCategory(
     BuildContext context, {
     required String? image,
-    required String? category,
-    required String? CatId,
   }) {
     return SafeArea(
       child: Column(
@@ -140,7 +142,8 @@ class FoodItem extends StatelessWidget {
                   FutureBuilder(
                     builder: ((context, AsyncSnapshot snapshot) {
                       if (snapshot.hasData) {
-                        print("HORAAYY" + '${snapshot.data}');
+                        var image = snapshot.data;
+
                         return Container(
                           height: 130.h,
                           decoration: BoxDecoration(
@@ -151,7 +154,7 @@ class FoodItem extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Image.network(
-                              "https://x-eats.com${snapshot.data.data["Names"][0]["image"]}",
+                              "https://x-eats.com${image.data["Names"][0]["image"]}",
                               loadingBuilder:
                                   (context, child, loadingProgress) {
                                 if (loadingProgress == null) return child;
@@ -163,12 +166,11 @@ class FoodItem extends StatelessWidget {
                           ),
                         );
                       } else {
-                        print("HORAAYY" + '${snapshot.data}');
                         return Loading();
                       }
                     }),
-                    future: Dio()
-                        .get("https://x-eats.com/get_category_by_id/$CatId"),
+                    future: Dio().get(
+                        "https://x-eats.com/get_category_by_id/${this.category}"),
                   ),
                   SizedBox(
                     width: 20.w,
@@ -184,7 +186,7 @@ class FoodItem extends StatelessWidget {
                             child: Text(
                               englishName!,
                               style: GoogleFonts.poppins(
-                                  fontSize: 13, fontWeight: FontWeight.bold),
+                                  fontSize: 18, fontWeight: FontWeight.bold),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -197,7 +199,7 @@ class FoodItem extends StatelessWidget {
                           Text(
                             price.toString() + "  EGP",
                             style: GoogleFonts.poppins(
-                                color: Colors.black, fontSize: 14),
+                                color: Colors.black, fontSize: 16),
                           ),
                         ],
                       ),
@@ -231,6 +233,10 @@ class FoodItem extends StatelessWidget {
     bannerAd.load();
 
     return BlocBuilder<Xeatscubit, XeatsStates>(builder: (context, states) {
+      print(Xeatscubit.currentRestaurant);
+      if (CartItems.isEmpty) {
+        Xeatscubit.currentRestaurant = null;
+      }
       var cubit = Xeatscubit.get(context);
       var userId = cubit.idInformation;
       double width = MediaQuery.of(context).size.width;
@@ -240,15 +246,44 @@ class FoodItem extends StatelessWidget {
           backgroundColor: const Color.fromARGB(255, 9, 134, 211),
           //add to cart button
           onPressed: () {
-            Xeatscubit.get(context).addToCart(
-                productId: id,
-                quantity: quantity,
-                price: price,
-                totalPrice: totalPrice,
-                restaurantId: restaurant,
-                timeShift: currentTiming);
-            // Navigation(context, const Cart());
-            print(cubit.cartItems);
+            if (Xeatscubit.currentRestaurant == this.restaurant ||
+                Xeatscubit.currentRestaurant == null) {
+              Xeatscubit.get(context).addToCart(
+                  productId: id,
+                  quantity: quantity,
+                  price: price,
+                  totalPrice: totalPrice,
+                  restaurantId: restaurant,
+                  timeShift: currentTiming);
+              // Navigation(context, const Cart());
+              print(cubit.cartItems);
+            } else {
+              showDialog<void>(
+                context: context,
+                barrierDismissible: false, // user must tap button!
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('Error !!'),
+                    content: SingleChildScrollView(
+                      child: ListBody(
+                        children: const <Widget>[
+                          Text(
+                              'You can\'t order from different reataurants\nPlease make your order with the same restaurant only.'),
+                        ],
+                      ),
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        child: const Text('Got It'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            }
           },
           child: const Icon(Icons.add_shopping_cart_rounded),
         ),

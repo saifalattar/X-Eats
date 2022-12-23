@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 
 class NewProducts extends StatefulWidget {
   NewProducts({
@@ -13,7 +14,7 @@ class NewProducts extends StatefulWidget {
   final double raduisPadding = 8.0;
   final double raduisButton = 10.0;
   final String title;
-  final Image? image;
+  final String? image;
   final Color? Colors;
   final VoidCallback? Navigate;
 
@@ -34,13 +35,25 @@ class _NewProductsState extends State<NewProducts> {
           child: Padding(
             padding: EdgeInsets.all(widget.raduisPadding),
             child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: widget.Colors,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(widget.raduisButton)))),
-                onPressed: widget.Navigate,
-                child: widget.image),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: widget.Colors,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(widget.raduisButton)))),
+              onPressed: widget.Navigate,
+              child: Image(
+                width: 200,
+                image: NetworkImage(
+                  'https://x-eats.com' + widget.image!,
+                ),
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: Loading(),
+                  );
+                },
+              ),
+            ),
           ),
         ),
         Text(

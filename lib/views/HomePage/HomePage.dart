@@ -58,8 +58,8 @@ class HomePage extends StatelessWidget {
           ..GetMostSoldProducts()
           ..getPoster()
           ..GetResturants()
-          ..GettingUserData()
-          ..CartData(),
+          ..CartData()
+          ..GettingUserData(),
         child: BlocConsumer<Xeatscubit, XeatsStates>(
           builder: ((context, state) {
             var cubit = Xeatscubit.get(context);
@@ -70,10 +70,6 @@ class HomePage extends StatelessWidget {
             var userId = cubit.idInformation;
             var FirstName = cubit.FirstName ?? Loading();
             var LastName = cubit.LastName ?? ' ';
-            // var PhoneNumber = cubit.PhoneNumber ?? ' ';
-            var Wallet = cubit.wallet ?? 100;
-
-            var cart = cubit.cartID;
 
             return Scaffold(
               appBar: appBar(context,
@@ -163,6 +159,14 @@ class HomePage extends StatelessWidget {
                                             Colors: const Color.fromARGB(
                                                 255, 5, 95, 9),
                                             image: Image(
+                                              loadingBuilder: (context, child,
+                                                  loadingProgress) {
+                                                if (loadingProgress == null)
+                                                  return child;
+                                                return Center(
+                                                  child: Loading(),
+                                                );
+                                              },
                                               image: NetworkImage(DioHelper
                                                       .dio!.options.baseUrl +
                                                   restaurant_api[index]
@@ -207,20 +211,32 @@ class HomePage extends StatelessWidget {
                                       ...List.generate(
                                         product_api.length,
                                         (index) {
-                                          return GestureDetector(
-                                            child: ProductView(
-                                                image: 'images',
-                                                width: width / 2.0,
-                                                height: height / 4.2,
-                                                data: product_api[index]
-                                                        ["name"] +
-                                                    "\n",
-                                                Colors: Colors.white,
-                                                Navigate: () => {}),
-                                            onTap: () {
-                                              print(product_api[0]["name"]);
-                                            },
-                                          );
+                                          return FutureBuilder(
+                                              future:
+                                                  cubit.gettingCategoryImages(
+                                                      product_api[index]
+                                                              ["category"]
+                                                          .toString()),
+                                              builder: (context,
+                                                  AsyncSnapshot snapshot) {
+                                                if (snapshot.hasData) {
+                                                  return GestureDetector(
+                                                    child: ProductView(
+                                                        image: snapshot.data
+                                                            .toString(),
+                                                        width: width / 2.0,
+                                                        height: height / 4.2,
+                                                        data: product_api[index]
+                                                                ["name"] +
+                                                            "\n",
+                                                        Colors: Colors.white,
+                                                        Navigate: () => {}),
+                                                    onTap: () {},
+                                                  );
+                                                } else {
+                                                  return Loading();
+                                                }
+                                              });
                                         },
                                       ),
                                     ],

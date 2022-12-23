@@ -18,8 +18,8 @@ class FoodItem extends StatelessWidget {
   static double deliveryFee = 10;
   final double? price;
   final int? restaurant, category, id;
-  final String? englishName, productSlug, description, creationDate, arabicName;
-
+  final String? englishName, productSlug, creationDate, arabicName;
+  final String? description;
   int quantity = 1;
   double? totalPrice;
   String? itemImage, restaurantImage;
@@ -42,8 +42,8 @@ class FoodItem extends StatelessWidget {
       this.itemImage,
       this.restaurantImage,
       this.isNewProduct,
-      this.cartItemId,
-      this.isBestOffer}) {
+      this.isBestOffer,
+      this.cartItemId}) {
     totalPrice = price;
   }
 
@@ -58,25 +58,68 @@ class FoodItem extends StatelessWidget {
     return total;
   }
 
+  static String? getcartItemId() {
+    String? cartid;
+    for (var i in CartItems) {
+      try {
+        i = i as FoodItem;
+        i.cartItemId!;
+      } catch (e) {}
+    }
+    return cartid;
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<Xeatscubit, XeatsStates>(builder: (context, state) {
+      double width = MediaQuery.of(context).size.width;
+      double height = MediaQuery.of(context).size.height;
       return GestureDetector(
         onTap: () {
-          Navigation(
-              context, this.productDetails(context, image: this.itemImage));
+          NavigateAndRemov(
+            context,
+            this.productDetails(
+              context,
+              image: this.itemImage,
+              restaurantName: '',
+            ),
+          );
         },
         child: Dismissible(
           onDismissed: (direction) {
-            print(direction.index);
-            print(direction.name);
-            Xeatscubit.get(context).deleteCartItem(context, "$cartItemId");
-
-            FoodItem.CartItems.remove(this);
+            if (direction == DismissDirection.startToEnd) {
+              NavigateAndRemov(context, CheckOut());
+            } else {
+              Xeatscubit.get(context).deleteCartItem(context, "$cartItemId");
+              FoodItem.CartItems.remove(this);
+            }
           },
           key: Key(""),
           background: Container(
-            decoration: const BoxDecoration(color: Colors.red),
+            color: Colors.blue,
+            child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: Row(
+                children: <Widget>[
+                  Icon(Icons.arrow_forward_rounded, color: Colors.white),
+                  Text('Move to CheckOut',
+                      style: TextStyle(color: Colors.white)),
+                ],
+              ),
+            ),
+          ),
+          secondaryBackground: Container(
+            color: Colors.red,
+            child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Icon(Icons.delete, color: Colors.white),
+                  Text('Move to trash', style: TextStyle(color: Colors.white)),
+                ],
+              ),
+            ),
           ),
           child: Padding(
             padding: const EdgeInsets.all(10.0),
@@ -84,26 +127,41 @@ class FoodItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 SizedBox(
-                  child: Image.network("https://x-eats.com${this.itemImage}"),
-                  width: 100,
+                  width: width / 5,
+                  child: Image(
+                    width: width / 5,
+                    image: NetworkImage(
+                      "https://x-eats.com${this.itemImage}",
+                    ),
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Center(
+                        child: Loading(),
+                      );
+                    },
+                  ),
                 ),
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
-                      "${this.englishName}",
-                      style: TextStyle(fontSize: 21),
+                    Container(
+                      child: Text(
+                        "${this.englishName}",
+                        textAlign: TextAlign.left,
+                        style: GoogleFonts.poppins(
+                            fontSize: 13,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
-                    Text(
-                      "${this.arabicName}",
-                      style: TextStyle(fontSize: 21),
+                    SizedBox(
+                      height: height / 30,
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width / 1.6,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("QTY :    ${this.quantity}"),
+                          Text("QTY : ${this.quantity}"),
                           Text(
                             "$totalPrice EGP",
                             style: TextStyle(fontSize: 16),
@@ -124,16 +182,20 @@ class FoodItem extends StatelessWidget {
   Widget productsOfCategory(
     BuildContext context, {
     required String? image,
+    required String? category,
+    required String? CatId,
+    required String? restaurantName,
   }) {
     return SafeArea(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // DioHelper.dio!.options.baseUrl +
-          // value.data["Names"][index]['image'],
           InkWell(
             onTap: () {
-              Navigation(context, productDetails(context, image: '${image}'));
+              Navigation(
+                  context,
+                  productDetails(context,
+                      image: '${image}', restaurantName: restaurantName));
             },
             child: Padding(
               padding: const EdgeInsets.all(8),
@@ -142,8 +204,6 @@ class FoodItem extends StatelessWidget {
                   FutureBuilder(
                     builder: ((context, AsyncSnapshot snapshot) {
                       if (snapshot.hasData) {
-                        var image = snapshot.data;
-
                         return Container(
                           height: 130.h,
                           decoration: BoxDecoration(
@@ -153,8 +213,10 @@ class FoodItem extends StatelessWidget {
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
-                            child: Image.network(
-                              "https://x-eats.com${image.data["Names"][0]["image"]}",
+                            child: Image(
+                              image: NetworkImage(
+                                "https://x-eats.com${snapshot.data.data["Names"][0]["image"]}",
+                              ),
                               loadingBuilder:
                                   (context, child, loadingProgress) {
                                 if (loadingProgress == null) return child;
@@ -169,8 +231,8 @@ class FoodItem extends StatelessWidget {
                         return Loading();
                       }
                     }),
-                    future: Dio().get(
-                        "https://x-eats.com/get_category_by_id/${this.category}"),
+                    future: Dio()
+                        .get("https://x-eats.com/get_category_by_id/$CatId"),
                   ),
                   SizedBox(
                     width: 20.w,
@@ -186,7 +248,7 @@ class FoodItem extends StatelessWidget {
                             child: Text(
                               englishName!,
                               style: GoogleFonts.poppins(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
+                                  fontSize: 13, fontWeight: FontWeight.bold),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -199,7 +261,7 @@ class FoodItem extends StatelessWidget {
                           Text(
                             price.toString() + "  EGP",
                             style: GoogleFonts.poppins(
-                                color: Colors.black, fontSize: 16),
+                                color: Colors.black, fontSize: 14),
                           ),
                         ],
                       ),
@@ -214,7 +276,8 @@ class FoodItem extends StatelessWidget {
     );
   }
 
-  Widget productDetails(BuildContext context, {required String? image}) {
+  Widget productDetails(BuildContext context,
+      {required String? image, required String? restaurantName}) {
     String? shift;
 
     final BannerAd bannerAd = BannerAd(
@@ -232,219 +295,251 @@ class FoodItem extends StatelessWidget {
         request: AdRequest());
     bannerAd.load();
 
-    return BlocBuilder<Xeatscubit, XeatsStates>(builder: (context, states) {
-      print(Xeatscubit.currentRestaurant);
-      if (CartItems.isEmpty) {
-        Xeatscubit.currentRestaurant = null;
-      }
-      var cubit = Xeatscubit.get(context);
-      var userId = cubit.idInformation;
-      double width = MediaQuery.of(context).size.width;
-      double height = MediaQuery.of(context).size.height;
-      return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: const Color.fromARGB(255, 9, 134, 211),
-          //add to cart button
-          onPressed: () {
-            if (Xeatscubit.currentRestaurant == this.restaurant ||
-                Xeatscubit.currentRestaurant == null) {
-              Xeatscubit.get(context).addToCart(
+    return BlocProvider(
+      create: (context) => Xeatscubit()
+        ..CartData()
+        ..GettingUserData(),
+      child: BlocConsumer<Xeatscubit, XeatsStates>(
+        builder: (context, states) {
+          if (CartItems.isEmpty) {
+            Xeatscubit.currentRestaurant = null;
+          }
+          var cubit = Xeatscubit.get(context);
+          Xeatscubit.get(context).getCart(context,
+              email: Xeatscubit.get(context).EmailInforamtion.toString());
+
+          double width = MediaQuery.of(context).size.width;
+          double height = MediaQuery.of(context).size.height;
+          return Scaffold(
+            floatingActionButton: FloatingActionButton(
+              backgroundColor: const Color.fromARGB(255, 9, 134, 211),
+              //add to cart button
+              onPressed: () {
+                Xeatscubit.get(context).addToCart(
                   productId: id,
                   quantity: quantity,
                   price: price,
                   totalPrice: totalPrice,
                   restaurantId: restaurant,
-                  timeShift: currentTiming);
-              // Navigation(context, const Cart());
-              print(cubit.cartItems);
-            } else {
-              showDialog<void>(
-                context: context,
-                barrierDismissible: false, // user must tap button!
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('Error !!'),
-                    content: SingleChildScrollView(
-                      child: ListBody(
-                        children: const <Widget>[
-                          Text(
-                              'You can\'t order from different reataurants\nPlease make your order with the same restaurant only.'),
-                        ],
-                      ),
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                        child: const Text('Got It'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            }
-          },
-          child: const Icon(Icons.add_shopping_cart_rounded),
-        ),
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: const Color.fromARGB(255, 9, 134, 211),
-          toolbarHeight: 100,
-          leadingWidth: double.maxFinite,
-          leading: const Padding(
-            padding: EdgeInsets.all(10.0),
-            child: Text(
-              "Preview",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold),
+                  timeShift: currentTiming,
+                );
+                // cubit.updateCartPrice();
+                // Navigation(context, const Cart());
+              },
+
+              child: const Icon(Icons.add_shopping_cart_rounded),
             ),
-          ),
-          actions: [Image.asset("assets/Images/compass.png")],
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  width: double.maxFinite,
-                  child: Column(
-                    children: [
-                      Image(
-                        width: 200,
-                        image: NetworkImage(
-                          'https://x-eats.com$image',
-                        ),
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Center(
-                            child: Loading(),
-                          );
-                        },
-                      ),
-                      Text(
-                        "${this.englishName}\n${this.arabicName}",
-                        style: TextStyle(fontSize: 22),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        "${this.price} EGP",
-                        style: TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      SizedBox(
-                        width: double.maxFinite,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Description:\n",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 22),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                "${this.description}",
-                                style:
-                                    TextStyle(fontSize: 12, color: Colors.grey),
+            appBar: appBar(context,
+                subtitle: restaurantName.toString(), title: englishName),
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: double.maxFinite,
+                      child: Column(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(300.0),
+                            child: Image(
+                              width: 200,
+                              image: NetworkImage(
+                                'https://x-eats.com$image',
                               ),
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return Center(
+                                  child: Loading(),
+                                );
+                              },
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            "${this.price} EGP",
+                            style: TextStyle(
+                                fontSize: 22, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          SizedBox(
+                            width: width,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  "Order Time :",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 22),
-                                ),
-                                DropdownButton(
-                                    hint: shift == null
-                                        ? Text("Time Shift")
-                                        : Text("$shift"),
-                                    items: getTimings(),
-                                    onChanged: (data) {
-                                      shift = data as String?;
-                                      currentTiming = data as String?;
-                                      // Xeatscubit.get(context).emit(SetTiming());
-                                    }),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Text(
-                                  "QTY :",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 22),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        "${this.englishName}\n",
+                                        textAlign: TextAlign.left,
+                                        style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: height / 20,
+                                    ),
+                                  ],
                                 ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    IconButton(
-                                        onPressed: () {
-                                          if (quantity != 1) {
-                                            quantity--;
-                                            totalPrice = quantity * price!;
-                                            Xeatscubit.get(context)
-                                                .emit(RemoveQuantity());
-                                          }
-                                        },
-                                        icon: Icon(
-                                          Icons.remove,
-                                          color:
-                                              Color.fromARGB(255, 9, 134, 211),
-                                        )),
-                                    Text("${this.quantity}"),
-                                    IconButton(
-                                        onPressed: () {
-                                          quantity++;
-                                          totalPrice = quantity * price!;
-                                          Xeatscubit.get(context)
-                                              .emit(AddQuantity());
-                                        },
-                                        icon: Icon(
-                                          Icons.add,
-                                          color:
-                                              Color.fromARGB(255, 9, 134, 211),
-                                        )),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.right,
+                                        "${this.arabicName}",
+                                        style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 22),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "Description:\n",
+                                    style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "$description",
+                                    style: TextStyle(
+                                        fontSize: 12, color: Colors.grey),
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Text(
+                                      "Quantity :",
+                                      style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        IconButton(
+                                            onPressed: () {
+                                              if (quantity != 1) {
+                                                quantity--;
+                                                totalPrice = quantity * price!;
+                                                Xeatscubit.get(context)
+                                                    .emit(RemoveQuantity());
+                                              }
+                                            },
+                                            icon: Icon(
+                                              Icons.remove,
+                                              color: Color.fromARGB(
+                                                  255, 9, 134, 211),
+                                            )),
+                                        Text("${this.quantity}"),
+                                        IconButton(
+                                            onPressed: () {
+                                              quantity++;
+                                              totalPrice = quantity * price!;
+                                              Xeatscubit.get(context)
+                                                  .emit(AddQuantity());
+                                            },
+                                            icon: Icon(
+                                              Icons.add,
+                                              color: Color.fromARGB(
+                                                  255, 9, 134, 211),
+                                            )),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Text(
+                                      "Order Time :",
+                                      style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12),
+                                    ),
+                                    DropdownButton(
+                                        hint: shift == null
+                                            ? Text("Time Shift")
+                                            : Text("$shift"),
+                                        items: getTimings(),
+                                        onChanged: (data) {
+                                          shift = data as String?;
+                                          currentTiming = data as String?;
+                                          // Xeatscubit.get(context).emit(SetTiming());
+                                        }),
                                   ],
                                 ),
                               ],
-                            )
-                          ],
-                        ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  SizedBox(
+                    height: 50,
+                    width: double.maxFinite,
+                    child: AdWidget(ad: bannerAd),
+                  ),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                ],
               ),
-              const SizedBox(
-                height: 40,
-              ),
-              SizedBox(
-                height: 50,
-                width: double.maxFinite,
-                child: AdWidget(ad: bannerAd),
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-            ],
-          ),
-        ),
-      );
-    });
+            ),
+          );
+        },
+        listener: ((context, state) {}),
+      ),
+    );
   }
+}
+
+Widget showDialog(BuildContext context) {
+  return AlertDialog(
+    title: const Text('Error !!'),
+    content: SingleChildScrollView(
+      child: ListBody(
+        children: const <Widget>[
+          Text(
+              'You can\'t order from different reataurants\nPlease make your order with the same restaurant only.'),
+        ],
+      ),
+    ),
+    actions: <Widget>[
+      TextButton(
+        child: const Text('Got It'),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      ),
+    ],
+  );
 }

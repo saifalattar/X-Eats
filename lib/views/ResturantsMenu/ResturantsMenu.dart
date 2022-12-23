@@ -15,9 +15,6 @@ class ResturantsMenu extends StatelessWidget {
   ResturantsMenu({super.key, required this.data});
   var data;
 
-  String title1 = "Shawrma Frakh";
-  String title2 = "Meals";
-
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -158,10 +155,11 @@ class ResturantsMenu extends StatelessWidget {
                         }
                       }),
                       future: Xeatscubit.get(context).getCurrentCategories(
-                          context,
-                          image: data["image"].toString(),
-                          restaurantId: data["id"].toString(),
-                          restaurantName: data['Name'].toString()),
+                        context,
+                        image: data["image"].toString(),
+                        restaurantId: data["id"].toString(),
+                        restaurantName: data['Name'].toString(),
+                      ),
                     ),
                   ),
                 ],

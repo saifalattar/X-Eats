@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 
 class ProductView extends StatefulWidget {
   ProductView(
@@ -16,7 +17,7 @@ class ProductView extends StatefulWidget {
   final double raduisButton = 10.0;
   double height = 100;
   double width = 100;
-  final String image;
+  final String? image;
   final Color? Colors;
   final VoidCallback? Navigate;
   final String? data;
@@ -36,20 +37,32 @@ class _ProductViewState extends State<ProductView> {
           child: Padding(
             padding: EdgeInsets.all(widget.raduisPadding),
             child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: widget.Colors,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(widget.raduisButton)))),
-                onPressed: widget.Navigate,
-                child: Text(widget.image)),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: widget.Colors,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(widget.raduisButton)))),
+              onPressed: widget.Navigate,
+              child: Image(
+                image: NetworkImage(
+                  "https://x-eats.com" + widget.image!,
+                ),
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: Loading(),
+                  );
+                },
+              ),
+            ),
           ),
         ),
         Text(
           "${widget.data}",
-          // semanticsLabel: data,
-          style: GoogleFonts.poppins(),
-        )
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ],
     );
   }

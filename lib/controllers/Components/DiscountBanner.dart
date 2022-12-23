@@ -18,6 +18,12 @@ class DiscountBanner extends StatelessWidget {
           itemBuilder: (BuildContext context, int index, int pageViewIndex) {
             return Container(
               child: Image(
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: Loading(),
+                  );
+                },
                 image: NetworkImage(
                   'https://www.x-eats.com' +
                       data_from_api[index]['background_image'],

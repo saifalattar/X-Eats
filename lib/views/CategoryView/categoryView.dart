@@ -35,6 +35,7 @@ class CategoriesView extends StatelessWidget {
               padding: const EdgeInsets.all(15.0),
               child: FutureBuilder(
                 future: Xeatscubit.get(context).getCurrentProducts(context,
+                    restaurantName: restaurantName,
                     id: restaurantID,
                     CatId: categoryId,
                     image: image,

@@ -35,17 +35,19 @@ class CategoryCard extends StatelessWidget {
                     margin: EdgeInsets.only(right: width / 15),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: Image.network(
+                      child: Image(
+                        width: width / 3,
+                        height: height / 3,
+                        fit: BoxFit.cover,
+                        image: NetworkImage(
+                          image,
+                        ),
                         loadingBuilder: (context, child, loadingProgress) {
                           if (loadingProgress == null) return child;
                           return Center(
                             child: Loading(),
                           );
                         },
-                        width: width / 3,
-                        height: height / 3,
-                        image,
-                        fit: BoxFit.cover,
                       ),
                     ),
                   ),

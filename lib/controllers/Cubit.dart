@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:xeats/controllers/Components/Global%20Components/AlertDialog.dart';
 import 'package:xeats/controllers/Components/ItemClass.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/controllers/States.dart';
@@ -97,35 +98,20 @@ class Xeatscubit extends Cubit<XeatsStates> {
     emit(Cleared());
   }
 
-  static List<dynamic> cartList = [];
+  List<dynamic> cartList = [];
 
-  Future<List> getCart(
-    context,
-  ) async {
-    await DioHelper.getdata(url: "get_carts_by_id/$EmailInforamtion", query: {})
-        .then((value) async {
-      //EmailInformationList
+  Future<List> getCart(context, {String? email}) async {
+    await Dio().get("$BASEURL/get_carts_by_id/$email").then((value) async {
       cartList = value.data['Names'];
-      print("CART" + " " + '$cartList');
+      print(cartList[0]['id']);
+      print("EMAIL" + " " + "$email");
       SharedPreferences userCartID = await SharedPreferences.getInstance();
       userCartID.setInt("cartIDSaved", cartList[0]['id']);
-      emit(SuccessGetInformation());
+      emit(SuccessGetCartID());
     }).catchError((onError) {
-      emit(FailgetInformation());
+      emit(FailedGetCartID());
     });
     return cartList;
-  }
-
-  Future<void> getCurrentAvailableOrderRestauant() async {
-    await Dio()
-        .get("$BASEURL/get_user_cartItems/$EmailInforamtion")
-        .then((value) {
-      if (value.data["Names"].length == 0) {
-        currentRestaurant = null;
-      } else {
-        currentRestaurant = value.data["Names"][0]["Restaurant"];
-      }
-    });
   }
 
 //-------------------- Function Separated to get his email if his email null then it will go to login if not then it will go to home page
@@ -133,8 +119,9 @@ class Xeatscubit extends Cubit<XeatsStates> {
   Future<void> CartData() async {
     SharedPreferences cart = await SharedPreferences.getInstance();
     cartID = cart.getInt('cartIDSaved');
-    emit(SuccessGetCart());
+    emit(SuccessGetCartID());
     print("LISTOOO" + '${cartList[0]}');
+    print("BLA BLA" + " " "$cartID");
   }
 
   static List<dynamic> Get_Category = [];
@@ -212,17 +199,30 @@ class Xeatscubit extends Cubit<XeatsStates> {
     });
   }
 
+  Future<void> getCurrentAvailableOrderRestauant() async {
+    await Dio()
+        .get("$BASEURL/get_user_cartItems/$EmailInforamtion")
+        .then((value) {
+      if (value.data["Names"].length == 0) {
+        currentRestaurant = null;
+      } else {
+        currentRestaurant = value.data["Names"][0]["Restaurant"];
+      }
+    });
+  }
+
   // function to add item to the cart
-  void addToCart(
-      {int? id,
-      int? productId,
-      int? quantity,
-      double? price,
-      double? totalPrice,
-      int? restaurantId,
-      String? timeShift}) async {
+  void addToCart({
+    int? productId,
+    int? quantity,
+    int? cartItemId,
+    double? price,
+    double? totalPrice,
+    int? restaurantId,
+    String? timeShift,
+  }) async {
     await Dio().post(
-      "$BASEURL/addingToCart/$EmailInforamtion/$restaurantId",
+      "$BASEURL/get_user_cartItems/$EmailInforamtion",
       data: {
         "user": idInformation,
         "cart": cartID,
@@ -233,20 +233,33 @@ class Xeatscubit extends Cubit<XeatsStates> {
         "Restaurant": restaurantId,
         "order_shift": "25"
       },
-    ).then((value) async {
-      // cartItems.add(value.data["Names"][0]["Restaurant"]);
-      await Dio()
-          .put("$BASEURL/get_carts_by_id/$EmailInforamtion", data: {
-            "total_price": FoodItem.getSubtotal().toDouble(),
-            "total_after_delivery":
-                (FoodItem.deliveryFee + FoodItem.getSubtotal()).toDouble(),
-          })
-          .then((value) => print("Added to cart "))
-          .catchError((DioError onError) {
-            print("Errooooooooooooor");
-            print(onError.response!.statusCode);
-          });
-    }).catchError((DioError onError) => print(onError.response!.statusCode));
+    ).then((value) {
+      DioError? dioException;
+
+      print(value);
+    }).catchError((e) {
+      var dioException = e as DioError;
+      var status = dioException.response!.statusCode;
+      var resp = dioException.response!.data;
+      if (status == 403) {
+        print("Not the Same Rest");
+      }
+    });
+    ;
+  }
+
+  void updateCartPrice() async {
+    await Dio().put("$BASEURL/get_carts_by_id/$EmailInforamtion", data: {
+      "total_price": FoodItem().price!.toDouble(),
+      "total_after_delivery":
+          (FoodItem.deliveryFee + FoodItem.getSubtotal()).toDouble()
+    }).then((value) {
+      print(value);
+    }).catchError((e) {
+      var dioException = e as DioError;
+      var status = dioException.response!.statusCode;
+      print("CARTITEM ERROR" + " " + '$status');
+    });
   }
 
   // function to get the food data(image, name in arabic and english, price , category. ...) by (productId)
@@ -271,6 +284,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
     await Dio().get("$BASEURL/get_user_cartItems/$email").then((value) async {
       for (var i in value.data["Names"]) {
         FoodItem? theItem;
+        print(i['id']);
         await Dio()
             .get(
           "$BASEURL/get_products_by_id/${i["product"]}",
@@ -284,7 +298,8 @@ class Xeatscubit extends Cubit<XeatsStates> {
               arabicName: v2.data["Names"][0]["ArabicName"],
               productSlug: v2.data["Names"][0]["productslug"],
               restaurant: i["Restaurant"],
-              description: v2.data["Names"][0]["description"],
+              description: v2.data["Names"][0]["description"] ??
+                  " No description for this Product",
               price: double.parse(v2.data["Names"][0]["price"].toString()) *
                   double.parse(i["quantity"].toString()),
               category: v2.data["Names"][0]["category"],
@@ -437,6 +452,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
     required String? CatId,
     required String? image,
     required String? category,
+    required String? restaurantName,
   }) async {
     var data;
     await Dio()
@@ -456,7 +472,11 @@ class Xeatscubit extends Cubit<XeatsStates> {
               isBestOffer: value.data["Names"][index]["Best_Offer"],
               isMostPopular: value.data["Names"][index]["Most_Popular"],
               isNewProduct: value.data["Names"][index]["New_Products"],
-            ).productsOfCategory(context, image: image);
+            ).productsOfCategory(context,
+                image: image,
+                category: category,
+                CatId: CatId,
+                restaurantName: restaurantName);
           },
           separatorBuilder: ((context, index) {
             return Divider();
@@ -546,5 +566,15 @@ class Xeatscubit extends Cubit<XeatsStates> {
             print('Token Exist');
           }
         });
+  }
+
+  Future<String> gettingCategoryImages(String categoryID) async {
+    String? image;
+    await Dio()
+        .get("https://www.x-eats.com/get_category_by_id/$categoryID")
+        .then((value) {
+      image = value.data["Names"][0]["image"].toString();
+    });
+    return image!;
   }
 }

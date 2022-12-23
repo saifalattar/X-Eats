@@ -20,10 +20,10 @@ class CheckOut extends StatelessWidget {
         toolbarHeight: 100,
         leadingWidth: 800,
         leading: const Padding(
-          padding: EdgeInsets.all(25.0),
+          padding: EdgeInsets.all(15.0),
           child: Text(
-            "Check Out",
-            style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+            "Checkout",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -80,9 +80,7 @@ class CheckOut extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                    onPressed: () {},
                     style: ButtonStyle(
                         backgroundColor:
                             MaterialStateProperty.all(Colors.white),

@@ -8,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
-import 'package:xeats/controllers/Components/Products%20Components/ProductView.dart';
 import 'package:xeats/controllers/Components/AppBarCustomized.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/States.dart';
@@ -64,19 +63,28 @@ class Resturantss extends StatelessWidget {
                                   ...List.generate(
                                     newProducts.length,
                                     (index) {
-                                      return GestureDetector(
-                                        child: NewProducts(
-                                            title: newProducts[index]["name"],
-                                            Colors: Colors.white,
-                                            image: const Image(
-                                              image: AssetImage(
-                                                'assets/Images/Shawrma.png',
-                                              ),
-                                            ),
-                                            Navigate: () => {}),
+                                      return FutureBuilder(
+                                          future: cubit.gettingCategoryImages(
+                                              newProducts[index]["category"]
+                                                  .toString()),
+                                          builder: (context,
+                                              AsyncSnapshot snapshot) {
+                                            if (snapshot.hasData) {
+                                              return GestureDetector(
+                                                child: NewProducts(
+                                                    title: newProducts[index]
+                                                        ["name"],
+                                                    Colors: Colors.white,
+                                                    image: snapshot.data
+                                                        .toString(),
+                                                    Navigate: () => {}),
 
-                                        // },
-                                      );
+                                                // },
+                                              );
+                                            } else {
+                                              return Loading();
+                                            }
+                                          });
                                     },
                                   ),
                                 ],

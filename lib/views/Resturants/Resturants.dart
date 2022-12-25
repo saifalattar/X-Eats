@@ -10,16 +10,18 @@ import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Components/AppBarCustomized.dart';
 import 'package:xeats/controllers/Cubit.dart';
+import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:xeats/views/Layout/Layout.dart';
 
 import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
 
 import '../../controllers/Components/Products Components/NewProducts.dart';
 
-class Resturantss extends StatelessWidget {
-  const Resturantss({super.key});
+class Restaurants extends StatelessWidget {
+  const Restaurants({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,7 @@ class Resturantss extends StatelessWidget {
             var cubit = Xeatscubit.get(context);
             var data_from_api = Xeatscubit.ResturantsList;
             var newProducts = Xeatscubit.new_products;
-
+            var navcubit = NavBarCubitcubit.get(context);
             var Connection = false;
 
             return Scaffold(
@@ -231,6 +233,21 @@ class Resturantss extends StatelessWidget {
                     ),
                   ]),
                 ),
+              ),
+              bottomNavigationBar: BottomNavigationBar(
+                selectedLabelStyle: GoogleFonts.poppins(),
+                backgroundColor: Colors.white,
+                items: navcubit.bottomitems,
+                currentIndex: 1,
+                onTap: (index) {
+                  if (index == 1) {
+                    Navigator.pop(context);
+                  } else if (index == 0) {
+                    Navigation(context, Layout());
+                  } else {
+                    Navigation(context, Profile());
+                  }
+                },
               ),
             );
           },

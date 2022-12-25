@@ -18,44 +18,13 @@ import 'package:xeats/views/CategoryView/categoryView.dart';
 
 class NavBarCubitcubit extends Cubit<NavBarCubitStates> {
   NavBarCubitcubit() : super(SuperNavBarCubitStates());
-  bool isPassword = true;
-  bool isPassword1 = true;
-  // var Password = TextEditingController();
-  // var Password1 = TextEditingController();
-  var XeatOtp1 = TextEditingController();
-  var XeatOtp2 = TextEditingController();
-  var XeatOtp3 = TextEditingController();
-  var XeatOtp4 = TextEditingController();
-  var XeatOtp5 = TextEditingController();
-  var email = TextEditingController();
-  var Firstname = TextEditingController();
-  // var Lastname = TextEditingController();
-  // var Phone = TextEditingController();
-  // var datecontroller = TextEditingController();
-
-  // bool ShowLabel = true;
-  // bool ShowLabel2 = true;
-  // bool ShowLabel3 = true;
-  // bool ShowLabel4 = true;
 
   int currentindex = 0;
   List<Widget> Screens = [
     HomePage(),
-    Resturantss(),
+    Restaurants(),
     Profile(),
   ];
-
-  ////////////////////////////////////////////////
-
-  ///////////////////////////////////////////////
-
-  // user data retrieved after logging in
-
-  int? userId = 191, cartId = 189; // for testing 224, 209
-
-  //////////////////////////////////////
-  ///// Base url ///////////
-  String BASEURL = "https://www.x-eats.com";
 
   static NavBarCubitcubit get(context) => BlocProvider.of(context);
 

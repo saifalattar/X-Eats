@@ -83,10 +83,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future init(context) async {
     Xeatscubit.get(context).GettingUserData();
-    // Xeatscubit.get(context).CartData();
-
-    // Xeatscubit.get(context).getCart(context,
-    //     email: Xeatscubit.get(context).EmailInforamtion.toString());
+    Xeatscubit.get(context).getCartID();
 
     Future.delayed(Duration(seconds: 6)).then((value) {
       if (Xeatscubit.get(context).EmailInforamtion != null) {

@@ -11,6 +11,17 @@ import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/views/Splash%20Screen/Splach%20Screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:connectivity/connectivity.dart';
+
+// Future<bool> check() async {
+//   var connectivityResult = await (Connectivity().checkConnectivity());
+//   if (connectivityResult == ConnectivityResult.mobile) {
+//     return true;
+//   } else if (connectivityResult == ConnectivityResult.wifi) {
+//     return true;
+//   }
+//   return false;
+// }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,

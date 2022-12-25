@@ -7,10 +7,14 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Components/AppBarCustomized.dart';
 import 'package:xeats/controllers/Cubit.dart';
+import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/views/Cart/cart.dart';
 import 'package:xeats/views/CheckOut/CheckOut.dart';
+import 'package:xeats/views/Layout/Layout.dart';
+import 'package:xeats/views/Profile/Profile.dart';
+import 'package:xeats/views/Resturants/Resturants.dart';
 
 class FoodItem extends StatelessWidget {
   final bool? isMostPopular, isNewProduct, isBestOffer;
@@ -66,121 +70,156 @@ class FoodItem extends StatelessWidget {
     return BlocBuilder<Xeatscubit, XeatsStates>(builder: (context, state) {
       double width = MediaQuery.of(context).size.width;
       double height = MediaQuery.of(context).size.height;
-      return GestureDetector(
-        onTap: () {
-          NavigateAndRemov(
-            context,
-            productDetails(
+      return SingleChildScrollView(
+        child: GestureDetector(
+          onTap: () {
+            NavigateAndRemov(
               context,
-              image: itemImage,
-              price: price,
-              restaurantName: '',
-            ),
-          );
-        },
-        child: Dismissible(
-          onDismissed: (direction) async {
-            if (direction == DismissDirection.startToEnd) {
-              NavigateAndRemov(context, const CheckOut());
-            } else {
-              await Xeatscubit.get(context)
-                  .deleteCartItem(context, "$cartItemId")
-                  .then((value) {
-                FoodItem.CartItems.remove(this);
-
-                Xeatscubit.get(context).updateCartPrice();
-              });
-            }
+              productDetails(
+                context,
+                image: itemImage,
+                price: price,
+                restaurantName: restaurant.toString(),
+                arabicName: arabicName,
+                description: description ?? "No Description for this Product",
+                englishName: englishName,
+              ),
+            );
           },
-          key: const Key(""),
-          background: Container(
-            color: Colors.blue,
-            child: Padding(
-              padding: const EdgeInsets.all(15),
-              child: Row(
-                children: const [
-                  Icon(Icons.arrow_forward_rounded, color: Colors.white),
-                  Text('Move to CheckOut',
-                      style: TextStyle(color: Colors.white)),
-                ],
-              ),
-            ),
-          ),
-          secondaryBackground: Container(
-            color: Colors.red,
-            child: Padding(
-              padding: const EdgeInsets.all(15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: const [
-                  Icon(Icons.delete, color: Colors.white),
-                  Text('Move to trash', style: TextStyle(color: Colors.white)),
-                ],
-              ),
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                SizedBox(
-                  width: width / 5,
-                  child: Image(
-                    width: width / 5,
-                    image: NetworkImage(
-                      "https://x-eats.com${this.itemImage}",
-                    ),
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Center(
-                        child: Loading(),
-                      );
-                    },
-                  ),
-                ),
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "$englishName",
-                          textAlign: TextAlign.left,
-                          style: GoogleFonts.poppins(
-                              fontSize: 13,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          "$price",
-                          textAlign: TextAlign.left,
-                          style: GoogleFonts.poppins(
-                              fontSize: 13,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: height / 30,
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 1.6,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("QTY : ${this.quantity}"),
-                          Text(
-                            "$totalPrice EGP",
-                            style: const TextStyle(fontSize: 16),
-                          )
-                        ],
-                      ),
-                    ),
+          child: Dismissible(
+            onDismissed: (direction) async {
+              if (direction == DismissDirection.startToEnd) {
+                NavigateAndRemov(context, const CheckOut());
+              } else {
+                await Xeatscubit.get(context)
+                    .deleteCartItem(context, "$cartItemId")
+                    .then((value) {
+                  FoodItem.CartItems.remove(this);
+
+                  Xeatscubit.get(context).updateCartPrice();
+                });
+              }
+            },
+            key: const Key(""),
+            background: Container(
+              color: Colors.blue,
+              child: Padding(
+                padding: const EdgeInsets.all(15),
+                child: Row(
+                  children: const [
+                    Icon(Icons.arrow_forward_rounded, color: Colors.white),
+                    Text('Move to CheckOut',
+                        style: TextStyle(color: Colors.white)),
                   ],
                 ),
-              ],
+              ),
+            ),
+            secondaryBackground: Container(
+              color: Colors.red,
+              child: Padding(
+                padding: const EdgeInsets.all(15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: const [
+                    Icon(Icons.delete, color: Colors.white),
+                    Text('Move to trash',
+                        style: TextStyle(color: Colors.white)),
+                  ],
+                ),
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  SizedBox(
+                    width: width / 5,
+                    child: Image(
+                      width: width / 5,
+                      image: NetworkImage(
+                        "https://x-eats.com${this.itemImage}",
+                      ),
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                          child: Loading(),
+                        );
+                      },
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 1.6,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "$englishName",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              softWrap: true,
+                              textAlign: TextAlign.left,
+                              style: GoogleFonts.poppins(
+                                  fontSize: 11,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: height / 40,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 1.6,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Price: $price",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.right,
+                              style: GoogleFonts.poppins(
+                                fontSize: 13,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Text(
+                              "$arabicName",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.right,
+                              style: GoogleFonts.poppins(
+                                fontSize: 13,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: height / 40,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 1.6,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("QTY : $quantity"),
+                            Text(
+                              "Total: $totalPrice EGP",
+                              style: const TextStyle(fontSize: 16),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -209,6 +248,9 @@ class FoodItem extends StatelessWidget {
                   image: '${image}',
                   restaurantName: restaurantName,
                   price: price,
+                  arabicName: arabicName,
+                  description: description ?? "No Description for this Product",
+                  englishName: englishName,
                 ),
               );
             },
@@ -296,6 +338,9 @@ class FoodItem extends StatelessWidget {
     required String? image,
     required String? restaurantName,
     required double? price,
+    required String? arabicName,
+    required String? description,
+    required String? englishName,
   }) {
     String? shift;
 
@@ -324,9 +369,7 @@ class FoodItem extends StatelessWidget {
             Xeatscubit.currentRestaurant = null;
           }
           var cubit = Xeatscubit.get(context);
-          // Xeatscubit.get(context).getCart(context,
-          //     email: Xeatscubit.get(context).EmailInforamtion.toString());
-
+          var navcubit = NavBarCubitcubit.get(context);
           double width = MediaQuery.of(context).size.width;
           double height = MediaQuery.of(context).size.height;
           return Scaffold(
@@ -532,32 +575,26 @@ class FoodItem extends StatelessWidget {
                 ],
               ),
             ),
+            bottomNavigationBar: BottomNavigationBar(
+              selectedLabelStyle: GoogleFonts.poppins(),
+              backgroundColor: Colors.white,
+              items: navcubit.bottomitems,
+              currentIndex: 1,
+              onTap: (index) {
+                Navigator.pop(context);
+                if (index == 1) {
+                  Navigation(context, Restaurants());
+                } else if (index == 0) {
+                  Navigation(context, Layout());
+                } else {
+                  Navigation(context, Profile());
+                }
+              },
+            ),
           );
         },
         listener: ((context, state) {}),
       ),
     );
   }
-}
-
-Widget showDialog(BuildContext context) {
-  return AlertDialog(
-    title: const Text('Error !!'),
-    content: SingleChildScrollView(
-      child: ListBody(
-        children: const <Widget>[
-          Text(
-              'You can\'t order from different reataurants\nPlease make your order with the same restaurant only.'),
-        ],
-      ),
-    ),
-    actions: <Widget>[
-      TextButton(
-        child: const Text('Got It'),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      ),
-    ],
-  );
 }

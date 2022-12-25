@@ -13,9 +13,8 @@ import '../../controllers/Components/Global Components/loading.dart';
 class ThankYou extends StatelessWidget {
   const ThankYou({
     Key? key,
-    required this.press,
   }) : super(key: key);
-  final VoidCallback press;
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;

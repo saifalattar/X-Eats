@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xeats/controllers/Components/AppBarCustomized.dart';
 import 'package:xeats/controllers/Components/Auth%20Components/ProfileMenu.dart';
@@ -12,8 +13,11 @@ import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
+import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
 import 'package:xeats/controllers/Dio/Cache_Helper.dart';
 import 'package:xeats/controllers/States.dart';
+import 'package:xeats/views/Layout/Layout.dart';
+import 'package:xeats/views/Resturants/Resturants.dart';
 import 'package:xeats/views/Splash%20Screen/Splach%20Screen.dart';
 
 class Profile extends StatelessWidget {
@@ -29,6 +33,7 @@ class Profile extends StatelessWidget {
           listener: (context, state) {},
           builder: (context, state) {
             var cubit = Xeatscubit.get(context);
+            var navcubit = NavBarCubitcubit.get(context);
             var Email = cubit.EmailInforamtion;
             var lastname = cubit.LastName;
             var Wallet = cubit.wallet;
@@ -109,6 +114,21 @@ class Profile extends StatelessWidget {
                           ],
                         ),
                       ],
+                    ),
+                    bottomNavigationBar: BottomNavigationBar(
+                      selectedLabelStyle: GoogleFonts.poppins(),
+                      backgroundColor: Colors.white,
+                      items: navcubit.bottomitems,
+                      currentIndex: 2,
+                      onTap: (index) {
+                        if (index == 2) {
+                          Navigator.pop(context);
+                        } else if (index == 0) {
+                          Navigation(context, Layout());
+                        } else {
+                          Navigation(context, const Restaurants());
+                        }
+                      },
                     ),
                   );
                 },

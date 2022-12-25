@@ -9,6 +9,7 @@ import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/views/Layout/Layout.dart';
+import 'package:xeats/views/Profile/Profile.dart';
 import '../../controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
 
 class ResturantsMenu extends StatelessWidget {
@@ -154,7 +155,7 @@ class ResturantsMenu extends StatelessWidget {
                           return Loading();
                         }
                       }),
-                      future: Xeatscubit.get(context).getCurrentCategories(
+                      future: Xeatscubit.get(context).getRestaurantCategories(
                         context,
                         image: data["image"].toString(),
                         restaurantId: data["id"].toString(),
@@ -171,12 +172,12 @@ class ResturantsMenu extends StatelessWidget {
               items: navcubit.bottomitems,
               currentIndex: 1,
               onTap: (index) {
+                Navigator.pop(context);
                 if (index == 1) {
-                  Navigator.pop(context);
                 } else if (index == 0) {
                   Navigation(context, Layout());
                 } else {
-                  Navigation(context, Layout());
+                  Navigation(context, Profile());
                 }
               },
             ),

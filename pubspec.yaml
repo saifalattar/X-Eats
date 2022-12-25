@@ -53,6 +53,8 @@ dependencies:
   cupertino_icons:
   conditional_builder_null_safety:
   flutter_launcher_icons:
+  connectivity:
+  pull_to_refresh:
 
 
   flutter:

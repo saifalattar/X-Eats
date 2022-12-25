@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xeats/controllers/Components/ItemClass.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
@@ -8,8 +9,10 @@ import 'package:xeats/controllers/States.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/views/CategoryView/categoryView.dart';
 import 'package:xeats/views/HomePage/HomePage.dart';
+import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
 import 'package:xeats/views/SuccessOrder/successOrder.dart';
+import 'package:xeats/views/ThankYou/thankyou.dart';
 import '../views/Cart/Cart.dart';
 import 'Components/Categories Components/CategoryCard.dart';
 import 'Components/Global Components/loading.dart';
@@ -100,24 +103,28 @@ class Xeatscubit extends Cubit<XeatsStates> {
     emit(Cleared());
   }
 
+  int? cartID;
   Future<void> getCartID() async {
     SharedPreferences userCartID = await SharedPreferences.getInstance();
     var d;
     if (userCartID.containsKey("cartIDSaved") &&
         (d = userCartID.getInt("cartIDSaved")) != null) {
+      print("cart id is 1 : $cartID" + "$d");
       cartID = d;
     } else {
-      await Dio().get("$BASEURL/get_carts_by_id/$email").then((value) {
+      print("cart id is 2 : $EmailInforamtion");
+      await Dio()
+          .get("$BASEURL/get_carts_by_id/$EmailInforamtion")
+          .then((value) {
         userCartID.setInt("cartIDSaved", value.data["Names"][0]['id']);
         cartID = value.data["Names"][0]['id'];
-        print("cart id is : $cartID");
+        print("cart id is 3 : $cartID");
       });
     }
     emit(SuccessGetCartID());
   }
 
 //-------------------- Function Separated to get his email if his email null then it will go to login if not then it will go to home page
-  int? cartID;
 
   static List<dynamic> Get_Category = [];
   void GetCategory() {
@@ -248,21 +255,72 @@ class Xeatscubit extends Cubit<XeatsStates> {
             print("Data is Null or No Items in Cart");
           }
         });
-        print("Updated IN CART");
-      } else if (value.statusCode == 403) {
+        print("Updated in Cart");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.blue,
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const Icon(
+                  Icons.done_rounded,
+                  color: Colors.white,
+                ),
+                Container(
+                    margin: EdgeInsets.only(left: 10.w),
+                    child: Text("${value.data}"))
+              ],
+            ),
+          ),
+        );
+      } else if (value.statusCode == 403 || value.statusCode == 304) {
         print("Cannot add to products from different Rest");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.redAccent,
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const Icon(
+                  Icons.done_rounded,
+                  color: Colors.white,
+                ),
+                Container(
+                    margin: EdgeInsets.only(left: 10.w),
+                    child: Text("${value.data}"))
+              ],
+            ),
+          ),
+        );
       } else {
-        print("Added to the empty cart");
+        print("Added To Cart");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.green,
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const Icon(
+                  Icons.done_rounded,
+                  color: Colors.white,
+                ),
+                Container(
+                    margin: EdgeInsets.only(left: 10.w),
+                    child: Text("${value.data}"))
+              ],
+            ),
+          ),
+        );
       }
       bool isAlreadyAdded = false;
-      for (Widget i in FoodItem.CartItems) {
+      for (Widget foodItemLoop in FoodItem.CartItems) {
         try {
-          i = i as FoodItem;
-          if (i.id == foodItemObject.id) {
-            print(i.quantity.toString() +
+          foodItemLoop = foodItemLoop as FoodItem;
+          if (foodItemLoop.id == foodItemObject.id) {
+            print(foodItemLoop.quantity.toString() +
                 "  " +
                 foodItemObject.quantity.toString());
-            i.quantity = foodItemObject.quantity;
+            foodItemLoop.quantity = foodItemObject.quantity;
             isAlreadyAdded = true;
             break;
           }
@@ -273,7 +331,6 @@ class Xeatscubit extends Cubit<XeatsStates> {
       if (!isAlreadyAdded) {
         FoodItem.CartItems.add(foodItemObject);
       }
-      print("هنااااا");
       updateCartPrice();
       Navigation(context, const Cart());
     }).catchError(
@@ -281,17 +338,23 @@ class Xeatscubit extends Cubit<XeatsStates> {
         var dioException = e as DioError;
         var status = dioException.response!.statusCode;
         var resp = dioException.response!.data;
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        print("Cannot add to products from different Rest");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
             backgroundColor: Colors.red,
             content: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Icon(
-                  Icons.error,
+                const Icon(
+                  Icons.error_outline_outlined,
                   color: Colors.white,
                 ),
-                Text("$resp")
+                Container(
+                    margin: EdgeInsets.only(left: 10.w), child: Text("$resp"))
               ],
-            )));
+            ),
+          ),
+        );
       },
     );
   }
@@ -392,37 +455,41 @@ class Xeatscubit extends Cubit<XeatsStates> {
     context, {
     int? id,
   }) async {
-    await Dio().post("$BASEURL/get_orders/", data: {
+    await Dio().post("$BASEURL/get_orders_by_email/$EmailInforamtion", data: {
       "user": id,
       "total_price_after_delivery":
           FoodItem.deliveryFee + FoodItem.getSubtotal(),
-      "paid": false,
       "totalPrice": FoodItem.getSubtotal(),
-      "cart": cartID
+      "cart": cartID,
+      "flag": "Mobile"
     }).then((value) {
-      NavigateAndRemov(context, const SuccessOrder());
+      NavigateAndRemov(context, const ThankYou());
     }).catchError((onError) => print(onError));
   }
 
   Future<void> deleteCartItem(BuildContext context, String cartItemId) async {
     await Dio().delete("$BASEURL/delete_cartItems/$cartItemId").then((value) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
           backgroundColor: Colors.green,
           content: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Icon(
-                Icons.done,
+              const Icon(
+                Icons.done_rounded,
                 color: Colors.white,
               ),
-              Text(
-                "Item deleted successfully",
-                style: TextStyle(color: Colors.white),
-              ),
+              Container(
+                  margin: EdgeInsets.only(left: 10.w),
+                  child: const Text("Item Deleted Successfully"))
             ],
-          )));
+          ),
+        ),
+      );
     }).catchError((onError) {
       print(onError);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
           backgroundColor: Colors.red,
           content: Row(
             children: [
@@ -435,11 +502,13 @@ class Xeatscubit extends Cubit<XeatsStates> {
                 style: TextStyle(color: Colors.white),
               ),
             ],
-          )));
+          ),
+        ),
+      );
     });
   }
 
-  Future<Widget> getCurrentCategories(
+  Future<Widget> getRestaurantCategories(
     BuildContext context, {
     required String? restaurantId,
     required String? image,

@@ -27,46 +27,37 @@ class FoodItem extends StatelessWidget {
 
   static List<Widget> CartItems = [];
 
-  FoodItem(
-      {this.id,
-      this.quantity = 1,
-      this.englishName,
-      this.productSlug,
-      this.description,
-      this.creationDate,
-      this.arabicName,
-      this.restaurant,
-      this.category,
-      this.price,
-      this.isMostPopular,
-      this.itemImage,
-      this.restaurantImage,
-      this.isNewProduct,
-      this.isBestOffer,
-      this.cartItemId}) {
-    totalPrice = price;
-  }
+  FoodItem({
+    this.id,
+    this.quantity = 1,
+    this.englishName,
+    this.productSlug,
+    this.description,
+    this.creationDate,
+    this.arabicName,
+    this.restaurant,
+    this.category,
+    this.price,
+    this.isMostPopular,
+    this.itemImage,
+    this.restaurantImage,
+    this.isNewProduct,
+    this.isBestOffer,
+    this.cartItemId,
+    this.totalPrice,
+  }) {}
 
   static double getSubtotal() {
     double total = 0;
     for (var i in CartItems) {
+      print("CartItems" + " " + "$CartItems");
       try {
         i = i as FoodItem;
         total += i.totalPrice!;
+        print("TOTAL" + " " + "$total");
       } catch (e) {}
     }
     return total;
-  }
-
-  static String? getcartItemId() {
-    String? cartid;
-    for (var i in CartItems) {
-      try {
-        i = i as FoodItem;
-        i.cartItemId!;
-      } catch (e) {}
-    }
-    return cartid;
   }
 
   @override
@@ -78,29 +69,35 @@ class FoodItem extends StatelessWidget {
         onTap: () {
           NavigateAndRemov(
             context,
-            this.productDetails(
+            productDetails(
               context,
-              image: this.itemImage,
+              image: itemImage,
+              price: price,
               restaurantName: '',
             ),
           );
         },
         child: Dismissible(
-          onDismissed: (direction) {
+          onDismissed: (direction) async {
             if (direction == DismissDirection.startToEnd) {
-              NavigateAndRemov(context, CheckOut());
+              NavigateAndRemov(context, const CheckOut());
             } else {
-              Xeatscubit.get(context).deleteCartItem(context, "$cartItemId");
-              FoodItem.CartItems.remove(this);
+              await Xeatscubit.get(context)
+                  .deleteCartItem(context, "$cartItemId")
+                  .then((value) {
+                FoodItem.CartItems.remove(this);
+
+                Xeatscubit.get(context).updateCartPrice();
+              });
             }
           },
-          key: Key(""),
+          key: const Key(""),
           background: Container(
             color: Colors.blue,
             child: Padding(
               padding: const EdgeInsets.all(15),
               child: Row(
-                children: <Widget>[
+                children: const [
                   Icon(Icons.arrow_forward_rounded, color: Colors.white),
                   Text('Move to CheckOut',
                       style: TextStyle(color: Colors.white)),
@@ -114,7 +111,7 @@ class FoodItem extends StatelessWidget {
               padding: const EdgeInsets.all(15),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
+                children: const [
                   Icon(Icons.delete, color: Colors.white),
                   Text('Move to trash', style: TextStyle(color: Colors.white)),
                 ],
@@ -143,20 +140,31 @@ class FoodItem extends StatelessWidget {
                 ),
                 Column(
                   children: [
-                    Container(
-                      child: Text(
-                        "${this.englishName}",
-                        textAlign: TextAlign.left,
-                        style: GoogleFonts.poppins(
-                            fontSize: 13,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold),
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "$englishName",
+                          textAlign: TextAlign.left,
+                          style: GoogleFonts.poppins(
+                              fontSize: 13,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          "$price",
+                          textAlign: TextAlign.left,
+                          style: GoogleFonts.poppins(
+                              fontSize: 13,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
                     SizedBox(
                       height: height / 30,
                     ),
-                    Container(
+                    SizedBox(
                       width: MediaQuery.of(context).size.width / 1.6,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -164,7 +172,7 @@ class FoodItem extends StatelessWidget {
                           Text("QTY : ${this.quantity}"),
                           Text(
                             "$totalPrice EGP",
-                            style: TextStyle(fontSize: 16),
+                            style: const TextStyle(fontSize: 16),
                           )
                         ],
                       ),
@@ -185,6 +193,7 @@ class FoodItem extends StatelessWidget {
     required String? category,
     required String? CatId,
     required String? restaurantName,
+    required double? price,
   }) {
     return SafeArea(
       child: Column(
@@ -193,9 +202,14 @@ class FoodItem extends StatelessWidget {
           InkWell(
             onTap: () {
               Navigation(
+                context,
+                productDetails(
                   context,
-                  productDetails(context,
-                      image: '${image}', restaurantName: restaurantName));
+                  image: '${image}',
+                  restaurantName: restaurantName,
+                  price: price,
+                ),
+              );
             },
             child: Padding(
               padding: const EdgeInsets.all(8),
@@ -276,8 +290,12 @@ class FoodItem extends StatelessWidget {
     );
   }
 
-  Widget productDetails(BuildContext context,
-      {required String? image, required String? restaurantName}) {
+  Widget productDetails(
+    BuildContext context, {
+    required String? image,
+    required String? restaurantName,
+    required double? price,
+  }) {
     String? shift;
 
     final BannerAd bannerAd = BannerAd(
@@ -292,7 +310,7 @@ class FoodItem extends StatelessWidget {
             print('Ad failed to load: $error');
           },
         ),
-        request: AdRequest());
+        request: const AdRequest());
     bannerAd.load();
 
     return BlocProvider(
@@ -314,17 +332,23 @@ class FoodItem extends StatelessWidget {
             floatingActionButton: FloatingActionButton(
               backgroundColor: const Color.fromARGB(255, 9, 134, 211),
               //add to cart button
-              onPressed: () {
-                Xeatscubit.get(context).addToCart(
+              onPressed: () async {
+                await Xeatscubit.get(context)
+                    .addToCart(
+                  cartItemId: cartItemId,
                   productId: id,
                   quantity: quantity,
                   price: price,
                   totalPrice: totalPrice,
                   restaurantId: restaurant,
                   timeShift: currentTiming,
-                );
-                // cubit.updateCartPrice();
-                // Navigation(context, const Cart());
+                )
+                    .then((value) {
+                  CartItems.add(this);
+                  cubit.updateCartPrice();
+                });
+
+                Navigation(context, const Cart());
               },
 
               child: const Icon(Icons.add_shopping_cart_rounded),
@@ -360,7 +384,7 @@ class FoodItem extends StatelessWidget {
                             height: 20,
                           ),
                           Text(
-                            "${this.price} EGP",
+                            "$price EGP",
                             style: TextStyle(
                                 fontSize: 22, fontWeight: FontWeight.bold),
                           ),
@@ -381,11 +405,11 @@ class FoodItem extends StatelessWidget {
                                       child: Text(
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
-                                        "${this.englishName}\n",
+                                        "$englishName\n",
                                         textAlign: TextAlign.left,
                                         style: GoogleFonts.poppins(
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 18),
+                                            fontSize: 14),
                                       ),
                                     ),
                                     SizedBox(
@@ -402,10 +426,10 @@ class FoodItem extends StatelessWidget {
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.right,
-                                        "${this.arabicName}",
+                                        "$arabicName",
                                         style: GoogleFonts.poppins(
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 22),
+                                            fontSize: 14),
                                       ),
                                     ),
                                   ],

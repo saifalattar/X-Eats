@@ -1,0 +1,10 @@
+Item Class.dart : line : 326
+- when a product is added to cart it should update the cart price in the database, but it doesn't
+
+Cubit.dart: line : 244
+- it doesn't add two products from two different restaurants but AlertDialog should be appear
+
+MostSold & New Products in Cubit.dart 
+The preview in the home page & restaurant Page should add on tapping the product it goes to the ProductDetails View
+
+- Handling the Checkout & Profile View

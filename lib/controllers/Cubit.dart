@@ -212,10 +212,10 @@ class Xeatscubit extends Cubit<XeatsStates> {
   }
 
   // function to add item to the cart
-  void addToCart({
+  Future<void> addToCart({
     int? productId,
     int? quantity,
-    int? cartItemId,
+    String? cartItemId,
     double? price,
     double? totalPrice,
     int? restaurantId,
@@ -233,24 +233,47 @@ class Xeatscubit extends Cubit<XeatsStates> {
         "Restaurant": restaurantId,
         "order_shift": "25"
       },
-    ).then((value) {
-      DioError? dioException;
-
-      print(value);
-    }).catchError((e) {
-      var dioException = e as DioError;
-      var status = dioException.response!.statusCode;
-      var resp = dioException.response!.data;
-      if (status == 403) {
-        print("Not the Same Rest");
+    ).then((value) async {
+      if (value.statusCode == 202) {
+        print(cartItemId);
+        await Dio().put(
+          "$BASEURL/get_user_cartItems/$EmailInforamtion",
+          data: {
+            "id": cartItemId,
+            "user": idInformation,
+            "product": productId,
+            "quantity": quantity,
+            "totalOrderItemPrice": totalPrice,
+            "price": price,
+            "ordered": false,
+          },
+        ).catchError((e) {
+          var dioException = e as DioError;
+          var status = dioException.response!.statusCode;
+          if (status == 304) {
+            print("Data is Null or No Items in Cart");
+          }
+        });
+        print("Updated IN CART");
+      } else if (value.statusCode == 403) {
+        print("Cannot add to products from different Rest");
+      } else {
+        print("Added to the empty cart");
       }
-    });
-    ;
+    }).catchError(
+      (e) async {
+        var dioException = e as DioError;
+        var status = dioException.response!.statusCode;
+        var resp = dioException.response!.data;
+        print(status);
+        print(resp);
+      },
+    );
   }
 
   void updateCartPrice() async {
     await Dio().put("$BASEURL/get_carts_by_id/$EmailInforamtion", data: {
-      "total_price": FoodItem().price!.toDouble(),
+      "total_price": FoodItem.getSubtotal(),
       "total_after_delivery":
           (FoodItem.deliveryFee + FoodItem.getSubtotal()).toDouble()
     }).then((value) {
@@ -300,8 +323,10 @@ class Xeatscubit extends Cubit<XeatsStates> {
               restaurant: i["Restaurant"],
               description: v2.data["Names"][0]["description"] ??
                   " No description for this Product",
-              price: double.parse(v2.data["Names"][0]["price"].toString()) *
-                  double.parse(i["quantity"].toString()),
+              price: double.parse(v2.data["Names"][0]["price"].toString()),
+              totalPrice:
+                  double.parse(v2.data["Names"][0]["price"].toString()) *
+                      double.parse(i["quantity"].toString()),
               category: v2.data["Names"][0]["category"],
               isBestOffer: v2.data["Names"][0]["Best_Offer"],
               isMostPopular: v2.data["Names"][0]["Most_Popular"],
@@ -355,7 +380,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
         .catchError((onError) => print(onError));
   }
 
-  void deleteCartItem(BuildContext context, String cartItemId) async {
+  Future<void> deleteCartItem(BuildContext context, String cartItemId) async {
     await Dio().delete("$BASEURL/delete_cartItems/$cartItemId").then((value) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: Colors.green,
@@ -476,7 +501,8 @@ class Xeatscubit extends Cubit<XeatsStates> {
                 image: image,
                 category: category,
                 CatId: CatId,
-                restaurantName: restaurantName);
+                restaurantName: restaurantName,
+                price: value.data["Names"][index]["price"]);
           },
           separatorBuilder: ((context, index) {
             return Divider();

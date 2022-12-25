@@ -1,5 +1,4 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,10 +10,8 @@ import 'package:xeats/controllers/Components/Products%20Components/ProductView.d
 import 'package:xeats/controllers/Components/Restaurant%20Components/RestaurantView.dart';
 import 'package:xeats/controllers/Components/AppBarCustomized.dart';
 import 'package:xeats/controllers/Cubit.dart';
-import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/controllers/States.dart';
-import 'package:xeats/views/Cart/cart.dart';
 import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
 
 class HomePage extends StatelessWidget {
@@ -58,7 +55,6 @@ class HomePage extends StatelessWidget {
           ..GetMostSoldProducts()
           ..getPoster()
           ..GetResturants()
-          ..CartData()
           ..GettingUserData(),
         child: BlocConsumer<Xeatscubit, XeatsStates>(
           builder: ((context, state) {
@@ -70,6 +66,7 @@ class HomePage extends StatelessWidget {
             var userId = cubit.idInformation;
             var FirstName = cubit.FirstName ?? Loading();
             var LastName = cubit.LastName ?? ' ';
+            print("carrrrrrt" + "${Xeatscubit.get(context).cartID}");
 
             return Scaffold(
               appBar: appBar(context,

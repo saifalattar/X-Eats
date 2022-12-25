@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
-import 'package:xeats/controllers/Components/ItemClass.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/views/Animations/EmptyCart.dart';
@@ -17,17 +16,16 @@ class Cart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
     return BlocProvider(
       create: (context) => Xeatscubit()
-        ..CartData()
-        ..GettingUserData(),
+        ..GettingUserData()
+        ..getCartID(),
       child: BlocConsumer<Xeatscubit, XeatsStates>(
         listener: (context, state) {},
         builder: (context, state) {
+          print("carrrrrrt" + "${Xeatscubit.get(context).cartID}");
+
           var cubit = Xeatscubit.get(context);
-          var cartId = cubit.cartID;
           return Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(

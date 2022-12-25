@@ -41,3 +41,5 @@ class FailedGetCartID extends SuperXeats {}
 class SuccessEmailProfile extends SuperXeats {}
 
 class Cleared extends SuperXeats {}
+
+class ButtonPressedLoading extends SuperXeats {}

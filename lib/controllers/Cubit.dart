@@ -2,16 +2,18 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:xeats/controllers/Components/Global%20Components/AlertDialog.dart';
 import 'package:xeats/controllers/Components/ItemClass.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/views/CategoryView/categoryView.dart';
+import 'package:xeats/views/HomePage/HomePage.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
-
+import 'package:xeats/views/SuccessOrder/successOrder.dart';
+import '../views/Cart/Cart.dart';
 import 'Components/Categories Components/CategoryCard.dart';
 import 'Components/Global Components/loading.dart';
+import 'package:flutter/src/material/dialog.dart';
 
 class Xeatscubit extends Cubit<XeatsStates> {
   Xeatscubit() : super(SuperXeats());
@@ -98,31 +100,24 @@ class Xeatscubit extends Cubit<XeatsStates> {
     emit(Cleared());
   }
 
-  List<dynamic> cartList = [];
-
-  Future<List> getCart(context, {String? email}) async {
-    await Dio().get("$BASEURL/get_carts_by_id/$email").then((value) async {
-      cartList = value.data['Names'];
-      print(cartList[0]['id']);
-      print("EMAIL" + " " + "$email");
-      SharedPreferences userCartID = await SharedPreferences.getInstance();
-      userCartID.setInt("cartIDSaved", cartList[0]['id']);
-      emit(SuccessGetCartID());
-    }).catchError((onError) {
-      emit(FailedGetCartID());
-    });
-    return cartList;
+  Future<void> getCartID() async {
+    SharedPreferences userCartID = await SharedPreferences.getInstance();
+    var d;
+    if (userCartID.containsKey("cartIDSaved") &&
+        (d = userCartID.getInt("cartIDSaved")) != null) {
+      cartID = d;
+    } else {
+      await Dio().get("$BASEURL/get_carts_by_id/$email").then((value) {
+        userCartID.setInt("cartIDSaved", value.data["Names"][0]['id']);
+        cartID = value.data["Names"][0]['id'];
+        print("cart id is : $cartID");
+      });
+    }
+    emit(SuccessGetCartID());
   }
 
 //-------------------- Function Separated to get his email if his email null then it will go to login if not then it will go to home page
   int? cartID;
-  Future<void> CartData() async {
-    SharedPreferences cart = await SharedPreferences.getInstance();
-    cartID = cart.getInt('cartIDSaved');
-    emit(SuccessGetCartID());
-    print("LISTOOO" + '${cartList[0]}');
-    print("BLA BLA" + " " "$cartID");
-  }
 
   static List<dynamic> Get_Category = [];
   void GetCategory() {
@@ -212,15 +207,15 @@ class Xeatscubit extends Cubit<XeatsStates> {
   }
 
   // function to add item to the cart
-  Future<void> addToCart({
-    int? productId,
-    int? quantity,
-    String? cartItemId,
-    double? price,
-    double? totalPrice,
-    int? restaurantId,
-    String? timeShift,
-  }) async {
+  Future<void> addToCart(context,
+      {int? productId,
+      int? quantity,
+      String? cartItemId,
+      double? price,
+      double? totalPrice,
+      int? restaurantId,
+      String? timeShift,
+      required FoodItem foodItemObject}) async {
     await Dio().post(
       "$BASEURL/get_user_cartItems/$EmailInforamtion",
       data: {
@@ -235,7 +230,6 @@ class Xeatscubit extends Cubit<XeatsStates> {
       },
     ).then((value) async {
       if (value.statusCode == 202) {
-        print(cartItemId);
         await Dio().put(
           "$BASEURL/get_user_cartItems/$EmailInforamtion",
           data: {
@@ -260,13 +254,44 @@ class Xeatscubit extends Cubit<XeatsStates> {
       } else {
         print("Added to the empty cart");
       }
+      bool isAlreadyAdded = false;
+      for (Widget i in FoodItem.CartItems) {
+        try {
+          i = i as FoodItem;
+          if (i.id == foodItemObject.id) {
+            print(i.quantity.toString() +
+                "  " +
+                foodItemObject.quantity.toString());
+            i.quantity = foodItemObject.quantity;
+            isAlreadyAdded = true;
+            break;
+          }
+        } catch (e) {
+          continue;
+        }
+      }
+      if (!isAlreadyAdded) {
+        FoodItem.CartItems.add(foodItemObject);
+      }
+      print("هنااااا");
+      updateCartPrice();
+      Navigation(context, const Cart());
     }).catchError(
-      (e) async {
+      (e) {
         var dioException = e as DioError;
         var status = dioException.response!.statusCode;
         var resp = dioException.response!.data;
-        print(status);
-        print(resp);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.red,
+            content: Row(
+              children: [
+                Icon(
+                  Icons.error,
+                  color: Colors.white,
+                ),
+                Text("$resp")
+              ],
+            )));
       },
     );
   }
@@ -367,17 +392,16 @@ class Xeatscubit extends Cubit<XeatsStates> {
     context, {
     int? id,
   }) async {
-    await Dio()
-        .post("$BASEURL/get_orders/", data: {
-          "user": id,
-          "total_price_after_delivery":
-              FoodItem.deliveryFee + FoodItem.getSubtotal(),
-          "paid": false,
-          "totalPrice": FoodItem.getSubtotal(),
-          "cart": cartID
-        })
-        .then((value) => print(value))
-        .catchError((onError) => print(onError));
+    await Dio().post("$BASEURL/get_orders/", data: {
+      "user": id,
+      "total_price_after_delivery":
+          FoodItem.deliveryFee + FoodItem.getSubtotal(),
+      "paid": false,
+      "totalPrice": FoodItem.getSubtotal(),
+      "cart": cartID
+    }).then((value) {
+      NavigateAndRemov(context, const SuccessOrder());
+    }).catchError((onError) => print(onError));
   }
 
   Future<void> deleteCartItem(BuildContext context, String cartItemId) async {

@@ -11,7 +11,6 @@ import 'package:xeats/controllers/States.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/views/Cart/cart.dart';
 import 'package:xeats/views/CheckOut/CheckOut.dart';
-import 'package:http/http.dart';
 
 class FoodItem extends StatelessWidget {
   final bool? isMostPopular, isNewProduct, isBestOffer;
@@ -53,9 +52,11 @@ class FoodItem extends StatelessWidget {
       print("CartItems" + " " + "$CartItems");
       try {
         i = i as FoodItem;
-        total += i.totalPrice!;
+        total += i.price! * i.quantity;
         print("TOTAL" + " " + "$total");
-      } catch (e) {}
+      } catch (e) {
+        continue;
+      }
     }
     return total;
   }
@@ -315,16 +316,16 @@ class FoodItem extends StatelessWidget {
 
     return BlocProvider(
       create: (context) => Xeatscubit()
-        ..CartData()
-        ..GettingUserData(),
+        ..GettingUserData()
+        ..getCartID(),
       child: BlocConsumer<Xeatscubit, XeatsStates>(
         builder: (context, states) {
           if (CartItems.isEmpty) {
             Xeatscubit.currentRestaurant = null;
           }
           var cubit = Xeatscubit.get(context);
-          Xeatscubit.get(context).getCart(context,
-              email: Xeatscubit.get(context).EmailInforamtion.toString());
+          // Xeatscubit.get(context).getCart(context,
+          //     email: Xeatscubit.get(context).EmailInforamtion.toString());
 
           double width = MediaQuery.of(context).size.width;
           double height = MediaQuery.of(context).size.height;
@@ -333,22 +334,15 @@ class FoodItem extends StatelessWidget {
               backgroundColor: const Color.fromARGB(255, 9, 134, 211),
               //add to cart button
               onPressed: () async {
-                await Xeatscubit.get(context)
-                    .addToCart(
-                  cartItemId: cartItemId,
-                  productId: id,
-                  quantity: quantity,
-                  price: price,
-                  totalPrice: totalPrice,
-                  restaurantId: restaurant,
-                  timeShift: currentTiming,
-                )
-                    .then((value) {
-                  CartItems.add(this);
-                  cubit.updateCartPrice();
-                });
-
-                Navigation(context, const Cart());
+                await Xeatscubit.get(context).addToCart(context,
+                    cartItemId: cartItemId,
+                    productId: id,
+                    quantity: quantity,
+                    price: price,
+                    totalPrice: price! * quantity,
+                    restaurantId: restaurant,
+                    timeShift: currentTiming,
+                    foodItemObject: this);
               },
 
               child: const Icon(Icons.add_shopping_cart_rounded),

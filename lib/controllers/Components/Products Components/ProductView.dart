@@ -31,7 +31,7 @@ class _ProductViewState extends State<ProductView> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
+        SizedBox(
           height: widget.height,
           width: widget.width,
           child: Padding(
@@ -45,7 +45,7 @@ class _ProductViewState extends State<ProductView> {
               onPressed: widget.Navigate,
               child: Image(
                 image: NetworkImage(
-                  "https://x-eats.com" + widget.image!,
+                  "https://x-eats.com/" + widget.image!,
                 ),
                 loadingBuilder: (context, child, loadingProgress) {
                   if (loadingProgress == null) return child;

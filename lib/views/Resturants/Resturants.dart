@@ -1,23 +1,18 @@
-// ignore_for_file: prefer_interpolation_to_compose_strings
-
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Components/AppBarCustomized.dart';
+import 'package:xeats/controllers/Components/ItemClass.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:xeats/views/Layout/Layout.dart';
-
 import 'package:xeats/views/Profile/Profile.dart';
 import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
-
 import '../../controllers/Components/Products Components/NewProducts.dart';
 
 class Restaurants extends StatelessWidget {
@@ -25,7 +20,6 @@ class Restaurants extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return BlocProvider(
         create: (context) => Xeatscubit()..NewProducts(),
@@ -43,58 +37,83 @@ class Restaurants extends StatelessWidget {
               body: SingleChildScrollView(
                 child: SafeArea(
                   child: Column(children: [
-                    Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Text(
-                              'New Products',
-                              style: GoogleFonts.poppins(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Text(
+                            'New Products',
+                            style: GoogleFonts.poppins(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Container(
-                              child: Row(
-                                children: [
-                                  ...List.generate(
-                                    newProducts.length,
-                                    (index) {
-                                      return FutureBuilder(
-                                          future: cubit.gettingCategoryImages(
-                                              newProducts[index]["category"]
-                                                  .toString()),
-                                          builder: (context,
-                                              AsyncSnapshot snapshot) {
-                                            if (snapshot.hasData) {
-                                              return GestureDetector(
-                                                child: NewProducts(
-                                                    title: newProducts[index]
-                                                        ["name"],
-                                                    Colors: Colors.white,
-                                                    image: snapshot.data
-                                                        .toString(),
-                                                    Navigate: () => {}),
+                        ),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              ...List.generate(
+                                newProducts.length,
+                                (index) {
+                                  return FutureBuilder(
+                                      future: cubit.gettingCategoryImages(
+                                          newProducts[index]["category"]
+                                              .toString()),
+                                      builder:
+                                          (context, AsyncSnapshot snapshot) {
+                                        if (snapshot.hasData) {
+                                          return GestureDetector(
+                                            child: NewProducts(
+                                                title: newProducts[index]
+                                                    ["name"],
+                                                Colors: Colors.white,
+                                                image: snapshot.data.toString(),
+                                                Navigate: () => {
+                                                      Navigation(
+                                                        context,
+                                                        FoodItem()
+                                                            .productDetails(
+                                                          context,
+                                                          image:
+                                                              "/${snapshot.data.toString()}",
+                                                          price:
+                                                              newProducts[index]
+                                                                  ['price'],
+                                                          englishName:
+                                                              newProducts[index]
+                                                                  ["name"],
+                                                          arabicName:
+                                                              newProducts[index]
+                                                                  [
+                                                                  "ArabicName"],
+                                                          description: newProducts[
+                                                                      index][
+                                                                  "description"] ??
+                                                              "No Description for this Product",
+                                                          restaurantName:
+                                                              newProducts[index]
+                                                                      [
+                                                                      "Restaurant"]
+                                                                  .toString(),
+                                                        ),
+                                                      ),
+                                                    }),
+                                          );
 
-                                                // },
-                                              );
-                                            } else {
-                                              return Loading();
-                                            }
-                                          });
-                                    },
-                                  ),
-                                ],
+                                          // },
+
+                                        } else {
+                                          return Loading();
+                                        }
+                                      });
+                                },
                               ),
-                            ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                     Column(
                       children: [

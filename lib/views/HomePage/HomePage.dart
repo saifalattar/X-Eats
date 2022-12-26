@@ -1,5 +1,5 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -117,7 +117,7 @@ class HomePage extends StatelessWidget {
                                   child: Text(
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
-                                    "Welcome," + " " + '$FirstName',
+                                    "Welcome, $FirstName",
                                     style: GoogleFonts.poppins(
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold),
@@ -125,79 +125,76 @@ class HomePage extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            Container(
-                              child: ConditionalBuilder(
-                                  condition: Xeatscubit.getposters.isNotEmpty,
-                                  fallback: (context) => Center(
-                                        child: Loading(),
-                                      ),
-                                  builder: (context) => DiscountBanner()),
-                            ),
+                            ConditionalBuilder(
+                                condition: Xeatscubit.getposters.isNotEmpty,
+                                fallback: (context) => Center(
+                                      child: Loading(),
+                                    ),
+                                builder: (context) => const DiscountBanner()),
                           ],
                         ),
                       ),
-                      Container(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Text(
-                                'Restaurant',
-                                style: GoogleFonts.poppins(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
-                              ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Text(
+                              'Restaurant',
+                              style: GoogleFonts.poppins(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
                             ),
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: [
-                                  ...List.generate(
-                                    restaurant_api.length,
-                                    (index) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          Navigation(
-                                              context,
-                                              ResturantsMenu(
-                                                  data: restaurant_api[index]));
-                                        },
-                                        child: RestaurantView(
-                                          data: restaurant_api[index]['Name'] ??
-                                              Loading(),
-                                          Colors: const Color.fromARGB(
-                                              255, 5, 95, 9),
-                                          image: Image(
-                                            loadingBuilder: (context, child,
-                                                loadingProgress) {
-                                              if (loadingProgress == null)
-                                                return child;
-                                              return Center(
-                                                child: Loading(),
-                                              );
-                                            },
-                                            image: NetworkImage(DioHelper
-                                                    .dio!.options.baseUrl +
-                                                restaurant_api[index]['image']),
-                                          ),
+                          ),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                ...List.generate(
+                                  restaurant_api.length,
+                                  (index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Navigation(
+                                            context,
+                                            ResturantsMenu(
+                                                data: restaurant_api[index]));
+                                      },
+                                      child: RestaurantView(
+                                        data: restaurant_api[index]['Name'] ??
+                                            Loading(),
+                                        Colors:
+                                            const Color.fromARGB(255, 5, 95, 9),
+                                        image: Image(
+                                          loadingBuilder: (context, child,
+                                              loadingProgress) {
+                                            if (loadingProgress == null) {
+                                              return child;
+                                            }
+                                            return Center(
+                                              child: Loading(),
+                                            );
+                                          },
+                                          image: NetworkImage(DioHelper
+                                                  .dio!.options.baseUrl +
+                                              restaurant_api[index]['image']),
                                         ),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
                             ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              child: AdWidget(ad: bannerAd),
-                              height: 50,
-                              width: double.maxFinite,
-                            )
-                          ],
-                        ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          SizedBox(
+                            child: AdWidget(ad: bannerAd),
+                            height: 50,
+                            width: double.maxFinite,
+                          )
+                        ],
                       ),
                       Container(
                         child: Column(
@@ -213,76 +210,70 @@ class HomePage extends StatelessWidget {
                             ),
                             SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
-                              child: Container(
-                                child: Row(
-                                  children: [
-                                    ...List.generate(
-                                      product_api.length,
-                                      (index) {
-                                        return FutureBuilder(
-                                            future: cubit.gettingCategoryImages(
-                                                product_api[index]["category"]
-                                                    .toString()),
-                                            builder: (context,
-                                                AsyncSnapshot snapshot) {
-                                              double? price =
-                                                  product_api[index]['price'];
-                                              if (snapshot.hasData) {
-                                                return GestureDetector(
-                                                  child: ProductView(
-                                                      image: snapshot.data
-                                                          .toString(),
-                                                      width: width / 2.0,
-                                                      height: height / 4.2,
-                                                      data: product_api[index]
-                                                              ["name"] +
-                                                          "\n",
-                                                      Colors: Colors.white,
-                                                      Navigate: () => {
-                                                            NavigateAndRemov(
+                              child: Row(
+                                children: [
+                                  ...List.generate(
+                                    product_api.length,
+                                    (index) {
+                                      return FutureBuilder(
+                                          future: cubit.gettingCategoryImages(
+                                              product_api[index]["category"]
+                                                  .toString()),
+                                          builder: (context,
+                                              AsyncSnapshot snapshot) {
+                                            double? price =
+                                                product_api[index]['price'];
+                                            if (snapshot.hasData) {
+                                              return GestureDetector(
+                                                child: ProductView(
+                                                    image: snapshot.data
+                                                        .toString(),
+                                                    width: width / 2.0,
+                                                    height: height / 4.2,
+                                                    data: product_api[index]
+                                                            ["name"] +
+                                                        "\n",
+                                                    Colors: Colors.white,
+                                                    Navigate: () => {
+                                                          Navigation(
+                                                            context,
+                                                            FoodItem()
+                                                                .productDetails(
                                                               context,
-                                                              FoodItem()
-                                                                  .productDetails(
-                                                                context,
-                                                                image: product_api[
-                                                                            index]
-                                                                        [
-                                                                        "category"]
-                                                                    .toString(),
-                                                                price: price,
-                                                                englishName:
-                                                                    product_api[
-                                                                            index]
-                                                                        [
-                                                                        "name"],
-                                                                arabicName:
-                                                                    product_api[
-                                                                            index]
-                                                                        [
-                                                                        "ArabicName"],
-                                                                description: product_api[
-                                                                            index]
-                                                                        [
-                                                                        "description"] ??
-                                                                    "No Description for this Product",
-                                                                restaurantName:
-                                                                    product_api[index]
-                                                                            [
-                                                                            "Restaurant"]
-                                                                        .toString(),
-                                                              ),
+                                                              image:
+                                                                  "/${snapshot.data.toString()}",
+                                                              price: price,
+                                                              englishName:
+                                                                  product_api[
+                                                                          index]
+                                                                      ["name"],
+                                                              arabicName:
+                                                                  product_api[
+                                                                          index]
+                                                                      [
+                                                                      "ArabicName"],
+                                                              description: product_api[
+                                                                          index]
+                                                                      [
+                                                                      "description"] ??
+                                                                  "No Description for this Product",
+                                                              restaurantName:
+                                                                  product_api[index]
+                                                                          [
+                                                                          "Restaurant"]
+                                                                      .toString(),
                                                             ),
-                                                          }),
-                                                  onTap: () {},
-                                                );
-                                              } else {
-                                                return Loading();
-                                              }
-                                            });
-                                      },
-                                    ),
-                                  ],
-                                ),
+                                                          ),
+                                                        }),
+                                                onTap: () {},
+                                              );
+                                            } else {
+                                              return Loading();
+                                            }
+                                          });
+                                    },
+                                  ),
+                                ],
                               ),
                             ),
                           ],

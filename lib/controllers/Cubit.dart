@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xeats/controllers/Components/ItemClass.dart';
+import 'package:xeats/controllers/Components/Requests%20Loading%20Components/RequstsLoading.dart';
 import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/controllers/Components/Components.dart';
@@ -16,7 +17,6 @@ import 'package:xeats/views/ThankYou/thankyou.dart';
 import '../views/Cart/Cart.dart';
 import 'Components/Categories Components/CategoryCard.dart';
 import 'Components/Global Components/loading.dart';
-import 'package:flutter/src/material/dialog.dart';
 
 class Xeatscubit extends Cubit<XeatsStates> {
   Xeatscubit() : super(SuperXeats());
@@ -213,6 +213,15 @@ class Xeatscubit extends Cubit<XeatsStates> {
     });
   }
 
+  Future<String?> getRestaurantName(String id) async {
+    await Dio().get("https://$BASEURL/get_restaurants_by_id/$id").then((value) {
+      print("jhdfjrhjjrjhjr");
+      return value.data["Names"][0]["Name"].toString();
+    }).catchError((onError) {
+      return onError.response!.statusCode.toString();
+    });
+  }
+
   // function to add item to the cart
   Future<void> addToCart(context,
       {int? productId,
@@ -223,6 +232,9 @@ class Xeatscubit extends Cubit<XeatsStates> {
       int? restaurantId,
       String? timeShift,
       required FoodItem foodItemObject}) async {
+    isRequestFinished = false;
+    emit(ButtonPressedLoading());
+
     await Dio().post(
       "$BASEURL/get_user_cartItems/$EmailInforamtion",
       data: {
@@ -255,6 +267,9 @@ class Xeatscubit extends Cubit<XeatsStates> {
             print("Data is Null or No Items in Cart");
           }
         });
+        isRequestFinished = true;
+        emit(ButtonPressedLoading());
+
         print("Updated in Cart");
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -274,6 +289,9 @@ class Xeatscubit extends Cubit<XeatsStates> {
           ),
         );
       } else if (value.statusCode == 403 || value.statusCode == 304) {
+        isRequestFinished = true;
+        emit(ButtonPressedLoading());
+
         print("Cannot add to products from different Rest");
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -294,6 +312,9 @@ class Xeatscubit extends Cubit<XeatsStates> {
         );
       } else {
         print("Added To Cart");
+        isRequestFinished = true;
+        emit(ButtonPressedLoading());
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: Colors.green,
@@ -335,6 +356,8 @@ class Xeatscubit extends Cubit<XeatsStates> {
       Navigation(context, const Cart());
     }).catchError(
       (e) {
+        isRequestFinished = true;
+        emit(ButtonPressedLoading());
         var dioException = e as DioError;
         var status = dioException.response!.statusCode;
         var resp = dioException.response!.data;

@@ -31,9 +31,9 @@ environment:
 dependencies:
   bloc:
   flutter_bloc:
-  intl:
-  shared_preferences:
-  dio:
+  intl: ^0.18.0
+  shared_preferences: ^2.0.15
+  dio: ^4.0.6
   flutter_screenutil:
   google_fonts:
   carousel_slider:
@@ -45,9 +45,9 @@ dependencies:
   flutter_svg:
   animated_text_kit:
   page_transition:
-  firebase_core:
-  firebase_messaging:
-  cloud_firestore:
+  firebase_core: 
+  firebase_messaging: 
+  cloud_firestore: 
   awesome_notifications:
   flutter_icons:
   cupertino_icons:

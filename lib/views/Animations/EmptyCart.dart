@@ -14,7 +14,7 @@ class _EmptyCartState extends State<EmptyCart> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height / 1.3,
+      height: MediaQuery.of(context).size.height / 1.5,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

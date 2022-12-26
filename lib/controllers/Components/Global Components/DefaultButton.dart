@@ -35,7 +35,6 @@ class _DefaultButtonState extends State<DefaultButton> {
                 fontSize: 16.0.sp,
                 fontStyle: FontStyle.normal,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
               ),
             )),
       ),

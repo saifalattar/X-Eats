@@ -2,10 +2,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Components/AppBarCustomized.dart';
+import 'package:xeats/controllers/Components/Requests%20Loading%20Components/RequstsLoading.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
 import 'package:xeats/controllers/States.dart';
@@ -73,7 +75,7 @@ class FoodItem extends StatelessWidget {
       return SingleChildScrollView(
         child: GestureDetector(
           onTap: () {
-            NavigateAndRemov(
+            Navigation(
               context,
               productDetails(
                 context,
@@ -353,7 +355,6 @@ class FoodItem extends StatelessWidget {
           // Called when an ad request failed.
           onAdFailedToLoad: (Ad ad, LoadAdError error) {
             // Dispose the ad here to free resources.
-            print('Ad failed to load: $error');
           },
         ),
         request: const AdRequest());
@@ -368,28 +369,32 @@ class FoodItem extends StatelessWidget {
           if (CartItems.isEmpty) {
             Xeatscubit.currentRestaurant = null;
           }
-          var cubit = Xeatscubit.get(context);
           var navcubit = NavBarCubitcubit.get(context);
           double width = MediaQuery.of(context).size.width;
           double height = MediaQuery.of(context).size.height;
           return Scaffold(
-            floatingActionButton: FloatingActionButton(
-              backgroundColor: const Color.fromARGB(255, 9, 134, 211),
-              //add to cart button
-              onPressed: () async {
-                await Xeatscubit.get(context).addToCart(context,
-                    cartItemId: cartItemId,
-                    productId: id,
-                    quantity: quantity,
-                    price: price,
-                    totalPrice: price! * quantity,
-                    restaurantId: restaurant,
-                    timeShift: currentTiming,
-                    foodItemObject: this);
-              },
+            floatingActionButton: isRequestFinished
+                ? FloatingActionButton(
+                    backgroundColor: const Color.fromARGB(255, 9, 134, 211),
+                    //add to cart button
+                    onPressed: () async {
+                      await Xeatscubit.get(context).addToCart(context,
+                          cartItemId: cartItemId,
+                          productId: id,
+                          quantity: quantity,
+                          price: price,
+                          totalPrice: price! * quantity,
+                          restaurantId: restaurant,
+                          timeShift: currentTiming,
+                          foodItemObject: this);
+                    },
 
-              child: const Icon(Icons.add_shopping_cart_rounded),
-            ),
+                    child: const Icon(Icons.add_shopping_cart_rounded),
+                  )
+                : SizedBox(
+                    child: Image.asset("assets/Images/loading2.gif"),
+                    width: 100,
+                  ),
             appBar: appBar(context,
                 subtitle: restaurantName.toString(), title: englishName),
             body: SingleChildScrollView(
@@ -417,15 +422,15 @@ class FoodItem extends StatelessWidget {
                               },
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Text(
                             "$price EGP",
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 22, fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 30,
                           ),
                           SizedBox(
@@ -510,7 +515,7 @@ class FoodItem extends StatelessWidget {
                                                     .emit(RemoveQuantity());
                                               }
                                             },
-                                            icon: Icon(
+                                            icon: const Icon(
                                               Icons.remove,
                                               color: Color.fromARGB(
                                                   255, 9, 134, 211),
@@ -523,7 +528,7 @@ class FoodItem extends StatelessWidget {
                                               Xeatscubit.get(context)
                                                   .emit(AddQuantity());
                                             },
-                                            icon: Icon(
+                                            icon: const Icon(
                                               Icons.add,
                                               color: Color.fromARGB(
                                                   255, 9, 134, 211),
@@ -544,12 +549,12 @@ class FoodItem extends StatelessWidget {
                                     ),
                                     DropdownButton(
                                         hint: shift == null
-                                            ? Text("Time Shift")
+                                            ? const Text("Time Shift")
                                             : Text("$shift"),
                                         items: getTimings(),
                                         onChanged: (data) {
                                           shift = data as String?;
-                                          currentTiming = data as String?;
+                                          currentTiming = data;
                                           // Xeatscubit.get(context).emit(SetTiming());
                                         }),
                                   ],
@@ -583,7 +588,7 @@ class FoodItem extends StatelessWidget {
               onTap: (index) {
                 Navigator.pop(context);
                 if (index == 1) {
-                  Navigation(context, Restaurants());
+                  Navigation(context, const Restaurants());
                 } else if (index == 0) {
                   Navigation(context, Layout());
                 } else {

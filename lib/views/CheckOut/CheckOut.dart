@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/controllers/Components/Global%20Components/DefaultButton.dart';
 import 'package:xeats/controllers/Components/ItemClass.dart';
 import 'package:xeats/controllers/Cubit.dart';
+import 'package:xeats/views/Cart/cart.dart';
 
 class CheckOut extends StatelessWidget {
   const CheckOut({super.key});
@@ -30,46 +32,46 @@ class CheckOut extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               "Payment Summary",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text(
+                const Text(
                   "Subtotal",
                   style: TextStyle(fontSize: 20),
                 ),
                 Text(
                   "EGP ${FoodItem.getSubtotal()}",
-                  style: TextStyle(fontSize: 20),
+                  style: const TextStyle(fontSize: 20),
                 )
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text(
+                const Text(
                   "Delivery Fee",
                   style: TextStyle(fontSize: 20),
                 ),
                 Text(
                   "EGP ${FoodItem.deliveryFee}",
-                  style: TextStyle(fontSize: 20),
+                  style: const TextStyle(fontSize: 20),
                 )
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text(
+                const Text(
                   "Total",
                   style: TextStyle(fontSize: 24),
                 ),
                 Text(
                   "EGP ${FoodItem.deliveryFee + FoodItem.getSubtotal()}",
-                  style: TextStyle(fontSize: 24),
+                  style: const TextStyle(fontSize: 24),
                 )
               ],
             ),
@@ -78,7 +80,7 @@ class CheckOut extends StatelessWidget {
               children: [
                 ElevatedButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigation(context, const Cart());
                     },
                     style: ButtonStyle(
                         backgroundColor:
@@ -87,7 +89,7 @@ class CheckOut extends StatelessWidget {
                             borderRadius: BorderRadius.circular(18.0),
                             side: const BorderSide(
                                 color: Color.fromARGB(255, 9, 134, 211))))),
-                    child: Text(
+                    child: const Text(
                       "Back to cart",
                       style: TextStyle(color: Colors.black),
                     )),

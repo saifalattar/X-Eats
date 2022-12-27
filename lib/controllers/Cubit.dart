@@ -43,7 +43,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
   ////////////////////////////////////////////////
 
   /////////////////////////////////////////
-  static int? currentRestaurant;
+  static Map currentRestaurant = {};
   ///////////////////////////////////////////////
 
   // user data retrieved after logging in
@@ -204,22 +204,25 @@ class Xeatscubit extends Cubit<XeatsStates> {
   Future<void> getCurrentAvailableOrderRestauant() async {
     await Dio()
         .get("$BASEURL/get_user_cartItems/$EmailInforamtion")
-        .then((value) {
+        .then((value) async {
       if (value.data["Names"].length == 0) {
-        currentRestaurant = null;
+        currentRestaurant = {};
       } else {
-        currentRestaurant = value.data["Names"][0]["Restaurant"];
+        var dataFromApi = await Dio().get(
+            "$BASEURL/get_restaurants_by_id/${value.data["Names"][0]["Restaurant"]}");
+        currentRestaurant = dataFromApi.data["Names"][0];
       }
     });
   }
 
   Future<String?> getRestaurantName(String id) async {
-    await Dio().get("https://$BASEURL/get_restaurants_by_id/$id").then((value) {
-      print("jhdfjrhjjrjhjr");
-      return value.data["Names"][0]["Name"].toString();
+    String? restaurantName;
+    await Dio().get("$BASEURL/get_restaurants_by_id/$id").then((value) {
+      restaurantName = value.data["Names"][0]["Name"].toString();
     }).catchError((onError) {
-      return onError.response!.statusCode.toString();
+      restaurantName = onError.response!.statusCode.toString();
     });
+    return restaurantName;
   }
 
   // function to add item to the cart

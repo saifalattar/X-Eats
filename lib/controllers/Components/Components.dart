@@ -8,9 +8,13 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 void NavigateAndRemov(context, widget) => Navigator.pushAndRemoveUntil(
     context, MaterialPageRoute(builder: (context) => widget), (route) => false);
 
-void Navigation(context, widget) => Navigator.push(
+void Navigation(context, widget,
+        {Duration duration = const Duration(seconds: 1)}) =>
+    Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => widget),
+      PageRouteBuilder(
+          pageBuilder: (context, a1, a2) => widget,
+          transitionDuration: duration),
     );
 
 Widget CircularNotchBottom(

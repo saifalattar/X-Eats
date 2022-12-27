@@ -34,7 +34,7 @@ class Cart extends StatelessWidget {
                   children: [
                     SizedBox(
                       child: Padding(
-                        padding: const EdgeInsets.all(25.0),
+                        padding: const EdgeInsets.all(15.0),
                         child: Text(
                           "${cubit.FirstName}\'s Cart",
                           style: const TextStyle(
@@ -51,7 +51,32 @@ class Cart extends StatelessWidget {
                   ],
                 ),
                 SizedBox(
-                  height: height / 15,
+                  height: 10,
+                ),
+                FutureBuilder(
+                  builder: (ctx, AsyncSnapshot ss) {
+                    if (ss.connectionState == ConnectionState.done) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            "${Xeatscubit.currentRestaurant["Name"]}",
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            width: 50,
+                            child: Image.network(
+                                "https://x-eats.com${Xeatscubit.currentRestaurant["image"]}"),
+                          )
+                        ],
+                      );
+                    } else {
+                      return Loading();
+                    }
+                  },
+                  future: Xeatscubit.get(context)
+                      .getCurrentAvailableOrderRestauant(),
                 ),
                 SingleChildScrollView(
                   child: FutureBuilder(
@@ -60,13 +85,12 @@ class Cart extends StatelessWidget {
                         email: cubit.EmailInforamtion,
                       ),
                       builder: (ctx, AsyncSnapshot snapshot) {
-                        print(snapshot.connectionState);
                         if (snapshot.hasData) {
                           if (!snapshot.data.isEmpty) {
                             allWhatInCart = snapshot.data;
 
                             allWhatInCart.add(Padding(
-                              padding: const EdgeInsets.only(top: 18),
+                              padding: const EdgeInsets.only(top: 10),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
@@ -75,7 +99,7 @@ class Cart extends StatelessWidget {
                                     style: TextStyle(color: Colors.red),
                                   ),
                                   SizedBox(
-                                    height: 10.h,
+                                    height: 8.h,
                                   ),
                                   Row(
                                     mainAxisAlignment:
@@ -128,7 +152,7 @@ class Cart extends StatelessWidget {
                             ));
 
                             return SizedBox(
-                              height: MediaQuery.of(context).size.height / 1.32,
+                              height: MediaQuery.of(context).size.height / 1.38,
                               child: ListView.separated(
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) {

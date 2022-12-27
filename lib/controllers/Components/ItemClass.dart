@@ -244,17 +244,18 @@ class FoodItem extends StatelessWidget {
           InkWell(
             onTap: () {
               Navigation(
-                context,
-                productDetails(
                   context,
-                  image: '${image}',
-                  restaurantName: restaurantName,
-                  price: price,
-                  arabicName: arabicName,
-                  description: description ?? "No Description for this Product",
-                  englishName: englishName,
-                ),
-              );
+                  productDetails(
+                    context,
+                    image: '${image}',
+                    restaurantName: restaurantName,
+                    price: price,
+                    arabicName: arabicName,
+                    description:
+                        description ?? "No Description for this Product",
+                    englishName: englishName,
+                  ),
+                  duration: Duration(seconds: 2));
             },
             child: Padding(
               padding: const EdgeInsets.all(8),
@@ -272,17 +273,20 @@ class FoodItem extends StatelessWidget {
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
-                            child: Image(
-                              image: NetworkImage(
-                                "https://x-eats.com${snapshot.data.data["Names"][0]["image"]}",
+                            child: Hero(
+                              tag: this.englishName.toString(),
+                              child: Image(
+                                image: NetworkImage(
+                                  "https://x-eats.com${snapshot.data.data["Names"][0]["image"]}",
+                                ),
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return Center(
+                                    child: Loading(),
+                                  );
+                                },
                               ),
-                              loadingBuilder:
-                                  (context, child, loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return Center(
-                                  child: Loading(),
-                                );
-                              },
                             ),
                           ),
                         );
@@ -367,7 +371,7 @@ class FoodItem extends StatelessWidget {
       child: BlocConsumer<Xeatscubit, XeatsStates>(
         builder: (context, states) {
           if (CartItems.isEmpty) {
-            Xeatscubit.currentRestaurant = null;
+            Xeatscubit.currentRestaurant = {};
           }
           var navcubit = NavBarCubitcubit.get(context);
           double width = MediaQuery.of(context).size.width;
@@ -408,18 +412,21 @@ class FoodItem extends StatelessWidget {
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(300.0),
-                            child: Image(
-                              width: 200,
-                              image: NetworkImage(
-                                'https://x-eats.com$image',
+                            child: Hero(
+                              tag: this.englishName.toString(),
+                              child: Image(
+                                width: 200,
+                                image: NetworkImage(
+                                  'https://x-eats.com$image',
+                                ),
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return Center(
+                                    child: Loading(),
+                                  );
+                                },
                               ),
-                              loadingBuilder:
-                                  (context, child, loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return Center(
-                                  child: Loading(),
-                                );
-                              },
                             ),
                           ),
                           const SizedBox(

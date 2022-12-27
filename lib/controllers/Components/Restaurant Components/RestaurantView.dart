@@ -14,7 +14,7 @@ class RestaurantView extends StatefulWidget {
   final double raduisButton = 10.0;
   final double Height = 100;
   final double Weight = 100;
-  final Image? image;
+  final Widget? image;
   final Color? Colors;
   final VoidCallback? Navigate;
   final String? data;

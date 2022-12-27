@@ -83,8 +83,6 @@ class HomePage extends StatelessWidget {
             var userId = cubit.idInformation;
             var FirstName = cubit.FirstName ?? Loading();
             var LastName = cubit.LastName ?? ' ';
-            print("carrrrrrt" + "${Xeatscubit.get(context).cartID}");
-
             return Scaffold(
               appBar: appBar(context,
                   subtitle: 'Delivering to', title: 'Nile University, Giza'),
@@ -93,13 +91,6 @@ class HomePage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      FutureBuilder(
-                        builder: (context, snapshot) {
-                          return Container();
-                        },
-                        future: Xeatscubit.get(context)
-                            .getCurrentAvailableOrderRestauant(),
-                      ),
                       SizedBox(
                         height: height / 20,
                       ),
@@ -231,39 +222,38 @@ class HomePage extends StatelessWidget {
                                                     width: width / 2.0,
                                                     height: height / 4.2,
                                                     data: product_api[index]
-                                                            ["name"] +
-                                                        "\n",
+                                                        ["name"],
                                                     Colors: Colors.white,
                                                     Navigate: () => {
                                                           Navigation(
-                                                            context,
-                                                            FoodItem()
-                                                                .productDetails(
                                                               context,
-                                                              image:
-                                                                  "/${snapshot.data.toString()}",
-                                                              price: price,
-                                                              englishName:
-                                                                  product_api[
-                                                                          index]
-                                                                      ["name"],
-                                                              arabicName:
-                                                                  product_api[
-                                                                          index]
-                                                                      [
-                                                                      "ArabicName"],
-                                                              description: product_api[
-                                                                          index]
-                                                                      [
-                                                                      "description"] ??
-                                                                  "No Description for this Product",
-                                                              restaurantName:
-                                                                  product_api[index]
-                                                                          [
-                                                                          "Restaurant"]
-                                                                      .toString(),
-                                                            ),
-                                                          ),
+                                                              FoodItem()
+                                                                  .productDetails(
+                                                                context,
+                                                                image:
+                                                                    "/${snapshot.data.toString()}",
+                                                                price: price,
+                                                                englishName:
+                                                                    product_api[
+                                                                            index]
+                                                                        [
+                                                                        "name"],
+                                                                arabicName:
+                                                                    product_api[
+                                                                            index]
+                                                                        [
+                                                                        "ArabicName"],
+                                                                description: product_api[
+                                                                            index]
+                                                                        [
+                                                                        "description"] ??
+                                                                    "No Description for this Product",
+                                                                restaurantName:
+                                                                    product_api[index]
+                                                                            [
+                                                                            "Restaurant"]
+                                                                        .toString(),
+                                                              )),
                                                         }),
                                                 onTap: () {},
                                               );

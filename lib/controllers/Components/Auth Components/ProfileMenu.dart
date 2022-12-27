@@ -15,25 +15,26 @@ class ProfileMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Column(
         children: [
-          DefaultButton(
-            function: press,
-            text: '',
-          ),
-          Row(
-            children: [
-              SvgPicture.asset(
-                icon,
-                color: Colors.black,
-                width: 22,
-              ),
-              SizedBox(width: 20),
-              Expanded(child: Text(text)),
-              Icon(Icons.arrow_forward_ios),
-            ],
+          GestureDetector(
+            onTap: press,
+            child: Row(
+              children: [
+                SvgPicture.asset(
+                  icon,
+                  color: Colors.black,
+                  width: 22,
+                ),
+                SizedBox(width: width / 20),
+                Expanded(child: Text(text)),
+                const Icon(Icons.arrow_forward_ios),
+              ],
+            ),
           ),
         ],
       ),

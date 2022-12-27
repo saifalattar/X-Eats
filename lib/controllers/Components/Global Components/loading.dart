@@ -6,8 +6,8 @@ class Loading extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Padding(
       padding: EdgeInsets.all(25.0),
-      child: SpinKitDualRing(
-        color: Colors.black,
+      child: SpinKitFadingCircle(
+        color: Color.fromARGB(255, 9, 134, 211),
         size: 30,
       ),
     );

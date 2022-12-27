@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:xeats/controllers/Components/AppBarCustomized.dart';
 import 'package:xeats/controllers/Components/Auth%20Components/ProfileMenu.dart';
 import 'package:xeats/controllers/Components/Components.dart';
@@ -34,105 +35,120 @@ class Profile extends StatelessWidget {
           builder: (context, state) {
             var cubit = Xeatscubit.get(context);
             var navcubit = NavBarCubitcubit.get(context);
-            var Email = cubit.EmailInforamtion;
-            var lastname = cubit.LastName;
-            var Wallet = cubit.wallet;
-            var userId = cubit.idInformation;
-            var firstName = cubit.FirstName ?? 'Loading..';
-
-            return SafeArea(
-              child: ConditionalBuilder(
-                fallback: (context) => Center(child: Loading()),
-                condition: Email != null,
-                builder: (BuildContext context) {
-                  return Scaffold(
-                    appBar: appBar(context, subtitle: 'Your', title: 'Profile'),
-                    body: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Container(
-                          child: Text.rich(
-                            TextSpan(
-                              style: TextStyle(color: Colors.black),
-                              children: [
-                                TextSpan(
-                                  text: "Name: ${cubit.FirstName}\n",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.lightBlue),
-                                ),
-                                TextSpan(
-                                  text: "Email: ${cubit.EmailInforamtion}\n",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.lightBlue),
-                                ),
-                                TextSpan(
-                                  text: "Wallet: ${cubit.wallet} \n",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.lightBlue),
-                                ),
-                              ],
-                            ),
+            return ConditionalBuilder(
+              fallback: (context) => Center(child: Loading()),
+              condition: cubit.EmailInforamtion != null,
+              builder: (BuildContext context) {
+                return Scaffold(
+                  appBar: appBar(context, subtitle: 'Your', title: 'Profile'),
+                  body: SingleChildScrollView(
+                    child: SafeArea(
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: height / 7,
                           ),
-                        ),
-                        Column(
-                          children: [
-                            Column(
-                              children: [
-                                // UserDetails(),
-                                SizedBox(height: 20),
-                                ProfileMenu(
-                                  text: "My Orders",
-                                  icon: "assets/icons/receipt.svg",
-                                  press: () {},
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(left: width / 10),
+                                child: Text.rich(
+                                  TextSpan(
+                                    style: TextStyle(color: Colors.black),
+                                    children: [
+                                      TextSpan(
+                                        text: "Name: ${cubit.FirstName}\n",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.lightBlue),
+                                      ),
+                                      TextSpan(
+                                        text:
+                                            "Email: ${cubit.EmailInforamtion}\n",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.lightBlue),
+                                      ),
+                                      TextSpan(
+                                        text: "Wallet: ${cubit.wallet} \n",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.lightBlue),
+                                      ),
+                                      TextSpan(
+                                        text:
+                                            "Phonenumber: ${cubit.PhoneNumber} \n",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.lightBlue),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                ProfileMenu(
-                                  text: 'Sign Out',
-                                  press: () {
-                                    cubit.signOut(context);
-                                  },
-                                  icon: "assets/icons/Log out.svg",
-                                )
-                              ],
-                            ),
-
-                            // Text(
-                            //     "The Name Of User is: ${snapshot.data[0]['email']}"),
-                            // SizedBox(
-                            //   height: 50,
-                            // ),
-                            // ElevatedButton(
-                            //     onPressed: () {
-                            //       cubit.signOut(context);
-                            //     },
-                            //     child: Text('SignOut'))
-                          ],
-                        ),
-                      ],
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Column(
+                                children: [
+                                  SizedBox(height: height / 20),
+                                  ProfileMenu(
+                                    text: "My Orders",
+                                    icon: "assets/icons/receipt.svg",
+                                    press: () {},
+                                  ),
+                                  SizedBox(height: height / 20),
+                                  ProfileMenu(
+                                    text: 'About Us',
+                                    press: () async {
+                                      // var url = Uri.parse(
+                                      //     "https://www.x-eats.com/about_us");
+                                      // if (await canLaunchUrl(url))
+                                      //   await launchUrl(url);
+                                      // else
+                                      //   throw "Could not launch $url";
+                                    },
+                                    icon: "assets/icons/other.svg",
+                                  ),
+                                  SizedBox(height: height / 20),
+                                  ProfileMenu(
+                                    text: 'Sign Out',
+                                    press: () {
+                                      cubit.signOut(context);
+                                    },
+                                    icon: "assets/icons/Log out.svg",
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                    bottomNavigationBar: BottomNavigationBar(
-                      selectedLabelStyle: GoogleFonts.poppins(),
-                      backgroundColor: Colors.white,
-                      items: navcubit.bottomitems,
-                      currentIndex: 2,
-                      onTap: (index) {
-                        if (index == 2) {
-                          Navigator.pop(context);
-                        } else if (index == 0) {
-                          Navigation(context, Layout());
-                        } else {
-                          Navigation(context, const Restaurants());
-                        }
-                      },
-                    ),
-                  );
-                },
-              ),
+                  ),
+                  bottomNavigationBar: BottomNavigationBar(
+                    selectedLabelStyle: GoogleFonts.poppins(),
+                    backgroundColor: Colors.white,
+                    items: navcubit.bottomitems,
+                    currentIndex: 2,
+                    onTap: (index) {
+                      if (index == 2) {
+                        Navigator.pop(context);
+                      } else if (index == 0) {
+                        Navigation(context, Layout());
+                      } else {
+                        Navigation(context, const Restaurants());
+                      }
+                    },
+                  ),
+                );
+              },
             );
           }),
     );

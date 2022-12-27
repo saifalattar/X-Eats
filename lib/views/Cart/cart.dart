@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:xeats/controllers/Components/AppBarCustomized.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
+import 'package:xeats/controllers/Components/Restaurant%20Components/RestaurantView.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/views/Animations/EmptyCart.dart';
 import 'package:xeats/views/Checkout/CheckOut.dart';
 import 'package:xeats/views/Layout/Layout.dart';
+import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
 
 List<Widget> allWhatInCart = [];
 
@@ -17,6 +20,7 @@ class Cart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return BlocProvider(
       create: (context) => Xeatscubit()
         ..GettingUserData()
@@ -26,156 +30,197 @@ class Cart extends StatelessWidget {
         builder: (context, state) {
           var cubit = Xeatscubit.get(context);
           return Scaffold(
+            appBar: appBar(context,
+                subtitle: "${cubit.FirstName}\'s", title: "Cart"),
             backgroundColor: Colors.white,
-            body: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            body: SafeArea(
+              child: SingleChildScrollView(
+                child: Column(
                   children: [
                     SizedBox(
-                      child: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Text(
-                          "${cubit.FirstName}\'s Cart",
-                          style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
-                        ),
-                      ),
+                      height: 10,
                     ),
-                    const SizedBox(
-                      child: Image(
-                          image: AssetImage('assets/Images/shopping-cart.png')),
+                    FutureBuilder(
+                      builder: (ctx, AsyncSnapshot ss) {
+                        if (ss.connectionState == ConnectionState.done) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              SizedBox(
+                                width: width / 2,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      "${cubit.FirstName},",
+                                      maxLines: 1,
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(left: width / 40),
+                                      child: const Text(
+                                        "You are Ordering From :",
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(0.0),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      height: height / 5,
+                                      width: width / 2.4,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          color: Colors.transparent,
+                                          border: Border.all(
+                                              width: 20, color: Colors.white)),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(20),
+                                        child: GestureDetector(
+                                          child: Image(
+                                            image: NetworkImage(
+                                                "https://x-eats.com${Xeatscubit.currentRestaurant["image"]}"),
+                                          ),
+                                          onTap: () {},
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      "${Xeatscubit.currentRestaurant["Name"]}" ??
+                                          "Loading",
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          );
+                        } else {
+                          return Loading();
+                        }
+                      },
+                      future: Xeatscubit.get(context)
+                          .getCurrentAvailableOrderRestauant(),
+                    ),
+                    SingleChildScrollView(
+                      child: FutureBuilder(
+                          future: Xeatscubit.get(context).getCartItems(
+                            context,
+                            email: cubit.EmailInforamtion,
+                          ),
+                          builder: (ctx, AsyncSnapshot snapshot) {
+                            if (snapshot.hasData) {
+                              if (!snapshot.data.isEmpty) {
+                                allWhatInCart = snapshot.data;
+
+                                allWhatInCart.add(Padding(
+                                  padding: const EdgeInsets.only(top: 10),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "Slide Left to delete an Item",
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                      SizedBox(
+                                        height: 8.h,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          ElevatedButton(
+                                              onPressed: () {
+                                                Navigation(context, Layout());
+                                              },
+                                              style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(
+                                                        Colors.white),
+                                                shape:
+                                                    MaterialStateProperty.all(
+                                                  RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            18.0),
+                                                    side: const BorderSide(
+                                                        color: Color.fromARGB(
+                                                            255, 9, 134, 211)),
+                                                  ),
+                                                ),
+                                              ),
+                                              child: const Text(
+                                                "Continue Shopping",
+                                                style: TextStyle(
+                                                    color: Colors.black),
+                                              )),
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width /
+                                                2,
+                                            height: 50.h,
+                                            child: ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20))),
+                                                onPressed: () {
+                                                  Navigation(context,
+                                                      const CheckOut());
+                                                },
+                                                child: const Text("Check Out")),
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ));
+
+                                return SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height / 1.38,
+                                  child: ListView.separated(
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) {
+                                      return allWhatInCart[index];
+                                    },
+                                    separatorBuilder: (context, index) {
+                                      return Dividerr();
+                                    },
+                                    itemCount: allWhatInCart.length,
+                                  ),
+                                );
+                              } else {
+                                return Center(child: EmptyCart());
+                              }
+                            } else {
+                              return SizedBox(
+                                child: Loading(),
+                                height:
+                                    MediaQuery.of(context).size.height / 1.5,
+                              );
+                            }
+                          }),
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 10,
-                ),
-                FutureBuilder(
-                  builder: (ctx, AsyncSnapshot ss) {
-                    if (ss.connectionState == ConnectionState.done) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            "${Xeatscubit.currentRestaurant["Name"]}",
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            width: 50,
-                            child: Image.network(
-                                "https://x-eats.com${Xeatscubit.currentRestaurant["image"]}"),
-                          )
-                        ],
-                      );
-                    } else {
-                      return Loading();
-                    }
-                  },
-                  future: Xeatscubit.get(context)
-                      .getCurrentAvailableOrderRestauant(),
-                ),
-                SingleChildScrollView(
-                  child: FutureBuilder(
-                      future: Xeatscubit.get(context).getCartItems(
-                        context,
-                        email: cubit.EmailInforamtion,
-                      ),
-                      builder: (ctx, AsyncSnapshot snapshot) {
-                        if (snapshot.hasData) {
-                          if (!snapshot.data.isEmpty) {
-                            allWhatInCart = snapshot.data;
-
-                            allWhatInCart.add(Padding(
-                              padding: const EdgeInsets.only(top: 10),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    "Slide Left to delete an Item",
-                                    style: TextStyle(color: Colors.red),
-                                  ),
-                                  SizedBox(
-                                    height: 8.h,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      ElevatedButton(
-                                          onPressed: () {
-                                            Navigation(context, Layout());
-                                          },
-                                          style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.white),
-                                            shape: MaterialStateProperty.all(
-                                              RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(18.0),
-                                                side: const BorderSide(
-                                                    color: Color.fromARGB(
-                                                        255, 9, 134, 211)),
-                                              ),
-                                            ),
-                                          ),
-                                          child: const Text(
-                                            "Continue Shopping",
-                                            style:
-                                                TextStyle(color: Colors.black),
-                                          )),
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                2,
-                                        height: 50.h,
-                                        child: ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20))),
-                                            onPressed: () {
-                                              Navigation(
-                                                  context, const CheckOut());
-                                            },
-                                            child: const Text("Check Out")),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ));
-
-                            return SizedBox(
-                              height: MediaQuery.of(context).size.height / 1.38,
-                              child: ListView.separated(
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  return allWhatInCart[index];
-                                },
-                                separatorBuilder: (context, index) {
-                                  return Dividerr();
-                                },
-                                itemCount: allWhatInCart.length,
-                              ),
-                            );
-                          } else {
-                            return Center(child: EmptyCart());
-                          }
-                        } else {
-                          return SizedBox(
-                            child: Loading(),
-                            height: MediaQuery.of(context).size.height / 1.5,
-                          );
-                        }
-                      }),
-                ),
-              ],
+              ),
             ),
           );
         },

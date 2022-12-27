@@ -30,17 +30,17 @@ AppBar appBar(BuildContext context, {String? subtitle, String? title}) {
                     children: [
                       subtitle!.length < 3
                           ? FutureBuilder(
-                              builder: (ctx, AsyncSnapshot ss) {
-                                print(ss.connectionState);
-                                if (ss.hasData) {
+                              builder: (ctx, AsyncSnapshot snapshot) {
+                                print(snapshot.connectionState);
+                                if (snapshot.hasData) {
                                   return Text(
-                                    ss.data ?? 'to',
+                                    snapshot.data ?? 'to',
                                     style: GoogleFonts.poppins(
                                         fontSize: 11, color: Colors.grey),
                                   );
                                 } else {
-                                  return const SpinKitDualRing(
-                                    color: Colors.black,
+                                  return const SpinKitThreeInOut(
+                                    color: Color.fromARGB(255, 9, 134, 211),
                                     size: 10,
                                   );
                                 }
@@ -64,8 +64,10 @@ AppBar appBar(BuildContext context, {String? subtitle, String? title}) {
                 onPressed: () {
                   Navigation(context, const Cart());
                 },
-                icon: const Icon(Icons.shopping_cart,
-                    color: Color.fromARGB(255, 9, 134, 211)),
+                icon: const Icon(
+                  Icons.shopping_cart,
+                  color: Colors.black,
+                ),
               ),
             ],
           ),

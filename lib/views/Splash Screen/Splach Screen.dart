@@ -85,7 +85,9 @@ class _SplashScreenState extends State<SplashScreen> {
     Xeatscubit.get(context).GettingUserData();
     Xeatscubit.get(context).getCartID();
 
-    Future.delayed(Duration(seconds: 6)).then((value) {
+    print(Xeatscubit.get(context).GettingUserData());
+
+    Future.delayed(const Duration(seconds: 6)).then((value) {
       if (Xeatscubit.get(context).EmailInforamtion != null) {
         NavigateAndRemov(context, Layout());
       } else {
@@ -109,7 +111,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 5),
                   child: Image(
-                    image: AssetImage('assets/Images/logo.png'),
+                    image: const AssetImage('assets/Images/logo.png'),
                     width: width,
                     height: height / 2,
                   ),
@@ -119,24 +121,10 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    DefaultTextStyle(
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.poppins(
-                        fontSize: 45,
-                        color: Color.fromRGBO(4, 137, 204, 1),
-                        fontWeight: FontWeight.bold,
-                      ),
-                      child: AnimatedTextKit(
-                        animatedTexts: [
-                          WavyAnimatedText(
-                            'Eat More',
-                          ),
-                          WavyAnimatedText('Pay Less'),
-                        ],
-                        isRepeatingAnimation: true,
-                      ),
+                  children: const [
+                    SpinKitThreeInOut(
+                      color: Color.fromARGB(255, 9, 134, 211),
+                      size: 35,
                     ),
                   ],
                 )

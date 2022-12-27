@@ -70,6 +70,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
       userInf.setString('LastName', EmailInList[0]['last_name']);
       userInf.setInt("Id", EmailInList[0]['id']);
       userInf.setDouble("wallet", EmailInList[0]['Wallet']);
+      userInf.setString("phonenumber", EmailInList[0]['PhoneNumber']);
 
       emit(SuccessGetInformation());
     }).catchError((onError) {
@@ -85,6 +86,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
   String? LastName;
   int? idInformation;
   double? wallet;
+  String? PhoneNumber;
 
   Future<void> GettingUserData() async {
     SharedPreferences User = await SharedPreferences.getInstance();
@@ -93,6 +95,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
     LastName = User.getString('LastName');
     idInformation = User.getInt('Id');
     wallet = User.getDouble('wallet');
+    PhoneNumber = User.getString('phonenumber');
     emit(SuccessEmailProfile());
   }
 

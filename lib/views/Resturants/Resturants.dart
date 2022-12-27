@@ -37,83 +37,72 @@ class Restaurants extends StatelessWidget {
               body: SingleChildScrollView(
                 child: SafeArea(
                   child: Column(children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Text(
-                            'New Products',
-                            style: GoogleFonts.poppins(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Text(
+                        'New Products',
+                        style: GoogleFonts.poppins(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              ...List.generate(
-                                newProducts.length,
-                                (index) {
-                                  return FutureBuilder(
-                                      future: cubit.gettingCategoryImages(
-                                          newProducts[index]["category"]
-                                              .toString()),
-                                      builder:
-                                          (context, AsyncSnapshot snapshot) {
-                                        if (snapshot.hasData) {
-                                          return GestureDetector(
-                                            child: NewProducts(
-                                                title: newProducts[index]
-                                                    ["name"],
-                                                Colors: Colors.white,
-                                                image: snapshot.data.toString(),
-                                                Navigate: () => {
-                                                      Navigation(
-                                                        context,
-                                                        FoodItem()
-                                                            .productDetails(
-                                                          context,
-                                                          image:
-                                                              "/${snapshot.data.toString()}",
-                                                          price:
-                                                              newProducts[index]
-                                                                  ['price'],
-                                                          englishName:
-                                                              newProducts[index]
-                                                                  ["name"],
-                                                          arabicName:
-                                                              newProducts[index]
-                                                                  [
-                                                                  "ArabicName"],
-                                                          description: newProducts[
-                                                                      index][
-                                                                  "description"] ??
-                                                              "No Description for this Product",
-                                                          restaurantName:
-                                                              newProducts[index]
-                                                                      [
-                                                                      "Restaurant"]
-                                                                  .toString(),
-                                                        ),
-                                                      ),
-                                                    }),
-                                          );
+                      ),
+                    ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          ...List.generate(
+                            newProducts.length,
+                            (index) {
+                              return FutureBuilder(
+                                  future: cubit.gettingCategoryImages(
+                                      newProducts[index]["category"]
+                                          .toString()),
+                                  builder: (context, AsyncSnapshot snapshot) {
+                                    if (snapshot.hasData) {
+                                      return GestureDetector(
+                                        child: NewProducts(
+                                            title: newProducts[index]["name"],
+                                            Colors: Colors.white,
+                                            image: snapshot.data.toString(),
+                                            Navigate: () => {
+                                                  Navigation(
+                                                    context,
+                                                    FoodItem().productDetails(
+                                                      context,
+                                                      image:
+                                                          "/${snapshot.data.toString()}",
+                                                      price: newProducts[index]
+                                                          ['price'],
+                                                      englishName:
+                                                          newProducts[index]
+                                                              ["name"],
+                                                      arabicName:
+                                                          newProducts[index]
+                                                              ["ArabicName"],
+                                                      description: newProducts[
+                                                                  index]
+                                                              ["description"] ??
+                                                          "No Description for this Product",
+                                                      restaurantName:
+                                                          newProducts[index]
+                                                                  ["Restaurant"]
+                                                              .toString(),
+                                                    ),
+                                                  ),
+                                                }),
+                                      );
 
-                                          // },
+                                      // },
 
-                                        } else {
-                                          return Loading();
-                                        }
-                                      });
-                                },
-                              ),
-                            ],
+                                    } else {
+                                      return Loading();
+                                    }
+                                  });
+                            },
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     Column(
                       children: [

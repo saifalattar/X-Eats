@@ -172,8 +172,8 @@ class ResturantsMenu extends StatelessWidget {
               items: navcubit.bottomitems,
               currentIndex: 1,
               onTap: (index) {
-                Navigator.pop(context);
                 if (index == 1) {
+                  Navigator.pop(context);
                 } else if (index == 0) {
                   Navigation(context, Layout());
                 } else {

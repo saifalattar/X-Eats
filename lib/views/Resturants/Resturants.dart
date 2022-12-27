@@ -72,6 +72,11 @@ class Restaurants extends StatelessWidget {
                                                       context,
                                                       image:
                                                           "/${snapshot.data.toString()}",
+                                                      id: newProducts[index]
+                                                          ['id'],
+                                                      restaurant:
+                                                          newProducts[index]
+                                                              ['Restaurant'],
                                                       price: newProducts[index]
                                                           ['price'],
                                                       englishName:

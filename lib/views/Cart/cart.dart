@@ -42,7 +42,8 @@ class Cart extends StatelessWidget {
                     ),
                     FutureBuilder(
                       builder: (ctx, AsyncSnapshot ss) {
-                        if (ss.connectionState == ConnectionState.done) {
+                        if (ss.connectionState == ConnectionState.done &&
+                            Xeatscubit.currentRestaurant["Name"] != null) {
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
@@ -89,14 +90,21 @@ class Cart extends StatelessWidget {
                                           child: Image(
                                             image: NetworkImage(
                                                 "https://x-eats.com${Xeatscubit.currentRestaurant["image"]}"),
+                                            loadingBuilder: (context, child,
+                                                loadingProgress) {
+                                              if (loadingProgress == null)
+                                                return child;
+                                              return Center(
+                                                child: Loading(),
+                                              );
+                                            },
                                           ),
                                           onTap: () {},
                                         ),
                                       ),
                                     ),
                                     Text(
-                                      "${Xeatscubit.currentRestaurant["Name"]}" ??
-                                          "Loading",
+                                      "${Xeatscubit.currentRestaurant["Name"]}",
                                       style: const TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
@@ -108,7 +116,9 @@ class Cart extends StatelessWidget {
                             ],
                           );
                         } else {
-                          return Loading();
+                          return SizedBox(
+                            height: height / 20,
+                          );
                         }
                       },
                       future: Xeatscubit.get(context)

@@ -81,7 +81,7 @@ android {
                     if (buildType == 'debug'){
                         newName = "app-${variant.getFlavorName()}-debug.apk"
                     } else {
-                        newName = "${appName}${defaultConfig.versionName}_${variant.getFlavorName()}.apk"
+                        newName = "${appName}_${defaultConfig.versionName}.apk"
                     }
                     outputFileName = newName
                 }

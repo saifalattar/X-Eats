@@ -230,6 +230,14 @@ class HomePage extends StatelessWidget {
                                                               FoodItem()
                                                                   .productDetails(
                                                                 context,
+                                                                id: product_api[
+                                                                        index]
+                                                                    ["id"],
+                                                                restaurant:
+                                                                    product_api[
+                                                                            index]
+                                                                        [
+                                                                        "Restaurant"],
                                                                 image:
                                                                     "/${snapshot.data.toString()}",
                                                                 price: price,

@@ -79,6 +79,8 @@ class FoodItem extends StatelessWidget {
               productDetails(
                 context,
                 image: itemImage,
+                id: id,
+                restaurant: restaurant,
                 price: price,
                 restaurantName: restaurant.toString(),
                 arabicName: arabicName,
@@ -247,6 +249,8 @@ class FoodItem extends StatelessWidget {
                   productDetails(
                     context,
                     image: '${image}',
+                    id: id,
+                    restaurant: restaurant,
                     restaurantName: restaurantName,
                     price: price,
                     arabicName: arabicName,
@@ -338,15 +342,15 @@ class FoodItem extends StatelessWidget {
     );
   }
 
-  Widget productDetails(
-    BuildContext context, {
-    required String? image,
-    required String? restaurantName,
-    required double? price,
-    required String? arabicName,
-    required String? description,
-    required String? englishName,
-  }) {
+  Widget productDetails(BuildContext context,
+      {required String? image,
+      required String? restaurantName,
+      required double? price,
+      required String? arabicName,
+      required String? description,
+      required String? englishName,
+      required int? id,
+      required int? restaurant}) {
     String? shift;
 
     final BannerAd bannerAd = BannerAd(

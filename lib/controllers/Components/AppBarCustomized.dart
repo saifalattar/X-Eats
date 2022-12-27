@@ -49,7 +49,7 @@ AppBar appBar(BuildContext context, {String? subtitle, String? title}) {
                                   .getRestaurantName(subtitle.toString()),
                             )
                           : Text(
-                              subtitle ?? 'to',
+                              subtitle,
                               style: GoogleFonts.poppins(
                                   fontSize: 11, color: Colors.grey),
                             ),

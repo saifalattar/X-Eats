@@ -99,7 +99,7 @@ class Profile extends StatelessWidget {
                                 children: [
                                   SizedBox(height: height / 20),
                                   ProfileMenu(
-                                    text: "My Orders",
+                                    text: "My Orders (Soon) ",
                                     icon: "assets/icons/receipt.svg",
                                     press: () {},
                                   ),

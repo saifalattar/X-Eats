@@ -469,9 +469,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
         }).catchError((onError) {
           print(onError);
         });
-        print("caaaaaaaaaaaaaaaaaaaaaaaaaaaaart");
 
-        print("caaaaaaaaaaaaaaaaaaaaaaaaaaaaart");
         FoodItem.CartItems.add(theItem!);
       }
     }).catchError((onError) => print(onError));

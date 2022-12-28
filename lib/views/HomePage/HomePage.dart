@@ -70,8 +70,8 @@ class HomePage extends StatelessWidget {
           ..GetMostSoldProducts()
           ..getPoster()
           ..GetResturants()
-          ..getCartID()
-          ..GettingUserData(),
+          ..GettingUserData()
+          ..getCartID(),
         child: BlocConsumer<Xeatscubit, XeatsStates>(
           builder: ((context, state) {
             var cubit = Xeatscubit.get(context);

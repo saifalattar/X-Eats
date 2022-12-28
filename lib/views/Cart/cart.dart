@@ -34,202 +34,186 @@ class Cart extends StatelessWidget {
                 subtitle: "${cubit.FirstName}\'s", title: "Cart"),
             backgroundColor: Colors.white,
             body: SafeArea(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 10,
-                    ),
-                    FutureBuilder(
-                      builder: (ctx, AsyncSnapshot ss) {
-                        if (ss.connectionState == ConnectionState.done &&
-                            Xeatscubit.currentRestaurant["Name"] != null) {
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              SizedBox(
-                                width: width / 2,
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      "${cubit.FirstName},",
-                                      maxLines: 1,
-                                      textAlign: TextAlign.left,
+              child: Column(
+                children: [
+                  FutureBuilder(
+                    builder: (ctx, AsyncSnapshot ss) {
+                      if (ss.connectionState == ConnectionState.done &&
+                          Xeatscubit.currentRestaurant["Name"] != null) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            SizedBox(
+                              width: width / 2,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "${cubit.FirstName},",
+                                    maxLines: 1,
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(left: width / 40),
+                                    child: const Text(
+                                      "You are Ordering From :",
                                       style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.only(left: width / 40),
-                                      child: const Text(
-                                        "You are Ordering From :",
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                        ),
+                                        fontSize: 12,
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(0.0),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      height: height / 5,
-                                      width: width / 2.4,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          color: Colors.transparent,
-                                          border: Border.all(
-                                              width: 20, color: Colors.white)),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(20),
-                                        child: GestureDetector(
-                                          child: Image(
-                                            image: NetworkImage(
-                                                "https://x-eats.com${Xeatscubit.currentRestaurant["image"]}"),
-                                            loadingBuilder: (context, child,
-                                                loadingProgress) {
-                                              if (loadingProgress == null)
-                                                return child;
-                                              return Center(
-                                                child: Loading(),
-                                              );
-                                            },
-                                          ),
-                                          onTap: () {},
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(0.0),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: height / 5,
+                                    width: width / 2.4,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        color: Colors.transparent,
+                                        border: Border.all(
+                                            width: 20, color: Colors.white)),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: GestureDetector(
+                                        child: Image(
+                                          image: NetworkImage(
+                                              "https://x-eats.com${Xeatscubit.currentRestaurant["image"]}"),
+                                          loadingBuilder: (context, child,
+                                              loadingProgress) {
+                                            if (loadingProgress == null)
+                                              return child;
+                                            return Center(
+                                              child: Loading(),
+                                            );
+                                          },
                                         ),
+                                        onTap: () {},
                                       ),
                                     ),
-                                    Text(
-                                      "${Xeatscubit.currentRestaurant["Name"]}",
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                  ),
+                                  Text(
+                                    "${Xeatscubit.currentRestaurant["Name"]}",
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          );
-                        } else {
-                          return SizedBox(
-                            height: height / 20,
-                          );
-                        }
-                      },
-                      future: Xeatscubit.get(context)
-                          .getCurrentAvailableOrderRestauant(),
-                    ),
-                    SingleChildScrollView(
-                      child: FutureBuilder(
-                          future: Xeatscubit.get(context).getCartItems(
-                            context,
-                            email: cubit.EmailInforamtion,
-                          ),
-                          builder: (ctx, AsyncSnapshot snapshot) {
-                            if (snapshot.hasData) {
-                              if (!snapshot.data.isEmpty) {
-                                allWhatInCart = snapshot.data;
+                            ),
+                          ],
+                        );
+                      } else {
+                        return SizedBox(
+                          height: height / 20,
+                        );
+                      }
+                    },
+                    future: Xeatscubit.get(context)
+                        .getCurrentAvailableOrderRestauant(),
+                  ),
+                  FutureBuilder(
+                      future: Xeatscubit.get(context).getCartItems(
+                        context,
+                        email: cubit.EmailInforamtion,
+                      ),
+                      builder: (ctx, AsyncSnapshot snapshot) {
+                        if (snapshot.hasData) {
+                          if (!snapshot.data.isEmpty) {
+                            allWhatInCart = snapshot.data;
 
-                                allWhatInCart.add(Padding(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
+                            allWhatInCart.add(Padding(
+                              padding: const EdgeInsets.only(top: 10),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "Slide Left to delete an Item",
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                  SizedBox(
+                                    height: 8.h,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
                                     children: [
-                                      const Text(
-                                        "Slide Left to delete an Item",
-                                        style: TextStyle(color: Colors.red),
-                                      ),
+                                      ElevatedButton(
+                                          onPressed: () {
+                                            Navigation(context, Layout());
+                                          },
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    Colors.white),
+                                            shape: MaterialStateProperty.all(
+                                              RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(18.0),
+                                                side: const BorderSide(
+                                                    color: Color.fromARGB(
+                                                        255, 9, 134, 211)),
+                                              ),
+                                            ),
+                                          ),
+                                          child: const Text(
+                                            "Continue Shopping",
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                          )),
                                       SizedBox(
-                                        height: 8.h,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          ElevatedButton(
-                                              onPressed: () {
-                                                Navigation(context, Layout());
-                                              },
-                                              style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateProperty.all(
-                                                        Colors.white),
-                                                shape:
-                                                    MaterialStateProperty.all(
-                                                  RoundedRectangleBorder(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                2,
+                                        height: 50.h,
+                                        child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            18.0),
-                                                    side: const BorderSide(
-                                                        color: Color.fromARGB(
-                                                            255, 9, 134, 211)),
-                                                  ),
-                                                ),
-                                              ),
-                                              child: const Text(
-                                                "Continue Shopping",
-                                                style: TextStyle(
-                                                    color: Colors.black),
-                                              )),
-                                          SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                2,
-                                            height: 50.h,
-                                            child: ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20))),
-                                                onPressed: () {
-                                                  Navigation(context,
-                                                      const CheckOut());
-                                                },
-                                                child: const Text("Check Out")),
-                                          )
-                                        ],
-                                      ),
+                                                            20))),
+                                            onPressed: () {
+                                              Navigation(
+                                                  context, const CheckOut());
+                                            },
+                                            child: const Text("Check Out")),
+                                      )
                                     ],
                                   ),
-                                ));
+                                ],
+                              ),
+                            ));
 
-                                return SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height / 1.38,
-                                  child: ListView.separated(
-                                    shrinkWrap: true,
-                                    itemBuilder: (context, index) {
-                                      return allWhatInCart[index];
-                                    },
-                                    separatorBuilder: (context, index) {
-                                      return Dividerr();
-                                    },
-                                    itemCount: allWhatInCart.length,
-                                  ),
-                                );
-                              } else {
-                                return Center(child: EmptyCart());
-                              }
-                            } else {
-                              return SizedBox(
-                                child: Loading(),
-                                height:
-                                    MediaQuery.of(context).size.height / 1.5,
-                              );
-                            }
-                          }),
-                    ),
-                  ],
-                ),
+                            return Expanded(
+                              child: ListView.separated(
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  return allWhatInCart[index];
+                                },
+                                separatorBuilder: (context, index) {
+                                  return Dividerr();
+                                },
+                                itemCount: allWhatInCart.length,
+                              ),
+                            );
+                          } else {
+                            return Center(child: EmptyCart());
+                          }
+                        } else {
+                          return SizedBox(
+                            child: Loading(),
+                            height: MediaQuery.of(context).size.height / 1.5,
+                          );
+                        }
+                      }),
+                ],
               ),
             ),
           );

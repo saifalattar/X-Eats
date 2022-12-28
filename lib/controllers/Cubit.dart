@@ -160,6 +160,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
         availableTimings.add(timings[0]);
         availableTimings.add(timings[1]);
         availableTimings.add(timings[2]);
+      } else if (int.parse("${timing_id_1[0]}${timing_id_1[1]}") < 11) {
       } else {
         availableTimings = timings;
       }
@@ -289,7 +290,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
         "quantity": quantity,
         "totalOrderItemPrice": totalPrice,
         "Restaurant": restaurantId,
-        "order_shift": "25"
+        "order_shift": timeShift
       },
     ).then((value) async {
       if (value.statusCode == 202) {

@@ -129,6 +129,44 @@ class Xeatscubit extends Cubit<XeatsStates> {
 
 //-------------------- Function Separated to get his email if his email null then it will go to login if not then it will go to home page
 
+  Future<List<DropdownMenuItem<String>>> getTimings() async {
+    List<DropdownMenuItem<String>> availableTimings = [];
+    List<DropdownMenuItem<String>> timings = [
+      DropdownMenuItem(
+        child: Text("11:00 AM"),
+        value: "11:00 AM",
+      ),
+      DropdownMenuItem(
+        child: Text("1:00 PM"),
+        value: "1:00 PM",
+      ),
+      DropdownMenuItem(
+        child: Text("3:00 PM"),
+        value: "3:00 PM",
+      ),
+      DropdownMenuItem(
+        child: Text("6:00 PM"),
+        value: "6:00 PM",
+      )
+    ];
+    await Dio().get("$BASEURL/get_order_timing").then((value) {
+      String timing_id_1 = value.data["Names"][0]["end_order"];
+      if (timing_id_1 == "11:00:00") {
+        availableTimings.add(timings[0]);
+      } else if (timing_id_1 == "13:00:00") {
+        availableTimings.add(timings[0]);
+        availableTimings.add(timings[1]);
+      } else if (timing_id_1 == "15:00:00") {
+        availableTimings.add(timings[0]);
+        availableTimings.add(timings[1]);
+        availableTimings.add(timings[2]);
+      } else {
+        availableTimings = timings;
+      }
+    }).catchError((onError) => print(onError));
+    return availableTimings;
+  }
+
   static List<dynamic> Get_Category = [];
   void GetCategory() {
     DioHelper.getdata(url: 'get_category/', query: {}).then((value) {

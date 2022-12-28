@@ -37,7 +37,7 @@ Widget Dividerr() => Padding(
       ),
     );
 
-getTimings() {
+List<DropdownMenuItem> getTimings() {
   var hour = DateTime.now().hour;
   List<DropdownMenuItem> timings = [];
 
@@ -59,6 +59,7 @@ getTimings() {
       value: "3:00 PM",
     ));
   }
+  return timings;
 }
 
 String? currentTiming;

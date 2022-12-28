@@ -557,16 +557,26 @@ class FoodItem extends StatelessWidget {
                                           fontWeight: FontWeight.bold,
                                           fontSize: 12),
                                     ),
-                                    DropdownButton(
-                                        hint: shift == null
-                                            ? const Text("Time Shift")
-                                            : Text("$shift"),
-                                        items: getTimings(),
-                                        onChanged: (data) {
-                                          shift = data as String?;
-                                          currentTiming = data;
-                                          // Xeatscubit.get(context).emit(SetTiming());
-                                        }),
+                                    FutureBuilder(
+                                        future: Xeatscubit.get(context)
+                                            .getTimings(),
+                                        builder: (context, AsyncSnapshot ss) {
+                                          if (ss.hasData) {
+                                            return DropdownButton(
+                                                hint: shift == null
+                                                    ? const Text("Time Shift")
+                                                    : Text("$shift"),
+                                                items: ss.data,
+                                                onChanged: (data) {
+                                                  shift = data as String?;
+                                                  currentTiming = data;
+                                                  Xeatscubit.get(context)
+                                                      .emit(SetTiming());
+                                                });
+                                          } else {
+                                            return Loading();
+                                          }
+                                        })
                                   ],
                                 ),
                               ],

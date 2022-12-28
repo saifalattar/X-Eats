@@ -12,7 +12,7 @@ import 'package:xeats/views/CategoryView/categoryView.dart';
 import 'package:xeats/views/HomePage/HomePage.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
-import 'package:xeats/views/SuccessOrder/successOrder.dart';
+
 import 'package:xeats/views/ThankYou/thankyou.dart';
 import '../views/Cart/Cart.dart';
 import 'Components/Categories Components/CategoryCard.dart';
@@ -29,6 +29,8 @@ class Xeatscubit extends Cubit<XeatsStates> {
   var XeatOtp3 = TextEditingController();
   var XeatOtp4 = TextEditingController();
   var XeatOtp5 = TextEditingController();
+  var XeatOtp6 = TextEditingController();
+
   var email = TextEditingController();
   var Firstname = TextEditingController();
   var Lastname = TextEditingController();

@@ -1,13 +1,19 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pinput/pinput.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
-import 'package:xeats/controllers/Components/Auth%20Components/Otp.dart';
+
 import 'package:xeats/controllers/Components/Global%20Components/DefaultButton.dart';
 import 'package:xeats/controllers/Components/Components.dart';
+import 'package:xeats/views/CompleteProfile/Complete_Profile.dart';
 import 'package:xeats/views/LoginSuccess/loginSuccess.dart';
+import 'package:xeats/views/SignIn/SignIn.dart';
 
 import '../../controllers/Cubit.dart';
 
@@ -15,8 +21,23 @@ class Verify extends StatelessWidget {
   Verify({super.key});
 
   var formkey = GlobalKey<FormState>();
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  var code = "";
   @override
   Widget build(BuildContext context) {
+    final defaultPinTheme = PinTheme(
+      width: 90.w,
+      height: 80.h,
+      textStyle: TextStyle(
+          fontSize: 20,
+          color: Color.fromRGBO(30, 60, 87, 1),
+          fontWeight: FontWeight.w600),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black, width: 4),
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
+      ),
+    );
+
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return BlocConsumer<AuthCubit, AuthStates>(
@@ -69,7 +90,7 @@ class Verify extends StatelessWidget {
                         ),
                         Center(
                           child: Text(
-                            'Please type the verification code sent to your e-mail',
+                            'Please type the verification code sent to your Phone',
                             style: TextStyle(fontSize: 15.sp),
                             textAlign: TextAlign.center,
                           ),
@@ -79,65 +100,63 @@ class Verify extends StatelessWidget {
                           child: Row(
                             children: [
                               Expanded(
-                                child: OTP(
-                                  context: context,
-                                  action: TextInputAction.next,
+                                child: Pinput(
+                                  defaultPinTheme: defaultPinTheme,
+                                  androidSmsAutofillMethod:
+                                      AndroidSmsAutofillMethod.smsRetrieverApi,
+                                  length: 6,
+                                  onChanged: (value) {
+                                    code = value;
+                                  },
                                   controller: Xeatscubit.get(context).XeatOtp1,
-                                  type: TextInputType.phone,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 26.w,
-                              ),
-                              Expanded(
-                                child: OTP(
-                                  context: context,
-                                  action: TextInputAction.next,
-                                  controller: Xeatscubit.get(context).XeatOtp2,
-                                  type: TextInputType.phone,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 26.w,
-                              ),
-                              Expanded(
-                                child: OTP(
-                                  context: context,
-                                  action: TextInputAction.next,
-                                  controller: Xeatscubit.get(context).XeatOtp3,
-                                  type: TextInputType.phone,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 26.w,
-                              ),
-                              Expanded(
-                                child: OTP(
-                                  context: context,
-                                  action: TextInputAction.done,
-                                  controller: Xeatscubit.get(context).XeatOtp4,
-                                  type: TextInputType.phone,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              'Resend Code',
-                              style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.w600,
-                                  textStyle: TextStyle(color: Colors.blue)),
-                            )),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        DefaultButton(
-                          text: 'Verify now',
-                          function: () {
-                            Navigation(context, LoginSuccess());
-                          },
+                        Row(
+                          children: [
+                            TextButton(
+                                onPressed: () {},
+                                child: Text(
+                                  'Resend Code',
+                                  style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w600,
+                                      textStyle: TextStyle(color: Colors.blue)),
+                                )),
+                            Spacer(),
+                            FloatingActionButton(
+                              child: Icon(Icons.arrow_forward_ios),
+                              backgroundColor: Colors.black,
+                              onPressed: () async {
+                                PhoneAuthCredential credential =
+                                    PhoneAuthProvider.credential(
+                                  verificationId: Complete_Profile.verify,
+                                  smsCode: code,
+                                );
+                                try {
+                                  await auth.signInWithCredential(credential);
+                                  cubit.CreateUser(
+                                    context,
+                                    password: cubit.password.text,
+                                    email: cubit.email.text,
+                                    first_name: cubit.first_name.text,
+                                    last_name: cubit.last_name.text,
+                                    title: cubit.title,
+                                    PhoneNumber: cubit.PhoneNumber.text,
+                                  );
+                                  Navigation(context, SignIn());
+                                } on FirebaseAuthException catch (e) {
+                                  const snackBar = SnackBar(
+                                    backgroundColor: Colors.red,
+                                    content: Text('The otp is wrong'),
+                                  );
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                }
+                              },
+                            ),
+                          ],
                         ),
                       ],
                     ),

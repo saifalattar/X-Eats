@@ -61,8 +61,6 @@ class AuthCubit extends Cubit<AuthStates> {
     String? PhoneNumber,
     String? password,
     String? title,
-    String? school,
-    String? nu_id,
   }) async {
     await DioHelper.PostData(data: {
       "password": password,
@@ -70,13 +68,10 @@ class AuthCubit extends Cubit<AuthStates> {
       "first_name": first_name,
       "last_name": last_name,
       "title": title,
-      "nu_id": nu_id,
-      "school": school,
       "PhoneNumber": PhoneNumber,
     }, url: "create_users_API/")
         .then((value) async {
       SharedPreferences Auth = await SharedPreferences.getInstance();
-
       Auth.setString("token", value.data['token'])
           .then((value) => NavigateAndRemov(context, Verify()))
           .catchError((error) {
@@ -85,7 +80,7 @@ class AuthCubit extends Cubit<AuthStates> {
     });
   }
 
-  List<dynamic> user = [];
+  List<List> user = [];
 
   Future<void> login(
     context, {
@@ -100,6 +95,20 @@ class AuthCubit extends Cubit<AuthStates> {
       user = value.data['Names'];
       print(user);
     });
+  }
+
+  List<dynamic> EmailExist = [];
+  Future<List> CheckExistEmail(context, {String? Email}) async {
+    await DioHelper.getdata(url: "get_user_by_id/$Email", query: {})
+        .then((value) {
+      EmailExist = value.data['Names'];
+      print(EmailExist);
+      emit(CheckEmailExistSuccess());
+    }).catchError((error) {
+      print(CheckEmailFailed(error.toString()));
+      emit(CheckEmailFailed(error.toString()));
+    });
+    return EmailExist;
   }
 
   //-------------Show password method-------------------//

@@ -11,8 +11,14 @@ import 'package:xeats/views/SignIn/SignIn.dart';
 
 import '../../controllers/Cubit.dart';
 
-class Signup extends StatelessWidget {
+class Signup extends StatefulWidget {
   Signup({super.key});
+
+  @override
+  State<Signup> createState() => _SignupState();
+}
+
+class _SignupState extends State<Signup> {
   var formkey = GlobalKey<FormState>();
 
   @override
@@ -108,9 +114,25 @@ class Signup extends StatelessWidget {
                           height: 15.h,
                         ),
                         DefaultButton(
-                            function: (() {
-                              NavigateAndRemov(context, Complete_Profile());
-                            }),
+                            function: () {
+                              cubit.CheckExistEmail(context,
+                                      Email: cubit.email.text)
+                                  .then((value) {
+                                if (formkey.currentState!.validate()) {
+                                  if (cubit.EmailExist.length == 0) {
+                                    Navigation(context, Complete_Profile());
+                                  } else {
+                                    const snackBar = SnackBar(
+                                      backgroundColor: Colors.red,
+                                      content:
+                                          Text('This Email Already Signed up'),
+                                    );
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                  }
+                                }
+                              });
+                            },
                             text: 'Sign Up'),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,

@@ -10,8 +10,6 @@ class CheckOut extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var cubit = Xeatscubit.get(context);
-    var userId = cubit.idInformation;
     return Scaffold(
       appBar: AppBar(
         actions: [Image.asset("assets/Images/shopping-cart.png")],

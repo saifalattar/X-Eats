@@ -8,12 +8,8 @@ import 'package:xeats/controllers/Components/Global%20Components/defaultFormFiel
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
-import 'package:xeats/controllers/States.dart';
-import 'package:xeats/views/HomePage/HomePage.dart';
-import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/LoginSuccess/loginSuccess.dart';
 import 'package:xeats/views/SignUp/SignUp.dart';
-import 'package:xeats/views/Splash%20Screen/Splach%20Screen.dart';
 
 class SignIn extends StatelessWidget {
   SignIn({super.key});
@@ -27,7 +23,13 @@ class SignIn extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => AuthCubit()),
-        BlocProvider(create: (context) => Xeatscubit())
+        BlocProvider(
+            create: (context) => Xeatscubit()
+              ..GetMostSoldProducts()
+              ..getPoster()
+              ..GetResturants()
+              ..GettingUserData()
+              ..getCartID())
       ],
       child: BlocConsumer<AuthCubit, AuthStates>(
         listener: ((context, state) {}),

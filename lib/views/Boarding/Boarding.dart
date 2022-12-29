@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Cubit.dart';
@@ -15,56 +13,53 @@ class Boarding extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    return BlocProvider(
-      create: (context) => Xeatscubit(),
-      child: BlocConsumer<Xeatscubit, XeatsStates>(
-        listener: (context, state) {},
-        builder: (context, state) {
-          return Scaffold(
-            body: Column(
-              children: [
-                Container(
-                  width: width,
-                  height: height,
-                  decoration: const BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage(
-                            'assets/Images/BG.png',
-                          ),
-                          fit: BoxFit.cover)),
-                  child: Column(
-                    children: [
-                      Image(
-                        height: height / 2.4,
-                        image: const AssetImage('assets/Images/time.png'),
-                      ),
-                      Text(
-                        "ON TIME!!!",
-                        style: GoogleFonts.poppins(
-                            fontSize: 40,
-                            textStyle: TextStyle(color: Colors.black)),
-                      ),
-                      Spacer(),
-                      Container(
-                        color: Colors.blue,
-                        child: CustomPaint(
-                          isComplex: true,
-
-                          size: Size(
-                              width,
-                              height *
-                                  0.300), //You can Replace [WIDTH] with your desired width for Custom Paint and height will be calculated automatically
-                          painter: MyPainter(),
+    return BlocConsumer<Xeatscubit, XeatsStates>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        return Scaffold(
+          body: Column(
+            children: [
+              Container(
+                width: width,
+                height: height,
+                decoration: const BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage(
+                          'assets/Images/BG.png',
                         ),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
-          );
-        },
-      ),
+                        fit: BoxFit.cover)),
+                child: Column(
+                  children: [
+                    Image(
+                      height: height / 2.4,
+                      image: const AssetImage('assets/Images/time.png'),
+                    ),
+                    Text(
+                      "ON TIME!!!",
+                      style: GoogleFonts.poppins(
+                          fontSize: 40,
+                          textStyle: TextStyle(color: Colors.black)),
+                    ),
+                    Spacer(),
+                    Container(
+                      color: Colors.blue,
+                      child: CustomPaint(
+                        isComplex: true,
+
+                        size: Size(
+                            width,
+                            height *
+                                0.300), //You can Replace [WIDTH] with your desired width for Custom Paint and height will be calculated automatically
+                        painter: MyPainter(),
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 }

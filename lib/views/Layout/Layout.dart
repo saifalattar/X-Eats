@@ -36,29 +36,24 @@ class Layout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    return BlocProvider(
-      create: ((context) => NavBarCubitcubit()),
-      child: BlocConsumer<NavBarCubitcubit, NavBarCubitStates>(
-          builder: ((context, state) {
-            {
-              var navcubit = NavBarCubitcubit.get(context);
-              return Scaffold(body: navcubit.Screens[navcubit.currentindex]
+    return BlocConsumer<NavBarCubitcubit, NavBarCubitStates>(
+        builder: ((context, state) {
+          {
+            var navcubit = NavBarCubitcubit.get(context);
+            return Scaffold(body: navcubit.Screens[navcubit.currentindex]
 
-                  // bottomNavigationBar: BottomNavigationBar(
-                  //   selectedLabelStyle: GoogleFonts.poppins(),
-                  //   backgroundColor: Colors.white,
-                  //   items: navcubit.bottomitems,
-                  //   currentIndex: navcubit.currentindex,
-                  //   // onTap: (index) {
-                  //   //   navcubit.changebottomnavindex(index);
-                  //   // },
-                  // ),
-                  );
-            }
-          }),
-          listener: ((context, state) {})),
-    );
+                // bottomNavigationBar: BottomNavigationBar(
+                //   selectedLabelStyle: GoogleFonts.poppins(),
+                //   backgroundColor: Colors.white,
+                //   items: navcubit.bottomitems,
+                //   currentIndex: navcubit.currentindex,
+                //   // onTap: (index) {
+                //   //   navcubit.changebottomnavindex(index);
+                //   // },
+                // ),
+                );
+          }
+        }),
+        listener: ((context, state) {}));
   }
 }

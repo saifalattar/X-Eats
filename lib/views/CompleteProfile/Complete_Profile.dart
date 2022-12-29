@@ -2,13 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Components/Components.dart';
-import 'package:xeats/controllers/Components/Global%20Components/DefaultButton.dart';
 import 'package:xeats/views/Verification/Verification.dart';
-import '../../controllers/Components/Auth Components/DropDownListGender.dart';
 import '../../controllers/Components/Auth Components/DropDownListTitle.dart';
 import '../../controllers/Components/Global Components/defaultFormField.dart';
 

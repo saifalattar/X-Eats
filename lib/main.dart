@@ -121,7 +121,14 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
-          BlocProvider(create: (context) => Xeatscubit()),
+          BlocProvider(
+              create: (context) => Xeatscubit()
+                ..GetMostSoldProducts()
+                ..getPoster()
+                ..GetResturants()
+                ..GettingUserData()
+                ..getCartID()
+                ..NewProducts()),
           BlocProvider(create: (context) => AuthCubit()),
           BlocProvider(create: (context) => NavBarCubitcubit()),
         ],

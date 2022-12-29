@@ -33,49 +33,46 @@ class CategoriesView extends StatelessWidget {
   Widget build(BuildContext context) {
     final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
         GlobalKey<RefreshIndicatorState>();
-    return BlocProvider(
-      create: (context) => Xeatscubit(),
-      child: BlocBuilder<Xeatscubit, XeatsStates>(
-        builder: ((context, state) {
-          var navcubit = NavBarCubitcubit.get(context);
-          return Scaffold(
-            appBar: appBar(context, subtitle: restaurantName, title: category),
-            body: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: FutureBuilder(
-                future: Xeatscubit.get(context).getCurrentProducts(context,
-                    restaurantName: restaurantName,
-                    id: restaurantID,
-                    CatId: categoryId,
-                    image: image,
-                    category: category),
-                builder: ((context, snapshot) {
-                  if (snapshot.hasData) {
-                    return snapshot.data!;
-                  } else {
-                    return Loading();
-                  }
-                }),
-              ),
-            ),
-            bottomNavigationBar: BottomNavigationBar(
-              selectedLabelStyle: GoogleFonts.poppins(),
-              backgroundColor: Colors.white,
-              items: navcubit.bottomitems,
-              currentIndex: 1,
-              onTap: (index) {
-                Navigator.pop(context);
-                if (index == 1) {
-                } else if (index == 0) {
-                  Navigation(context, Layout());
+    return BlocBuilder<Xeatscubit, XeatsStates>(
+      builder: ((context, state) {
+        var navcubit = NavBarCubitcubit.get(context);
+        return Scaffold(
+          appBar: appBar(context, subtitle: restaurantName, title: category),
+          body: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: FutureBuilder(
+              future: Xeatscubit.get(context).getCurrentProducts(context,
+                  restaurantName: restaurantName,
+                  id: restaurantID,
+                  CatId: categoryId,
+                  image: image,
+                  category: category),
+              builder: ((context, snapshot) {
+                if (snapshot.hasData) {
+                  return snapshot.data!;
                 } else {
-                  Navigation(context, Profile());
+                  return Loading();
                 }
-              },
+              }),
             ),
-          );
-        }),
-      ),
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            selectedLabelStyle: GoogleFonts.poppins(),
+            backgroundColor: Colors.white,
+            items: navcubit.bottomitems,
+            currentIndex: 1,
+            onTap: (index) {
+              Navigator.pop(context);
+              if (index == 1) {
+              } else if (index == 0) {
+                Navigation(context, Layout());
+              } else {
+                Navigation(context, Profile());
+              }
+            },
+          ),
+        );
+      }),
     );
   }
 }

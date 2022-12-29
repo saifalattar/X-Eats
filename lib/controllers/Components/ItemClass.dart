@@ -367,259 +367,254 @@ class FoodItem extends StatelessWidget {
         request: const AdRequest());
     bannerAd.load();
 
-    return BlocProvider(
-      create: (context) => Xeatscubit()
-        ..GettingUserData()
-        ..getCartID(),
-      child: BlocConsumer<Xeatscubit, XeatsStates>(
-        builder: (context, states) {
-          if (CartItems.isEmpty) {
-            Xeatscubit.currentRestaurant = {};
-          }
-          var navcubit = NavBarCubitcubit.get(context);
-          double width = MediaQuery.of(context).size.width;
-          double height = MediaQuery.of(context).size.height;
-          return Scaffold(
-            floatingActionButton: isRequestFinished
-                ? FloatingActionButton(
-                    backgroundColor: const Color.fromARGB(255, 9, 134, 211),
-                    //add to cart button
-                    onPressed: () async {
-                      await Xeatscubit.get(context).addToCart(context,
-                          cartItemId: cartItemId,
-                          productId: id,
-                          quantity: quantity,
-                          price: price,
-                          totalPrice: price! * quantity,
-                          restaurantId: restaurant,
-                          timeShift: currentTiming,
-                          foodItemObject: this);
-                    },
+    return BlocConsumer<Xeatscubit, XeatsStates>(
+      builder: (context, states) {
+        if (CartItems.isEmpty) {
+          Xeatscubit.currentRestaurant = {};
+        }
+        var navcubit = NavBarCubitcubit.get(context);
+        double width = MediaQuery.of(context).size.width;
+        double height = MediaQuery.of(context).size.height;
+        return Scaffold(
+          floatingActionButton: isRequestFinished
+              ? FloatingActionButton(
+                  backgroundColor: const Color.fromARGB(255, 9, 134, 211),
+                  //add to cart button
+                  onPressed: () async {
+                    await Xeatscubit.get(context).addToCart(context,
+                        cartItemId: cartItemId,
+                        productId: id,
+                        quantity: quantity,
+                        price: price,
+                        totalPrice: price! * quantity,
+                        restaurantId: restaurant,
+                        timeShift: currentTiming,
+                        foodItemObject: this);
+                  },
 
-                    child: const Icon(Icons.add_shopping_cart_rounded),
-                  )
-                : SizedBox(
-                    child: Image.asset("assets/Images/loading2.gif"),
-                    width: 100,
-                  ),
-            appBar: appBar(context,
-                subtitle: restaurantName.toString(), title: englishName),
-            body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      width: double.maxFinite,
-                      child: Column(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(300.0),
-                            child: Hero(
-                              tag: this.englishName.toString(),
-                              child: Image(
-                                width: 200,
-                                image: NetworkImage(
-                                  'https://x-eats.com$image',
-                                ),
-                                loadingBuilder:
-                                    (context, child, loadingProgress) {
-                                  if (loadingProgress == null) return child;
-                                  return Center(
-                                    child: Loading(),
-                                  );
-                                },
+                  child: const Icon(Icons.add_shopping_cart_rounded),
+                )
+              : SizedBox(
+                  child: Image.asset("assets/Images/loading2.gif"),
+                  width: 100,
+                ),
+          appBar: appBar(context,
+              subtitle: restaurantName.toString(), title: englishName),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: double.maxFinite,
+                    child: Column(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(300.0),
+                          child: Hero(
+                            tag: this.englishName.toString(),
+                            child: Image(
+                              width: 200,
+                              image: NetworkImage(
+                                'https://x-eats.com$image',
                               ),
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return Center(
+                                  child: Loading(),
+                                );
+                              },
                             ),
                           ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            "$price EGP",
-                            style: const TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(
-                            height: 30,
-                          ),
-                          SizedBox(
-                            width: width,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        "$englishName\n",
-                                        textAlign: TextAlign.left,
-                                        style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14),
-                                      ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          "$price EGP",
+                          style: const TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        SizedBox(
+                          width: width,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      "$englishName\n",
+                                      textAlign: TextAlign.left,
+                                      style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14),
                                     ),
-                                    SizedBox(
-                                      height: height / 20,
+                                  ),
+                                  SizedBox(
+                                    height: height / 20,
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.right,
+                                      "$arabicName",
+                                      style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14),
                                     ),
-                                  ],
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Description:\n",
+                                  style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12),
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.right,
-                                        "$arabicName",
-                                        style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14),
-                                      ),
-                                    ),
-                                  ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "$description",
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.grey),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    "Description:\n",
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Text(
+                                    "Quantity :",
                                     style: GoogleFonts.poppins(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 12),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    "$description",
-                                    style: TextStyle(
-                                        fontSize: 12, color: Colors.grey),
-                                  ),
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Text(
-                                      "Quantity :",
-                                      style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        IconButton(
-                                            onPressed: () {
-                                              if (quantity != 1) {
-                                                quantity--;
-                                                totalPrice = quantity * price!;
-                                                Xeatscubit.get(context)
-                                                    .emit(RemoveQuantity());
-                                              }
-                                            },
-                                            icon: const Icon(
-                                              Icons.remove,
-                                              color: Color.fromARGB(
-                                                  255, 9, 134, 211),
-                                            )),
-                                        Text("${this.quantity}"),
-                                        IconButton(
-                                            onPressed: () {
-                                              quantity++;
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      IconButton(
+                                          onPressed: () {
+                                            if (quantity != 1) {
+                                              quantity--;
                                               totalPrice = quantity * price!;
                                               Xeatscubit.get(context)
-                                                  .emit(AddQuantity());
-                                            },
-                                            icon: const Icon(
-                                              Icons.add,
-                                              color: Color.fromARGB(
-                                                  255, 9, 134, 211),
-                                            )),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Text(
-                                      "Order Time :",
-                                      style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12),
-                                    ),
-                                    FutureBuilder(
-                                        future: Xeatscubit.get(context)
-                                            .getTimings(),
-                                        builder: (context, AsyncSnapshot ss) {
-                                          if (ss.hasData) {
-                                            return DropdownButton(
-                                                hint: shift == null
-                                                    ? const Text("Time Shift")
-                                                    : Text("$shift"),
-                                                items: ss.data,
-                                                onChanged: (data) {
-                                                  shift = data as String?;
-                                                  currentTiming = data;
-                                                  Xeatscubit.get(context)
-                                                      .emit(SetTiming());
-                                                });
-                                          } else {
-                                            return Loading();
-                                          }
-                                        })
-                                  ],
-                                ),
-                              ],
-                            ),
+                                                  .emit(RemoveQuantity());
+                                            }
+                                          },
+                                          icon: const Icon(
+                                            Icons.remove,
+                                            color: Color.fromARGB(
+                                                255, 9, 134, 211),
+                                          )),
+                                      Text("${this.quantity}"),
+                                      IconButton(
+                                          onPressed: () {
+                                            quantity++;
+                                            totalPrice = quantity * price!;
+                                            Xeatscubit.get(context)
+                                                .emit(AddQuantity());
+                                          },
+                                          icon: const Icon(
+                                            Icons.add,
+                                            color: Color.fromARGB(
+                                                255, 9, 134, 211),
+                                          )),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Text(
+                                    "Order Time :",
+                                    style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12),
+                                  ),
+                                  FutureBuilder(
+                                      future:
+                                          Xeatscubit.get(context).getTimings(),
+                                      builder: (context, AsyncSnapshot ss) {
+                                        if (ss.hasData) {
+                                          return DropdownButton(
+                                              hint: shift == null
+                                                  ? const Text("Time Shift")
+                                                  : Text("$shift"),
+                                              items: ss.data,
+                                              onChanged: (data) {
+                                                shift = data as String?;
+                                                currentTiming = data;
+                                                Xeatscubit.get(context)
+                                                    .emit(SetTiming());
+                                              });
+                                        } else {
+                                          return Loading();
+                                        }
+                                      })
+                                ],
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  SizedBox(
-                    height: 50,
-                    width: double.maxFinite,
-                    child: AdWidget(ad: bannerAd),
-                  ),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(
+                  height: 40,
+                ),
+                SizedBox(
+                  height: 50,
+                  width: double.maxFinite,
+                  child: AdWidget(ad: bannerAd),
+                ),
+                const SizedBox(
+                  height: 40,
+                ),
+              ],
             ),
-            bottomNavigationBar: BottomNavigationBar(
-              selectedLabelStyle: GoogleFonts.poppins(),
-              backgroundColor: Colors.white,
-              items: navcubit.bottomitems,
-              currentIndex: 1,
-              onTap: (index) {
-                Navigator.pop(context);
-                if (index == 1) {
-                  Navigation(context, const Restaurants());
-                } else if (index == 0) {
-                  Navigation(context, Layout());
-                } else {
-                  Navigation(context, Profile());
-                }
-              },
-            ),
-          );
-        },
-        listener: ((context, state) {}),
-      ),
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            selectedLabelStyle: GoogleFonts.poppins(),
+            backgroundColor: Colors.white,
+            items: navcubit.bottomitems,
+            currentIndex: 1,
+            onTap: (index) {
+              Navigator.pop(context);
+              if (index == 1) {
+                Navigation(context, const Restaurants());
+              } else if (index == 0) {
+                Navigation(context, Layout());
+              } else {
+                Navigation(context, Profile());
+              }
+            },
+          ),
+        );
+      },
+      listener: ((context, state) {}),
     );
   }
 }

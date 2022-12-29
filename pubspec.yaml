@@ -56,6 +56,8 @@ dependencies:
   connectivity:
   pull_to_refresh:
   url_launcher:
+  firebase_auth:
+  pinput:
 
 
   flutter:

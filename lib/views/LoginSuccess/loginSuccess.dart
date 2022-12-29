@@ -119,21 +119,8 @@ class LoginSuccess extends StatelessWidget {
             ),
           ),
           floatingActionButton: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  child: Text(
-                    "Let's GO !",
-                    style: TextStyle(
-                        fontFamily: 'UberMoveTextBold',
-                        fontSize: 14.0.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 9, 134, 211)),
-                  ),
-                ),
-              ),
+              Spacer(),
               FloatingActionButton(
                 onPressed: () {
                   Navigation(context, Layout());

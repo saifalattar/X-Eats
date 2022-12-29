@@ -72,7 +72,7 @@ class Cart extends StatelessWidget {
                               child: Column(
                                 children: [
                                   Container(
-                                    height: height / 5,
+                                    height: height / 6,
                                     width: width / 2.4,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(12),

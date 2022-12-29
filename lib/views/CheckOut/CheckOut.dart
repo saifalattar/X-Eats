@@ -97,7 +97,6 @@ class CheckOut extends StatelessWidget {
                     function: () {
                       Xeatscubit.get(context).confirmOrder(
                         context,
-                        id: userId,
                       );
                     },
                     text: "Order Now")

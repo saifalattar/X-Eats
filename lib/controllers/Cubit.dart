@@ -520,11 +520,10 @@ class Xeatscubit extends Cubit<XeatsStates> {
 
   // a function to confirm and checkout
   void confirmOrder(
-    context, {
-    int? id,
-  }) async {
+    context,
+  ) async {
     await Dio().post("$BASEURL/get_orders_by_email/$EmailInforamtion", data: {
-      "user": id,
+      "user": idInformation,
       "total_price_after_delivery":
           FoodItem.deliveryFee + FoodItem.getSubtotal(),
       "totalPrice": FoodItem.getSubtotal(),

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Components/AppBarCustomized.dart';
@@ -9,7 +7,6 @@ import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
 import 'package:xeats/controllers/States.dart';
-import 'package:http/http.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
 
@@ -21,6 +18,7 @@ class CategoriesView extends StatelessWidget {
 
   const CategoriesView(
     this.restaurantID, {
+    super.key,
     required this.image,
     required this.category,
     required this.categoryId,
@@ -31,8 +29,6 @@ class CategoriesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-        GlobalKey<RefreshIndicatorState>();
     return BlocBuilder<Xeatscubit, XeatsStates>(
       builder: ((context, state) {
         var navcubit = NavBarCubitcubit.get(context);

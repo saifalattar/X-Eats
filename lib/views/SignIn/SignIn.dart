@@ -37,7 +37,7 @@ class SignIn extends StatelessWidget {
           var cubit = AuthCubit.get(context);
           var cubit1 = Xeatscubit.get(context);
           return Scaffold(
-            backgroundColor: Color(0xff0986d3),
+            backgroundColor: const Color(0xff0986d3),
             body: Container(
               width: width,
               height: height,
@@ -60,11 +60,12 @@ class SignIn extends StatelessWidget {
                                 fontFamily: 'UberMoveTextBold',
                                 fontSize: 25.0.sp,
                                 fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 9, 134, 211),
+                                color: const Color.fromARGB(255, 9, 134, 211),
                               )),
                           Center(
                             child: Image(
-                              image: AssetImage('assets/Images/First.png'),
+                              image:
+                                  const AssetImage('assets/Images/First.png'),
                               width: width / 2,
                               height: width / 2,
                             ),
@@ -115,7 +116,7 @@ class SignIn extends StatelessWidget {
                                     var status =
                                         dioException.response!.statusCode;
                                     if (e.runtimeType == DioError) {
-                                      print(dioException.response!.statusCode);
+                                      // print(dioException.response!.statusCode);
                                     }
                                     if (status == 302) {
                                       cubit1.getEmail(context,

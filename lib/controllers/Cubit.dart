@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xeats/controllers/Components/ItemClass.dart';
 import 'package:xeats/controllers/Components/Requests%20Loading%20Components/RequstsLoading.dart';
@@ -320,6 +321,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
         print("Updated in Cart");
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
+            duration: const Duration(milliseconds: 1000),
             backgroundColor: Colors.blue,
             content: Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -329,30 +331,15 @@ class Xeatscubit extends Cubit<XeatsStates> {
                   color: Colors.white,
                 ),
                 Container(
-                    margin: EdgeInsets.only(left: 10.w),
-                    child: Text("${value.data}"))
-              ],
-            ),
-          ),
-        );
-      } else if (value.statusCode == 403 || value.statusCode == 304) {
-        isRequestFinished = true;
-        emit(ButtonPressedLoading());
-
-        print("Cannot add to products from different Rest");
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.redAccent,
-            content: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const Icon(
-                  Icons.done_rounded,
-                  color: Colors.white,
-                ),
-                Container(
-                    margin: EdgeInsets.only(left: 10.w),
-                    child: Text("${value.data}"))
+                  margin: EdgeInsets.only(left: 10.w),
+                  child: Text(
+                    "${value.data}",
+                    style: GoogleFonts.poppins(
+                        fontSize: 11,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+                )
               ],
             ),
           ),
@@ -361,9 +348,9 @@ class Xeatscubit extends Cubit<XeatsStates> {
         print("Added To Cart");
         isRequestFinished = true;
         emit(ButtonPressedLoading());
-
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
+            duration: const Duration(milliseconds: 1000),
             backgroundColor: Colors.green,
             content: Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -373,8 +360,15 @@ class Xeatscubit extends Cubit<XeatsStates> {
                   color: Colors.white,
                 ),
                 Container(
-                    margin: EdgeInsets.only(left: 10.w),
-                    child: Text("${value.data}"))
+                  margin: EdgeInsets.only(left: 10.w),
+                  child: Text(
+                    "${value.data}",
+                    style: GoogleFonts.poppins(
+                        fontSize: 11,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+                )
               ],
             ),
           ),
@@ -408,9 +402,10 @@ class Xeatscubit extends Cubit<XeatsStates> {
         var dioException = e as DioError;
         var status = dioException.response!.statusCode;
         var resp = dioException.response!.data;
-        print("Cannot add to products from different Rest");
+        print(resp);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
+            duration: const Duration(milliseconds: 1500),
             backgroundColor: Colors.red,
             content: Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -420,7 +415,15 @@ class Xeatscubit extends Cubit<XeatsStates> {
                   color: Colors.white,
                 ),
                 Container(
-                    margin: EdgeInsets.only(left: 10.w), child: Text("$resp"))
+                  margin: EdgeInsets.only(left: 10.w),
+                  child: Text(
+                    "$resp",
+                    style: GoogleFonts.poppins(
+                      fontSize: 10,
+                      color: Colors.white,
+                    ),
+                  ),
+                )
               ],
             ),
           ),
@@ -538,6 +541,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
     await Dio().delete("$BASEURL/delete_cartItems/$cartItemId").then((value) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          duration: const Duration(milliseconds: 1000),
           backgroundColor: Colors.green,
           content: Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -557,9 +561,10 @@ class Xeatscubit extends Cubit<XeatsStates> {
       print(onError);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          duration: const Duration(milliseconds: 1000),
           backgroundColor: Colors.red,
           content: Row(
-            children: [
+            children: const [
               Icon(
                 Icons.error,
                 color: Colors.white,
@@ -623,7 +628,8 @@ class Xeatscubit extends Cubit<XeatsStates> {
           }),
           itemCount: value.data["Names"].length);
     }).catchError((onError) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        duration: Duration(milliseconds: 1000),
         content: Text("Something error try again later !!"),
         backgroundColor: Colors.red,
       ));
@@ -670,6 +676,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
           itemCount: value.data["Names"].length);
     }).catchError((e) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        duration: Duration(milliseconds: 1500),
         content: Text("Something error try again later !!"),
         backgroundColor: Colors.red,
       ));
@@ -725,7 +732,8 @@ class Xeatscubit extends Cubit<XeatsStates> {
           }),
           itemCount: value.data["Names"].length);
     }).catchError((onError) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        duration: Duration(milliseconds: 1500),
         content: Text("Something error try again later !!"),
         backgroundColor: Colors.red,
       ));

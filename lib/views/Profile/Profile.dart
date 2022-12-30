@@ -1,27 +1,19 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xeats/controllers/Components/AppBarCustomized.dart';
 import 'package:xeats/controllers/Components/Auth%20Components/ProfileMenu.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/controllers/Cubit.dart';
-import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
-import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
-import 'package:xeats/controllers/Dio/Cache_Helper.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Resturants/Resturants.dart';
-import 'package:xeats/views/Splash%20Screen/Splach%20Screen.dart';
 
 class Profile extends StatelessWidget {
-  Profile({super.key});
+  const Profile({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -52,11 +44,11 @@ class Profile extends StatelessWidget {
                               margin: EdgeInsets.only(left: width / 10),
                               child: Text.rich(
                                 TextSpan(
-                                  style: TextStyle(color: Colors.black),
+                                  style: const TextStyle(color: Colors.black),
                                   children: [
                                     TextSpan(
                                       text: "Name: ${cubit.FirstName}\n",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.lightBlue),
@@ -64,14 +56,14 @@ class Profile extends StatelessWidget {
                                     TextSpan(
                                       text:
                                           "Email: ${cubit.EmailInforamtion}\n",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.lightBlue),
                                     ),
                                     TextSpan(
                                       text: "Wallet: ${cubit.wallet} \n",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.lightBlue),
@@ -79,7 +71,7 @@ class Profile extends StatelessWidget {
                                     TextSpan(
                                       text:
                                           "Phonenumber: ${cubit.PhoneNumber} \n",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.lightBlue),
@@ -101,19 +93,19 @@ class Profile extends StatelessWidget {
                                   press: () {},
                                 ),
                                 SizedBox(height: height / 20),
-                                ProfileMenu(
-                                  text: 'About Us',
-                                  press: () async {
-                                    // var url = Uri.parse(
-                                    //     "https://www.x-eats.com/about_us");
-                                    // if (await canLaunchUrl(url))
-                                    //   await launchUrl(url);
-                                    // else
-                                    //   throw "Could not launch $url";
-                                  },
-                                  icon: "assets/icons/other.svg",
-                                ),
-                                SizedBox(height: height / 20),
+                                // ProfileMenu(
+                                //   text: 'About Us',
+                                //   press: () async {
+                                //     // var url = Uri.parse(
+                                //     //     "https://www.x-eats.com/about_us");
+                                //     // if (await canLaunchUrl(url))
+                                //     //   await launchUrl(url);
+                                //     // else
+                                //     //   throw "Could not launch $url";
+                                //   },
+                                //   icon: "assets/icons/other.svg",
+                                // ),
+                                // SizedBox(height: height / 20),
                                 ProfileMenu(
                                   text: 'Sign Out',
                                   press: () {

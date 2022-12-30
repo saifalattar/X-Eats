@@ -550,19 +550,21 @@ class FoodItem extends StatelessWidget {
                                   Text(
                                     "Order Time :",
                                     style: GoogleFonts.poppins(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
+                                    ),
                                   ),
                                   FutureBuilder(
                                       future:
                                           Xeatscubit.get(context).getTimings(),
-                                      builder: (context, AsyncSnapshot ss) {
-                                        if (ss.hasData) {
+                                      builder:
+                                          (context, AsyncSnapshot snapshot) {
+                                        if (snapshot.hasData) {
                                           return DropdownButton(
                                               hint: shift == null
                                                   ? const Text("Time Shift")
                                                   : Text("$shift"),
-                                              items: ss.data,
+                                              items: snapshot.data,
                                               onChanged: (data) {
                                                 shift = data as String?;
                                                 currentTiming = data;

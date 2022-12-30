@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Components/Components.dart';
@@ -14,7 +15,15 @@ class LoginSuccess extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return BlocConsumer<AuthCubit, AuthStates>(
-      listener: ((context, state) {}),
+      listener: ((context, state) {
+        Xeatscubit.get(context)
+          ..GetMostSoldProducts()
+          ..getPoster()
+          ..GetResturants()
+          ..GettingUserData()
+          ..getCartID()
+          ..NewProducts();
+      }),
       builder: (context, state) {
         return Scaffold(
           backgroundColor: Color(0xff0986d3),

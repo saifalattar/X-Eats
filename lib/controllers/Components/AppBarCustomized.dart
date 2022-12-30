@@ -10,6 +10,7 @@ AppBar appBar(BuildContext context, {String? subtitle, String? title}) {
   double height = MediaQuery.of(context).size.height;
 
   return AppBar(
+    automaticallyImplyLeading: false,
     foregroundColor: Colors.white,
     backgroundColor: Colors.white,
     actions: [

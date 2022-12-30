@@ -152,8 +152,9 @@ class Restaurants extends StatelessWidget {
                                               data_from_api[index]['image'],
                                           loadingBuilder: (context, child,
                                               loadingProgress) {
-                                            if (loadingProgress == null)
+                                            if (loadingProgress == null) {
                                               return child;
+                                            }
                                             return Center(
                                               child: Loading(),
                                             );

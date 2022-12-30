@@ -29,10 +29,9 @@ class ResturantsMenu extends StatelessWidget {
           // Called when an ad request failed.
           onAdFailedToLoad: (Ad ad, LoadAdError error) {
             // Dispose the ad here to free resources.
-            print('Ad failed to load: $error');
           },
         ),
-        request: AdRequest());
+        request: const AdRequest());
     bannerAd.load();
     return BlocConsumer<Xeatscubit, XeatsStates>(
       listener: (context, state) {},
@@ -46,7 +45,6 @@ class ResturantsMenu extends StatelessWidget {
               children: [
                 FutureBuilder(
                   builder: (context, snapshot) {
-                    print(Xeatscubit.currentRestaurant);
                     return Container();
                   },
                   future: Xeatscubit.get(context)

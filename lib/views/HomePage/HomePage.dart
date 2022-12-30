@@ -41,151 +41,87 @@ class HomePage extends StatelessWidget {
         adUnitId: "ca-app-pub-5674432343391353/7700576837",
         listener: BannerAdListener(
           // Called when an ad is successfully received.
-          onAdLoaded: (Ad ad) => print('Ad loaded.'),
           // Called when an ad request failed.
           onAdFailedToLoad: (Ad ad, LoadAdError error) {
             // Dispose the ad here to free resources.
-            print('Ad failed to load: $error');
           },
         ),
-        request: AdRequest());
+        request: const AdRequest());
     final BannerAd bannerAd2 = BannerAd(
         size: AdSize.banner,
         adUnitId: "ca-app-pub-5674432343391353/4883815579",
         listener: BannerAdListener(
           // Called when an ad is successfully received.
-          onAdLoaded: (Ad ad) => print('Ad loaded.'),
           // Called when an ad request failed.
           onAdFailedToLoad: (Ad ad, LoadAdError error) {
             // Dispose the ad here to free resources.
-            print('Ad failed to load: $error');
           },
         ),
-        request: AdRequest());
+        request: const AdRequest());
     bannerAd.load();
     bannerAd2.load();
 
-    return BlocConsumer<Xeatscubit, XeatsStates>(
-      builder: ((context, state) {
-        var cubit = Xeatscubit.get(context);
-        var navcubit = NavBarCubitcubit.get(context);
-        var product_api = Xeatscubit.MostSold;
-        var category_api = Xeatscubit.Get_Category;
-        var restaurant_api = Xeatscubit.ResturantsList;
-        var userEmail = cubit.EmailInforamtion;
-        var userId = cubit.idInformation;
-        var FirstName = cubit.FirstName ?? Loading();
-        var LastName = cubit.LastName ?? ' ';
-        return Scaffold(
-          appBar: appBar(context,
-              subtitle: 'Delivering to', title: 'Nile University, Giza'),
-          body: SingleChildScrollView(
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: height / 20,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 12, bottom: 12),
-                              child: Text(
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                "Welcome, $FirstName",
-                                style: GoogleFonts.poppins(
-                                    fontSize: 14, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ],
-                        ),
-                        ConditionalBuilder(
-                            condition: Xeatscubit.getposters.isNotEmpty,
-                            fallback: (context) => Center(
-                                  child: Loading(),
-                                ),
-                            builder: (context) => const DiscountBanner()),
-                      ],
+    return BlocProvider(
+      create: (context) => Xeatscubit()
+        ..GettingUserData()
+        ..getCartID(),
+      child: BlocConsumer<Xeatscubit, XeatsStates>(
+        builder: ((context, state) {
+          var cubit = Xeatscubit.get(context);
+          var navcubit = NavBarCubitcubit.get(context);
+          var product_api = Xeatscubit.MostSold;
+          var restaurant_api = Xeatscubit.ResturantsList;
+          var FirstName = cubit.FirstName ?? ' ';
+          return Scaffold(
+            appBar: appBar(context,
+                subtitle: 'Delivering to', title: 'Nile University, Giza'),
+            body: SingleChildScrollView(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: height / 20,
                     ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Text(
-                          'Restaurant',
-                          style: GoogleFonts.poppins(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            ...List.generate(
-                              restaurant_api.length,
-                              (index) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    Navigation(
-                                        context,
-                                        ResturantsMenu(
-                                            data: restaurant_api[index]));
-                                  },
-                                  child: RestaurantView(
-                                    data: restaurant_api[index]['Name'] ??
-                                        Loading(),
-                                    Colors: const Color.fromARGB(255, 5, 95, 9),
-                                    image: Image(
-                                      loadingBuilder:
-                                          (context, child, loadingProgress) {
-                                        if (loadingProgress == null) {
-                                          return child;
-                                        }
-                                        return Center(
-                                          child: Loading(),
-                                        );
-                                      },
-                                      image: NetworkImage(
-                                          DioHelper.dio!.options.baseUrl +
-                                              restaurant_api[index]['image']),
-                                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 12, bottom: 12),
+                                child: Text(
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  "Welcome, $FirstName",
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
+                          ),
+                          ConditionalBuilder(
+                              condition: Xeatscubit.getposters.isNotEmpty,
+                              fallback: (context) => Center(
+                                    child: Loading(),
                                   ),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
+                              builder: (context) => const DiscountBanner()),
+                        ],
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      SizedBox(
-                        child: AdWidget(ad: bannerAd),
-                        height: 50,
-                        width: double.maxFinite,
-                      )
-                    ],
-                  ),
-                  Container(
-                    child: Column(
+                    ),
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: Text(
-                            'Most Ordered',
+                            'Restaurant',
                             style: GoogleFonts.poppins(
                                 fontSize: 16, fontWeight: FontWeight.bold),
                           ),
@@ -195,98 +131,165 @@ class HomePage extends StatelessWidget {
                           child: Row(
                             children: [
                               ...List.generate(
-                                product_api.length,
+                                restaurant_api.length,
                                 (index) {
-                                  return FutureBuilder(
-                                      future: cubit.gettingCategoryImages(
-                                          product_api[index]["category"]
-                                              .toString()),
-                                      builder:
-                                          (context, AsyncSnapshot snapshot) {
-                                        double? price =
-                                            product_api[index]['price'];
-                                        if (snapshot.hasData) {
-                                          return GestureDetector(
-                                            child: ProductView(
-                                                image: snapshot.data.toString(),
-                                                width: width / 2.0,
-                                                height: height / 4.2,
-                                                data: product_api[index]
-                                                    ["name"],
-                                                Colors: Colors.white,
-                                                Navigate: () => {
-                                                      Navigation(
-                                                          context,
-                                                          FoodItem()
-                                                              .productDetails(
-                                                            context,
-                                                            id: product_api[
-                                                                index]["id"],
-                                                            restaurant:
-                                                                product_api[
-                                                                        index][
-                                                                    "Restaurant"],
-                                                            image:
-                                                                "/${snapshot.data.toString()}",
-                                                            price: price,
-                                                            englishName:
-                                                                product_api[
-                                                                        index]
-                                                                    ["name"],
-                                                            arabicName:
-                                                                product_api[
-                                                                        index][
-                                                                    "ArabicName"],
-                                                            description: product_api[
-                                                                        index][
-                                                                    "description"] ??
-                                                                "No Description for this Product",
-                                                            restaurantName:
-                                                                product_api[index]
-                                                                        [
-                                                                        "Restaurant"]
-                                                                    .toString(),
-                                                          )),
-                                                    }),
-                                            onTap: () {},
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigation(
+                                          context,
+                                          ResturantsMenu(
+                                              data: restaurant_api[index]));
+                                    },
+                                    child: RestaurantView(
+                                      data: restaurant_api[index]['Name'] ??
+                                          Loading(),
+                                      Colors:
+                                          const Color.fromARGB(255, 5, 95, 9),
+                                      image: Image(
+                                        loadingBuilder:
+                                            (context, child, loadingProgress) {
+                                          if (loadingProgress == null) {
+                                            return child;
+                                          }
+                                          return Center(
+                                            child: Loading(),
                                           );
-                                        } else {
-                                          return Loading();
-                                        }
-                                      });
+                                        },
+                                        image: NetworkImage(
+                                            DioHelper.dio!.options.baseUrl +
+                                                restaurant_api[index]['image']),
+                                      ),
+                                    ),
+                                  );
                                 },
                               ),
                             ],
                           ),
                         ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        SizedBox(
+                          height: 50,
+                          width: double.maxFinite,
+                          child: AdWidget(ad: bannerAd),
+                        )
                       ],
                     ),
-                  ),
-                  SizedBox(
-                    height: 50,
-                    width: double.maxFinite,
-                    child: AdWidget(ad: bannerAd2),
-                  )
-                ]),
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            selectedLabelStyle: GoogleFonts.poppins(),
-            backgroundColor: Colors.white,
-            items: navcubit.bottomitems,
-            currentIndex: 0,
-            onTap: (index) {
-              if (index == 0) {
-                Navigator.pop(context);
-              } else if (index == 1) {
-                Navigation(context, const Restaurants());
-              } else {
-                Navigation(context, Profile());
-              }
-            },
-          ),
-        );
-      }),
-      listener: ((context, state) {}),
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Text(
+                              'Most Ordered',
+                              style: GoogleFonts.poppins(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                ...List.generate(
+                                  product_api.length,
+                                  (index) {
+                                    return FutureBuilder(
+                                        future: cubit.gettingCategoryImages(
+                                            product_api[index]["category"]
+                                                .toString()),
+                                        builder:
+                                            (context, AsyncSnapshot snapshot) {
+                                          double? price =
+                                              product_api[index]['price'];
+                                          if (snapshot.hasData) {
+                                            return GestureDetector(
+                                              child: ProductView(
+                                                  image:
+                                                      snapshot.data.toString(),
+                                                  width: width / 2.0,
+                                                  height: height / 4.2,
+                                                  data: product_api[index]
+                                                      ["name"],
+                                                  Colors: Colors.white,
+                                                  Navigate: () => {
+                                                        Navigation(
+                                                            context,
+                                                            FoodItem()
+                                                                .productDetails(
+                                                              context,
+                                                              id: product_api[
+                                                                  index]["id"],
+                                                              restaurant:
+                                                                  product_api[
+                                                                          index]
+                                                                      [
+                                                                      "Restaurant"],
+                                                              image:
+                                                                  "/${snapshot.data.toString()}",
+                                                              price: price,
+                                                              englishName:
+                                                                  product_api[
+                                                                          index]
+                                                                      ["name"],
+                                                              arabicName:
+                                                                  product_api[
+                                                                          index]
+                                                                      [
+                                                                      "ArabicName"],
+                                                              description: product_api[
+                                                                          index]
+                                                                      [
+                                                                      "description"] ??
+                                                                  "No Description for this Product",
+                                                              restaurantName:
+                                                                  product_api[index]
+                                                                          [
+                                                                          "Restaurant"]
+                                                                      .toString(),
+                                                            )),
+                                                      }),
+                                              onTap: () {},
+                                            );
+                                          } else {
+                                            return Loading();
+                                          }
+                                        });
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 50,
+                      width: double.maxFinite,
+                      child: AdWidget(ad: bannerAd2),
+                    )
+                  ]),
+            ),
+            bottomNavigationBar: BottomNavigationBar(
+              selectedLabelStyle: GoogleFonts.poppins(),
+              backgroundColor: Colors.white,
+              items: navcubit.bottomitems,
+              currentIndex: 0,
+              onTap: (index) {
+                if (index == 0) {
+                  Navigator.pop(context);
+                } else if (index == 1) {
+                  Navigation(context, const Restaurants());
+                } else {
+                  Navigation(context, Profile());
+                }
+              },
+            ),
+          );
+        }),
+        listener: ((context, state) {}),
+      ),
     );
   }
 }

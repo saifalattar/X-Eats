@@ -109,12 +109,12 @@ class Complete_Profile extends StatelessWidget {
                                 value == null ? 'Select your title' : null,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 15,
                         ),
                         Row(
                           children: [
-                            Spacer(),
+                            const Spacer(),
                             FloatingActionButton(
                                 onPressed: () async {
                                   if (formkey.currentState!.validate()) {

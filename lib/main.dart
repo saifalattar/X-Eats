@@ -112,11 +112,6 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  // void inittiken() async {
-  //   var token = await FirebaseMessaging.instance.getToken();
-  //   print("Token is : $token");
-  // }
-
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(

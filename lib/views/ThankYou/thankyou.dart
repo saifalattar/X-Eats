@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:xeats/controllers/Components/AppBarCustomized.dart';
 import 'package:xeats/controllers/Components/Components.dart';
-import 'package:xeats/controllers/Components/Global%20Components/DefaultButton.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/views/Layout/Layout.dart';
@@ -40,7 +39,7 @@ class ThankYou extends StatelessWidget {
               children: [
                 SizedBox(height: height / 1.9),
                 Image(
-                  image: AssetImage(
+                  image: const AssetImage(
                     "assets/Images/success.png",
                   ),
                   height: height / 5,
@@ -63,8 +62,8 @@ class ThankYou extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: height / 200),
-                Center(),
-                Spacer(),
+                const Center(),
+                const Spacer(),
                 SizedBox(
                   width: width / 1.3,
                   child: ElevatedButton(
@@ -88,7 +87,7 @@ class ThankYou extends StatelessWidget {
                             color: Colors.black, fontWeight: FontWeight.bold),
                       )),
                 ),
-                Spacer(),
+                const Spacer(),
               ],
             ),
           ),

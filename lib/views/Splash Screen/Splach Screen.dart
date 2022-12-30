@@ -1,25 +1,16 @@
-// ignore_for_file: non_constant_identifier_names
-
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xeats/controllers/Cubit.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/controllers/States.dart';
-import 'package:xeats/views/HomePage/HomePage.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
 
 class SplashScreen extends StatefulWidget {
-  SplashScreen({super.key});
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -84,7 +75,6 @@ class _SplashScreenState extends State<SplashScreen> {
   Future init(context) async {
     Xeatscubit.get(context).GettingUserData();
     Xeatscubit.get(context).getCartID();
-
     print(Xeatscubit.get(context).GettingUserData());
 
     Future.delayed(const Duration(seconds: 6)).then((value) {

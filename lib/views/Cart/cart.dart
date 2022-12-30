@@ -27,14 +27,14 @@ class Cart extends StatelessWidget {
         var cubit = Xeatscubit.get(context);
         return Scaffold(
           appBar:
-              appBar(context, subtitle: "${cubit.FirstName}\'s", title: "Cart"),
+              appBar(context, subtitle: "${cubit.FirstName}'s", title: "Cart"),
           backgroundColor: Colors.white,
           body: SafeArea(
             child: Column(
               children: [
                 FutureBuilder(
-                  builder: (ctx, AsyncSnapshot ss) {
-                    if (ss.connectionState == ConnectionState.done &&
+                  builder: (ctx, AsyncSnapshot snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done &&
                         Xeatscubit.currentRestaurant["Name"] != null) {
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -47,7 +47,7 @@ class Cart extends StatelessWidget {
                                   "${cubit.FirstName},",
                                   maxLines: 1,
                                   textAlign: TextAlign.left,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -198,12 +198,12 @@ class Cart extends StatelessWidget {
                             ),
                           );
                         } else {
-                          return Center(child: EmptyCart());
+                          return const Center(child: EmptyCart());
                         }
                       } else {
                         return SizedBox(
-                          child: Loading(),
                           height: MediaQuery.of(context).size.height / 1.5,
+                          child: Loading(),
                         );
                       }
                     }),

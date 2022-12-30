@@ -17,14 +17,14 @@ void Navigation(context, widget,
           transitionDuration: duration),
     );
 
-Widget CircularNotchBottom(
-        {required List<BottomNavigationBarItem> Items,
-        CircularNotchedRectangle? Circle,
-        required int currentindex,
-        int? notchMargin,
-        Color? color,
-        Function(int)? ontap}) =>
-    BottomNavigationBar(currentIndex: currentindex, onTap: ontap, items: Items);
+// Widget CircularNotchBottom(
+//         {required List<BottomNavigationBarItem> Items,
+//         CircularNotchedRectangle? Circle,
+//         required int currentindex,
+//         int? notchMargin,
+//         Color? color,
+//         Function(int)? ontap}) =>
+//     BottomNavigationBar(currentIndex: currentindex, onTap: ontap, items: Items);
 
 Widget Dividerr() => Padding(
       padding: const EdgeInsetsDirectional.only(

@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,10 +7,8 @@ import 'package:pinput/pinput.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 
-import 'package:xeats/controllers/Components/Global%20Components/DefaultButton.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/views/CompleteProfile/Complete_Profile.dart';
-import 'package:xeats/views/LoginSuccess/loginSuccess.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
 
 import '../../controllers/Cubit.dart';
@@ -28,7 +24,7 @@ class Verify extends StatelessWidget {
     final defaultPinTheme = PinTheme(
       width: 90.w,
       height: 80.h,
-      textStyle: TextStyle(
+      textStyle: const TextStyle(
           fontSize: 20,
           color: Color.fromRGBO(30, 60, 87, 1),
           fontWeight: FontWeight.w600),

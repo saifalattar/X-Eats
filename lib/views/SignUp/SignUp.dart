@@ -9,8 +9,6 @@ import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/views/CompleteProfile/Complete_Profile.dart';
 import 'package:xeats/views/SignIn/SignIn.dart';
 
-import '../../controllers/Cubit.dart';
-
 class Signup extends StatefulWidget {
   Signup({super.key});
 
@@ -30,7 +28,7 @@ class _SignupState extends State<Signup> {
       builder: (context, state) {
         var cubit = AuthCubit.get(context);
         return Scaffold(
-          backgroundColor: Color(0xff0986d3),
+          backgroundColor: const Color(0xff0986d3),
           body: Container(
             width: width,
             height: height,
@@ -138,7 +136,7 @@ class _SignupState extends State<Signup> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Spacer(
+                            const Spacer(
                               flex: 1,
                             ),
                             Text(

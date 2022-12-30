@@ -6,6 +6,7 @@ import 'package:xeats/controllers/Cubits/AuthCubit/States.dart';
 import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Components/Components.dart';
 import 'package:xeats/views/Layout/Layout.dart';
+import 'package:xeats/views/Splash%20Screen/Splach%20Screen.dart';
 
 class LoginSuccess extends StatelessWidget {
   LoginSuccess({super.key});
@@ -120,10 +121,10 @@ class LoginSuccess extends StatelessWidget {
           ),
           floatingActionButton: Row(
             children: [
-              Spacer(),
+              const Spacer(),
               FloatingActionButton(
                 onPressed: () {
-                  Navigation(context, Layout());
+                  Navigation(context, const SplashScreen());
                 },
                 backgroundColor: Colors.black,
                 child: const Icon(Icons.arrow_forward_ios),

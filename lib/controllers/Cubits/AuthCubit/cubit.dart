@@ -69,15 +69,7 @@ class AuthCubit extends Cubit<AuthStates> {
       "last_name": last_name,
       "title": title,
       "PhoneNumber": PhoneNumber,
-    }, url: "create_users_API/")
-        .then((value) async {
-      SharedPreferences Auth = await SharedPreferences.getInstance();
-      Auth.setString("token", value.data['token'])
-          .then((value) => NavigateAndRemov(context, Verify()))
-          .catchError((error) {
-        print(error.toString());
-      });
-    });
+    }, url: "create_users_API/");
   }
 
   List<List> user = [];

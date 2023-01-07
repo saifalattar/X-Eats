@@ -30,4 +30,3 @@ This project is a starting point for a Flutter application, the website is X-Eat
     <img src="assets/06.jpg" width="200px"</img>
     <img src="assets/07.jpg" width="200px"</img>
 </div>
-

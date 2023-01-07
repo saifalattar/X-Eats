@@ -244,7 +244,7 @@ class Restaurants extends StatelessWidget {
             currentIndex: 1,
             onTap: (index) {
               if (index == 1) {
-                Navigator.pop(context);
+                Navigator.popUntil(context, (route) => route.isCurrent);
               } else if (index == 0) {
                 Navigation(context, Layout());
               } else {

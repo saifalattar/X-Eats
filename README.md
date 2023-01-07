@@ -1,8 +1,7 @@
-# X-Eats
-
+# X-Eats ![My animated logo](assets/Images/First.png)
 A new Flutter project.
 
-![My animated logo](assets/Images/First.png)
+
 
 ## Getting Started
 

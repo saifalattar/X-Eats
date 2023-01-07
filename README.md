@@ -1,7 +1,11 @@
 # X-Eats
 
-# Food Distribution platform service.
+## Food Distribution platform service.
 
+<div align="center">
+    <h3> Eat More, Pay Less </h3>
+    </div>
+    
 ![My animated logo](assets/Images/background.jpg)
 
 ## Brief OverView
@@ -17,6 +21,7 @@ This project is a starting point for a Flutter application, the website is X-Eat
 ## Screenshots
 
 <div align="right">
+    <img src="assets/00.jpg" width="200px"</img>
     <img src="assets/01.jpg" width="200px"</img>
     <img src="assets/02.jpg" width="200px"</img>
     <img src="assets/03.jpg" width="200px"</img>
@@ -26,17 +31,3 @@ This project is a starting point for a Flutter application, the website is X-Eat
     <img src="assets/07.jpg" width="200px"</img>
 </div>
 
-MostSold & New Products in Cubit.dart :
-
-
-- The preview in the home page & restaurant Page should add on tapping the product it goes to the ProductDetails View
-
-- Handling the Checkout & Profile View 
-
-- When Going from the cart to the Product Detail, the restaurant id is retrieved not the restaurant Name.
-
-- When Going from the MostSold to the Details Page Image is not sent successfully
-
-- Scrolling in the cart is not working Properly
-
-- adding the restaurant name and Image in the cart Screen.

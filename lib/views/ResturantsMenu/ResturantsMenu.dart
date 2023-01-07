@@ -10,6 +10,7 @@ import 'package:xeats/controllers/Dio/DioHelper.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/Profile/Profile.dart';
+import 'package:xeats/views/Resturants/Resturants.dart';
 import '../../controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
 
 class ResturantsMenu extends StatelessWidget {
@@ -167,7 +168,7 @@ class ResturantsMenu extends StatelessWidget {
             currentIndex: 1,
             onTap: (index) {
               if (index == 1) {
-                Navigator.pop(context);
+                Navigation(context, Restaurants());
               } else if (index == 0) {
                 Navigation(context, Layout());
               } else {

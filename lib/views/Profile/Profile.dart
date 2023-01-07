@@ -128,7 +128,7 @@ class Profile extends StatelessWidget {
                   currentIndex: 2,
                   onTap: (index) {
                     if (index == 2) {
-                      Navigator.pop(context);
+                      Navigator.popUntil(context, (route) => route.isCurrent);
                     } else if (index == 0) {
                       Navigation(context, Layout());
                     } else {

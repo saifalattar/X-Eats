@@ -17,7 +17,7 @@ This project is a starting point for a Flutter application, the website is X-Eat
 ## Screenshots
 
 <div align="right">
-    <img src="assets/01.jpg" width="400px"</img>
+    <img src="assets/01.jpg" width="100px"</img>
     <img src="assets/02.jpg" width="400px"</img>
     <img src="assets/03.jpg" width="400px"</img>
     <img src="assets/04.jpg" width="400px"</img>

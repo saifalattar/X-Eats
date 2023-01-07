@@ -1,4 +1,4 @@
-# xeats
+# X-Eats
 
 A new Flutter project.
 

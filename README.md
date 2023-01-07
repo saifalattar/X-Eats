@@ -1,11 +1,11 @@
 # X-Eats
 
-## Food Distribution platform service.
-
 <div align="center">
     <h3> Eat More, Pay Less </h3>
     </div>
     
+## Platform for Food Distribution service.
+
 ![My animated logo](assets/Images/background.jpg)
 
 ## Brief OverView
@@ -20,7 +20,7 @@ This project is a starting point for a Flutter application, the website is X-Eat
 
 ## Screenshots
 
-<div align="right">
+<div align="center">
     <img src="assets/00.jpg" width="200px"</img>
     <img src="assets/01.jpg" width="200px"</img>
     <img src="assets/02.jpg" width="200px"</img>

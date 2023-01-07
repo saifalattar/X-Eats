@@ -27,7 +27,7 @@ MostSold & New Products in Cubit.dart :
 - Handling the Checkout & Profile View 
 
 - When Going from the cart to the Product Detail, the restaurant id is retrieved not the restaurant Name.
-- 
+
 - When Going from the MostSold to the Details Page Image is not sent successfully
 
 - Scrolling in the cart is not working Properly

@@ -1,4 +1,4 @@
-# X-Eats ![My animated logo](assets/Images/First.png)
+# X-Eats ![My animated logo](assets/Images/background.jpg)
 A new Flutter project.
 
 

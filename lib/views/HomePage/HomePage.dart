@@ -278,7 +278,7 @@ class HomePage extends StatelessWidget {
               currentIndex: 0,
               onTap: (index) {
                 if (index == 0) {
-                  Navigator.pop(context);
+                  Navigator.popUntil(context, (route) => route.isCurrent);
                 } else if (index == 1) {
                   Navigation(context, const Restaurants());
                 } else {

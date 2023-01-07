@@ -1,6 +1,6 @@
 # X-Eats
 
-Food Distribution platform service.
+# Food Distribution platform service.
 
 ![My animated logo](assets/Images/background.jpg)
 
@@ -16,8 +16,14 @@ This project is a starting point for a Flutter application, the website is X-Eat
 
 ## Screenshots
 
-<div align="center">
-    <img src="assets/Images/background.jpg" width="400px"</img> 
+<div align="right">
+    <img src="assets/01.jpg" width="400px"</img>
+    <img src="assets/02.jpg" width="400px"</img>
+    <img src="assets/03.jpg" width="400px"</img>
+    <img src="assets/04.jpg" width="400px"</img>
+    <img src="assets/05.jpg" width="400px"</img>
+    <img src="assets/06.jpg" width="400px"</img>
+    <img src="assets/07.jpg" width="400px"</img>
 </div>
 
 MostSold & New Products in Cubit.dart :

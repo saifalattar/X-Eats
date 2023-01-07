@@ -7,12 +7,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:258167260360:android:dc77f1a2e465e3628391fd",
+        "mobilesdk_app_id": "1:258167260360:android:a257064116a1bbe18391fd",
         "android_client_info": {
-          "package_name": "com.example.xeats"
+          "package_name": "com.xeats.egy"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "258167260360-lompadepf6dvh3dciuq70c0uf361hi36.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.xeats.egy",
+            "certificate_hash": "0f51d0c16900dce30ba2ec48028602b3969f4e16"
+          }
+        },
         {
           "client_id": "258167260360-q0dprtvuajdfbbbi8tua8nuntjsmn8qj.apps.googleusercontent.com",
           "client_type": 3
@@ -29,6 +37,13 @@
             {
               "client_id": "258167260360-q0dprtvuajdfbbbi8tua8nuntjsmn8qj.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "258167260360-166hulbtp6adhmccdp05vc0aiah5tnld.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.xeats"
+              }
             }
           ]
         }

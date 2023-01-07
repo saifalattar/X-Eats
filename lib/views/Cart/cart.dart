@@ -12,12 +12,28 @@ import 'package:xeats/views/Checkout/CheckOut.dart';
 import 'package:xeats/views/Layout/Layout.dart';
 import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
 
-List<Widget> allWhatInCart = [];
-
-class Cart extends StatelessWidget {
+class Cart extends StatefulWidget {
   const Cart({super.key});
 
   @override
+  State<Cart> createState() => _CartState();
+}
+
+late Future FutureRestaurants;
+late Future getCartItemsFuture;
+late List<Widget> allWhatInCart = [];
+
+class _CartState extends State<Cart> {
+  @override
+  void initState() {
+    FutureRestaurants =
+        Xeatscubit.get(context).getCurrentAvailableOrderRestauant();
+    getCartItemsFuture = Xeatscubit.get(context).getCartItems(
+      context,
+      email: Xeatscubit.get(context).EmailInforamtion,
+    );
+  }
+
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
@@ -112,14 +128,10 @@ class Cart extends StatelessWidget {
                       );
                     }
                   },
-                  future: Xeatscubit.get(context)
-                      .getCurrentAvailableOrderRestauant(),
+                  future: FutureRestaurants,
                 ),
                 FutureBuilder(
-                    future: Xeatscubit.get(context).getCartItems(
-                      context,
-                      email: cubit.EmailInforamtion,
-                    ),
+                    future: getCartItemsFuture,
                     builder: (ctx, AsyncSnapshot snapshot) {
                       if (snapshot.hasData) {
                         if (!snapshot.data.isEmpty) {

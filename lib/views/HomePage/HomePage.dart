@@ -195,66 +195,67 @@ class HomePage extends StatelessWidget {
                                 ...List.generate(
                                   product_api.length,
                                   (index) {
-                                    return FutureBuilder(
-                                        future: cubit.gettingCategoryImages(
-                                            product_api[index]["category"]
-                                                .toString()),
-                                        builder:
-                                            (context, AsyncSnapshot snapshot) {
+                                    return ConditionalBuilder(
+                                        fallback: (context) {
+                                          return Loading();
+                                        },
+                                        condition:
+                                            product_api[index]["image"] != null,
+                                        builder: (
+                                          context,
+                                        ) {
                                           double? price =
                                               product_api[index]['price'];
-                                          if (snapshot.hasData) {
-                                            return GestureDetector(
-                                              child: ProductView(
-                                                  image:
-                                                      snapshot.data.toString(),
-                                                  width: width / 2.0,
-                                                  height: height / 4.2,
-                                                  data: product_api[index]
-                                                      ["name"],
-                                                  Colors: Colors.white,
-                                                  Navigate: () => {
-                                                        Navigation(
+
+                                          return GestureDetector(
+                                            child: ProductView(
+                                                image: product_api[index]
+                                                    ["image"],
+                                                width: width / 2.0,
+                                                height: height / 4.2,
+                                                data: product_api[index]
+                                                    ["name"],
+                                                Colors: Colors.white,
+                                                Navigate: () => {
+                                                      Navigation(
+                                                          context,
+                                                          FoodItem()
+                                                              .productDetails(
                                                             context,
-                                                            FoodItem()
-                                                                .productDetails(
-                                                              context,
-                                                              id: product_api[
-                                                                  index]["id"],
-                                                              restaurant:
-                                                                  product_api[
-                                                                          index]
-                                                                      [
-                                                                      "Restaurant"],
-                                                              image:
-                                                                  "/${snapshot.data.toString()}",
-                                                              price: price,
-                                                              englishName:
-                                                                  product_api[
-                                                                          index]
-                                                                      ["name"],
-                                                              arabicName:
-                                                                  product_api[
-                                                                          index]
-                                                                      [
-                                                                      "ArabicName"],
-                                                              description: product_api[
-                                                                          index]
-                                                                      [
-                                                                      "description"] ??
-                                                                  "No Description for this Product",
-                                                              restaurantName:
-                                                                  product_api[index]
-                                                                          [
-                                                                          "Restaurant"]
-                                                                      .toString(),
-                                                            )),
-                                                      }),
-                                              onTap: () {},
-                                            );
-                                          } else {
-                                            return Loading();
-                                          }
+                                                            productName:
+                                                                product_api[
+                                                                        index][
+                                                                    "productName"],
+                                                            id: product_api[
+                                                                index]["id"],
+                                                            restaurant:
+                                                                product_api[
+                                                                        index][
+                                                                    "Restaurant"],
+                                                            image: product_api[
+                                                                index]["image"],
+                                                            price: price,
+                                                            englishName:
+                                                                product_api[
+                                                                        index]
+                                                                    ["name"],
+                                                            arabicName:
+                                                                product_api[
+                                                                        index][
+                                                                    "ArabicName"],
+                                                            description: product_api[
+                                                                        index][
+                                                                    "description"] ??
+                                                                "No Description for this Product",
+                                                            restaurantName:
+                                                                product_api[index]
+                                                                        [
+                                                                        "Restaurant"]
+                                                                    .toString(),
+                                                          )),
+                                                    }),
+                                            onTap: () {},
+                                          );
                                         });
                                   },
                                 ),

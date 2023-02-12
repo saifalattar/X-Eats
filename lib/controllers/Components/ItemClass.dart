@@ -8,6 +8,7 @@ import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Components/AppBarCustomized.dart';
 import 'package:xeats/controllers/Components/Requests%20Loading%20Components/RequstsLoading.dart';
 import 'package:xeats/controllers/Cubit.dart';
+import 'package:xeats/controllers/Cubits/AuthCubit/cubit.dart';
 import 'package:xeats/controllers/Cubits/ButtomNavigationBarCubit/navigationCubit.dart';
 import 'package:xeats/controllers/States.dart';
 import 'package:xeats/controllers/Components/Components.dart';
@@ -27,12 +28,14 @@ class FoodItem extends StatelessWidget {
   int quantity = 1;
   double? totalPrice;
   String? itemImage, restaurantImage;
+  String? productName;
   String? cartItemId;
 
   static List<Widget> CartItems = [];
 
   FoodItem({
     this.id,
+    this.productName,
     this.quantity = 1,
     this.englishName,
     this.productSlug,
@@ -78,6 +81,7 @@ class FoodItem extends StatelessWidget {
               context,
               productDetails(
                 context,
+                productName: productName,
                 image: itemImage,
                 id: id,
                 restaurant: restaurant,
@@ -246,18 +250,17 @@ class FoodItem extends StatelessWidget {
             onTap: () {
               Navigation(
                   context,
-                  productDetails(
-                    context,
-                    image: '${image}',
-                    id: id,
-                    restaurant: restaurant,
-                    restaurantName: restaurantName,
-                    price: price,
-                    arabicName: arabicName,
-                    description:
-                        description ?? "No Description for this Product",
-                    englishName: englishName,
-                  ),
+                  productDetails(context,
+                      image: '${image}',
+                      id: id,
+                      restaurant: restaurant,
+                      restaurantName: restaurantName,
+                      price: price,
+                      arabicName: arabicName,
+                      description:
+                          description ?? "No Description for this Product",
+                      englishName: englishName,
+                      productName: productName),
                   duration: Duration(seconds: 2));
             },
             child: Padding(
@@ -346,6 +349,7 @@ class FoodItem extends StatelessWidget {
       {required String? image,
       required String? restaurantName,
       required double? price,
+      required String? productName,
       required String? arabicName,
       required String? description,
       required String? englishName,
@@ -372,6 +376,7 @@ class FoodItem extends StatelessWidget {
         if (CartItems.isEmpty) {
           Xeatscubit.currentRestaurant = {};
         }
+
         var navcubit = NavBarCubitcubit.get(context);
         double width = MediaQuery.of(context).size.width;
         double height = MediaQuery.of(context).size.height;
@@ -382,6 +387,10 @@ class FoodItem extends StatelessWidget {
                   //add to cart button
                   onPressed: () async {
                     await Xeatscubit.get(context).addToCart(context,
+                        // phoneNumber: Xeatscubit.get(context).PhoneNumber,
+                        // email: Xeatscubit.get(context).FirstName,
+                        // productName: productName,
+                        // resturantName: restaurantName,
                         cartItemId: cartItemId,
                         productId: id,
                         quantity: quantity,
@@ -543,40 +552,40 @@ class FoodItem extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Text(
-                                    "Order Time :",
-                                    style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                  FutureBuilder(
-                                      future:
-                                          Xeatscubit.get(context).getTimings(),
-                                      builder:
-                                          (context, AsyncSnapshot snapshot) {
-                                        if (snapshot.hasData) {
-                                          return DropdownButton(
-                                              hint: shift == null
-                                                  ? const Text("Time Shift")
-                                                  : Text("$shift"),
-                                              items: snapshot.data,
-                                              onChanged: (data) {
-                                                shift = data as String?;
-                                                currentTiming = data;
-                                                Xeatscubit.get(context)
-                                                    .emit(SetTiming());
-                                              });
-                                        } else {
-                                          return Loading();
-                                        }
-                                      })
-                                ],
-                              ),
+                              // Row(
+                              //   mainAxisAlignment:
+                              //       MainAxisAlignment.spaceAround,
+                              //   children: [
+                              //     Text(
+                              //       "Order Time :",
+                              //       style: GoogleFonts.poppins(
+                              //         fontWeight: FontWeight.bold,
+                              //         fontSize: 12,
+                              //       ),
+                              //     ),
+                              //     FutureBuilder(
+                              //         future:
+                              //             Xeatscubit.get(context).getTimings(),
+                              //         builder:
+                              //             (context, AsyncSnapshot snapshot) {
+                              //           if (snapshot.hasData) {
+                              //             return DropdownButton(
+                              //                 hint: shift == null
+                              //                     ? const Text("Time Shift")
+                              //                     : Text("$shift"),
+                              //                 items: snapshot.data,
+                              //                 onChanged: (data) {
+                              //                   shift = data as String?;
+                              //                   currentTiming = data;
+                              //                   Xeatscubit.get(context)
+                              //                       .emit(SetTiming());
+                              //                 });
+                              //           } else {
+                              //             return Loading();
+                              //           }
+                              //         })
+                              //   ],
+                              // ),
                             ],
                           ),
                         ),

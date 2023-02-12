@@ -52,51 +52,47 @@ class Restaurants extends StatelessWidget {
                       ...List.generate(
                         newProducts.length,
                         (index) {
-                          return FutureBuilder(
-                              future: cubit.gettingCategoryImages(
-                                  newProducts[index]["category"].toString()),
-                              builder: (context, AsyncSnapshot snapshot) {
-                                if (snapshot.hasData) {
-                                  return GestureDetector(
-                                    child: NewProducts(
-                                        title: newProducts[index]["name"],
-                                        Colors: Colors.white,
-                                        image: snapshot.data.toString(),
-                                        Navigate: () => {
-                                              Navigation(
+                          return ConditionalBuilder(
+                              fallback: (context) {
+                                return Loading();
+                              },
+                              condition: newProducts[index]["image"] != null,
+                              builder: (context) {
+                                return GestureDetector(
+                                  child: NewProducts(
+                                      title: newProducts[index]["name"],
+                                      Colors: Colors.white,
+                                      image: newProducts[index]["image"],
+                                      Navigate: () => {
+                                            Navigation(
+                                              context,
+                                              FoodItem().productDetails(
                                                 context,
-                                                FoodItem().productDetails(
-                                                  context,
-                                                  image:
-                                                      "/${snapshot.data.toString()}",
-                                                  id: newProducts[index]['id'],
-                                                  restaurant: newProducts[index]
-                                                      ['Restaurant'],
-                                                  price: newProducts[index]
-                                                      ['price'],
-                                                  englishName:
-                                                      newProducts[index]
-                                                          ["name"],
-                                                  arabicName: newProducts[index]
-                                                      ["ArabicName"],
-                                                  description: newProducts[
-                                                              index]
-                                                          ["description"] ??
-                                                      "No Description for this Product",
-                                                  restaurantName:
-                                                      newProducts[index]
-                                                              ["Restaurant"]
-                                                          .toString(),
-                                                ),
+                                                image: newProducts[index]
+                                                    ["image"],
+                                                id: newProducts[index]['id'],
+                                                restaurant: newProducts[index]
+                                                    ['Restaurant'],
+                                                price: newProducts[index]
+                                                    ['price'],
+                                                englishName: newProducts[index]
+                                                    ["name"],
+                                                arabicName: newProducts[index]
+                                                    ["ArabicName"],
+                                                description: newProducts[index]
+                                                        ["description"] ??
+                                                    "No Description for this Product",
+                                                restaurantName:
+                                                    newProducts[index]
+                                                            ["Restaurant"]
+                                                        .toString(),
+                                                productName: '',
                                               ),
-                                            }),
-                                  );
+                                            ),
+                                          }),
+                                );
 
-                                  // },
-
-                                } else {
-                                  return Loading();
-                                }
+                                // },
                               });
                         },
                       ),

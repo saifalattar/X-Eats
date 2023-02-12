@@ -275,6 +275,11 @@ class Xeatscubit extends Cubit<XeatsStates> {
       {int? productId,
       int? quantity,
       String? cartItemId,
+      // String? productName,
+      // String? image,
+      // String? phoneNumber,
+      // String? email,
+      // String? resturantName,
       double? price,
       double? totalPrice,
       int? restaurantId,
@@ -287,12 +292,17 @@ class Xeatscubit extends Cubit<XeatsStates> {
       "$BASEURL/get_user_cartItems/$EmailInforamtion",
       data: {
         "user": idInformation,
+        // "product_name": productName,
+        // "phone_number": phoneNumber,
+        // "email": email,
+        // "image": image,
         "cart": cartID,
         "product": productId,
         "price": price,
         "quantity": quantity,
         "totalOrderItemPrice": totalPrice,
         "Restaurant": restaurantId,
+        // "restaurant_name": resturantName,
         "order_shift": timeShift
       },
     ).then((value) async {
@@ -301,6 +311,9 @@ class Xeatscubit extends Cubit<XeatsStates> {
           "$BASEURL/get_user_cartItems/$EmailInforamtion",
           data: {
             "id": cartItemId,
+            // "product_name": productName,
+            // "image": image,
+            // "restaurant_name": resturantName,
             "user": idInformation,
             "product": productId,
             "quantity": quantity,
@@ -531,6 +544,9 @@ class Xeatscubit extends Cubit<XeatsStates> {
           FoodItem.deliveryFee + FoodItem.getSubtotal(),
       "totalPrice": FoodItem.getSubtotal(),
       "cart": cartID,
+      "first_name": FirstName,
+      "last_name": LastName,
+      "phone_number": PhoneNumber,
       "flag": "Mobile"
     }).then((value) {
       NavigateAndRemov(context, const ThankYou());
@@ -762,13 +778,13 @@ class Xeatscubit extends Cubit<XeatsStates> {
         });
   }
 
-  Future<String> gettingCategoryImages(String categoryID) async {
-    String? image;
-    await Dio()
-        .get("https://www.x-eats.com/get_category_by_id/$categoryID")
-        .then((value) {
-      image = value.data["Names"][0]["image"].toString();
-    });
-    return image!;
-  }
+  // Future<String> gettingCategoryImages(String categoryID) async {
+  //   String? image;
+  //   await Dio()
+  //       .get("https://www.x-eats.com/get_category_by_id/$categoryID")
+  //       .then((value) {
+  //     image = value.data["Names"][0]["image"].toString();
+  //   });
+  //   return image!;
+  // }
 }

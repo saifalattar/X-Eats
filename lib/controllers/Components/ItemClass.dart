@@ -21,7 +21,7 @@ import 'package:xeats/views/ResturantsMenu/ResturantsMenu.dart';
 
 class FoodItem extends StatelessWidget {
   final bool? isMostPopular, isNewProduct, isBestOffer;
-  static double deliveryFee = 10;
+  final double? deliveryFee;
   final double? price;
   final int? restaurant, category, id;
   final String? englishName, productSlug, creationDate, arabicName;
@@ -35,6 +35,7 @@ class FoodItem extends StatelessWidget {
   static List<Widget> CartItems = [];
 
   FoodItem({
+    this.deliveryFee,
     this.id,
     this.productName,
     this.quantity = 1,

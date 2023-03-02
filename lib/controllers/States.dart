@@ -73,3 +73,5 @@ class SearchOnRestaurantFail extends SuperXeats {
 class ClearRestaurantId extends SuperXeats {}
 
 class GetListOfRestaurantsSuccefully extends SuperXeats {}
+
+class GetDeliveryFeesState extends SuperXeats {}

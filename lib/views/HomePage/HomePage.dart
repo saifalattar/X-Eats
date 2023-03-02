@@ -116,49 +116,47 @@ class _HomePageState extends State<HomePage> {
                                     await Xeatscubit.get(context)
                                         .clearRestaurantId();
                                     await Xeatscubit.get(context)
-                                        .GetIdOfResutarant(context)
-                                        .then((value) async {
-                                      await Xeatscubit.get(context)
-                                          .SearchOnListOfRestuarant(context);
-                                      if (Xeatscubit.get(context)
-                                          .restaurant_nameFromSearching
-                                          .toString()
-                                          .toLowerCase()
-                                          .contains(Xeatscubit.get(context)
-                                              .searchRestaurantsController
-                                              .text
-                                              .toLowerCase())) {
-                                        Navigation(
-                                            context,
-                                            SearchRestaurantsScreen(
-                                              Restuarantsdata:
-                                                  Xeatscubit.get(context)
-                                                      .Restuarantsdata,
-                                              RestaurantId:
-                                                  Xeatscubit.get(context)
-                                                      .RestaurantId,
-                                              imageOfRestaurant:
-                                                  Xeatscubit.get(context)
-                                                      .imageOfRestaurant,
-                                              restaurant_nameFromSearching:
-                                                  Xeatscubit.get(context)
-                                                      .restaurant_nameFromSearching,
-                                            ));
-                                        print(Xeatscubit.get(context)
-                                            .RestaurantId);
-                                        print(Xeatscubit.get(context)
-                                            .restaurant_nameFromSearching);
-                                      } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                          duration: const Duration(
-                                              milliseconds: 1500),
-                                          content: Text(
-                                              "There isn't Restuarant called ${Xeatscubit.get(context).searchController.text}"),
-                                          backgroundColor: Colors.red,
-                                        ));
-                                      }
-                                    });
+                                        .GetIdOfResutarant(context);
+                                    await Xeatscubit.get(context)
+                                        .SearchOnListOfRestuarant(context);
+                                    if (Xeatscubit.get(context)
+                                        .restaurant_nameFromSearching
+                                        .toString()
+                                        .toLowerCase()
+                                        .contains(Xeatscubit.get(context)
+                                            .searchRestaurantsController
+                                            .text
+                                            .toLowerCase())) {
+                                      Navigation(
+                                          context,
+                                          SearchRestaurantsScreen(
+                                            Restuarantsdata:
+                                                Xeatscubit.get(context)
+                                                    .Restuarantsdata,
+                                            RestaurantId:
+                                                Xeatscubit.get(context)
+                                                    .RestaurantId,
+                                            imageOfRestaurant:
+                                                Xeatscubit.get(context)
+                                                    .imageOfRestaurant,
+                                            restaurant_nameFromSearching:
+                                                Xeatscubit.get(context)
+                                                    .restaurant_nameFromSearching,
+                                          ));
+                                      print(
+                                          Xeatscubit.get(context).RestaurantId);
+                                      print(Xeatscubit.get(context)
+                                          .restaurant_nameFromSearching);
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        duration:
+                                            const Duration(milliseconds: 1500),
+                                        content: Text(
+                                            "There isn't Restuarant called ${Xeatscubit.get(context).searchController.text}"),
+                                        backgroundColor: Colors.red,
+                                      ));
+                                    }
                                   },
                                 )),
                           ),

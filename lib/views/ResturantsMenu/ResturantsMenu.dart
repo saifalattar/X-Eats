@@ -79,64 +79,59 @@ class ResturantsMenu extends StatelessWidget {
                               controller:
                                   Xeatscubit.get(context).searchController,
                               onSubmitted: (value) async {
-                                await Xeatscubit.get(context)
-                                    .GetIdOfProducts(
+                                await Xeatscubit.get(context).GetIdOfProducts(
                                   context,
                                   id: RestaurantId.toString(),
-                                )
-                                    .then((value) async {
-                                  await Xeatscubit.get(context)
-                                      .SearchOnListOfProduct(
-                                    context,
-                                  );
+                                );
+                                await Xeatscubit.get(context)
+                                    .SearchOnListOfProduct(
+                                  context,
+                                );
 
-                                  if (Xeatscubit.get(context)
-                                          .ArabicName
-                                          .toString()
-                                          .toLowerCase()
-                                          .contains(Xeatscubit.get(context)
-                                              .searchController
-                                              .text
-                                              .toLowerCase()) ||
-                                      Xeatscubit.get(context)
-                                          .EnglishName
-                                          .toString()
-                                          .toLowerCase()
-                                          .contains(Xeatscubit.get(context)
-                                              .searchController
-                                              .text
-                                              .toLowerCase())) {
-                                    Navigation(
-                                        context,
-                                        SearchProductsScreen(
-                                          restaurantID: RestaurantId.toString(),
-                                          image: Xeatscubit.get(context)
-                                              .image
-                                              .first,
-                                          category: Xeatscubit.get(context)
-                                              .category_name
-                                              .first
-                                              .toString(),
-                                          categoryId: Xeatscubit.get(context)
-                                              .category
-                                              .first
-                                              .toString(),
-                                          restaurantName:
-                                              Xeatscubit.get(context)
-                                                  .restaurant_name
-                                                  .first,
-                                        ));
-                                  } else {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                      duration:
-                                          const Duration(milliseconds: 1500),
-                                      content: Text(
-                                          "There isn't product called ${Xeatscubit.get(context).searchController.text}"),
-                                      backgroundColor: Colors.red,
-                                    ));
-                                  }
-                                });
+                                if (Xeatscubit.get(context)
+                                        .ArabicName
+                                        .toString()
+                                        .toLowerCase()
+                                        .contains(Xeatscubit.get(context)
+                                            .searchController
+                                            .text
+                                            .toLowerCase()) ||
+                                    Xeatscubit.get(context)
+                                        .EnglishName
+                                        .toString()
+                                        .toLowerCase()
+                                        .contains(Xeatscubit.get(context)
+                                            .searchController
+                                            .text
+                                            .toLowerCase())) {
+                                  Navigation(
+                                      context,
+                                      SearchProductsScreen(
+                                        restaurantID: RestaurantId.toString(),
+                                        image:
+                                            Xeatscubit.get(context).image.first,
+                                        category: Xeatscubit.get(context)
+                                            .category_name
+                                            .first
+                                            .toString(),
+                                        categoryId: Xeatscubit.get(context)
+                                            .category
+                                            .first
+                                            .toString(),
+                                        restaurantName: Xeatscubit.get(context)
+                                            .restaurant_name
+                                            .first,
+                                      ));
+                                } else {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    duration:
+                                        const Duration(milliseconds: 1500),
+                                    content: Text(
+                                        "There isn't product called ${Xeatscubit.get(context).searchController.text}"),
+                                    backgroundColor: Colors.red,
+                                  ));
+                                }
                               },
                             ),
                           ),

@@ -194,30 +194,33 @@ class Restaurants extends StatelessWidget {
                                             Text(' 4.1'),
                                             Text(' (100+)')
                                           ]),
-                                          Row(
-                                            children: [
-                                              const Icon(Icons.timer_sharp),
-                                              Text(
-                                                ' 45 mins',
-                                                style: GoogleFonts.poppins(
-                                                    fontWeight:
-                                                        FontWeight.w400),
-                                              ),
-                                              SizedBox(
-                                                width: 25.w,
-                                              ),
-                                              Icon(Icons
-                                                  .delivery_dining_outlined),
-                                              SizedBox(
-                                                width: 2.w,
-                                              ),
-                                              Text(
-                                                'EGP 10',
-                                                style: GoogleFonts.poppins(
-                                                    fontWeight:
-                                                        FontWeight.w400),
-                                              )
-                                            ],
+                                          SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            child: Row(
+                                              children: [
+                                                const Icon(Icons.timer_sharp),
+                                                Text(
+                                                  ' 45 mins',
+                                                  style: GoogleFonts.poppins(
+                                                      fontWeight:
+                                                          FontWeight.w400),
+                                                ),
+                                                SizedBox(
+                                                  width: 25.w,
+                                                ),
+                                                Icon(Icons
+                                                    .delivery_dining_outlined),
+                                                SizedBox(
+                                                  width: 2.w,
+                                                ),
+                                                Text(
+                                                  'X-Eats Delivery',
+                                                  style: GoogleFonts.poppins(
+                                                      fontWeight:
+                                                          FontWeight.w400),
+                                                )
+                                              ],
+                                            ),
                                           )
                                         ],
                                       ),

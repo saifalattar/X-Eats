@@ -454,16 +454,19 @@ class Xeatscubit extends Cubit<XeatsStates> {
   }
 
   void updateCartPrice() async {
-    await Dio().put("$BASEURL/get_carts_by_id/$EmailInforamtion", data: {
-      "total_price": FoodItem.getSubtotal(),
-      "total_after_delivery":
-          (FoodItem.deliveryFee + FoodItem.getSubtotal()).toDouble()
-    }).then((value) {
-      print(value);
-    }).catchError((e) {
-      var dioException = e as DioError;
-      var status = dioException.response!.statusCode;
-      print("CARTITEM ERROR" + " " + '$status');
+    await Dio().get("$BASEURL/get_Delivery_Fees").then((value) async {
+      await Dio().put("$BASEURL/get_carts_by_id/$EmailInforamtion", data: {
+        "total_price": FoodItem.getSubtotal(),
+        "total_after_delivery":
+            (value.data["Names"][0]["delivery_fees"] + FoodItem.getSubtotal())
+                .toDouble()
+      }).then((value) {
+        print(value);
+      }).catchError((e) {
+        var dioException = e as DioError;
+        var status = dioException.response!.statusCode;
+        print("CARTITEM ERROR" + " " + '$status');
+      });
     });
   }
 
@@ -546,19 +549,21 @@ class Xeatscubit extends Cubit<XeatsStates> {
   void confirmOrder(
     context,
   ) async {
-    await Dio().post("$BASEURL/get_orders_by_email/$EmailInforamtion", data: {
-      "user": idInformation,
-      "total_price_after_delivery":
-          FoodItem.deliveryFee + FoodItem.getSubtotal(),
-      "totalPrice": FoodItem.getSubtotal(),
-      "cart": cartID,
-      "first_name": FirstName,
-      "last_name": LastName,
-      "phone_number": PhoneNumber,
-      "flag": "Mobile"
-    }).then((value) {
-      NavigateAndRemov(context, const ThankYou());
-    }).catchError((onError) => print(onError));
+    await Dio().get("$BASEURL/get_Delivery_Fees").then((value) async {
+      await Dio().post("$BASEURL/get_orders_by_email/$EmailInforamtion", data: {
+        "user": idInformation,
+        "total_price_after_delivery":
+            value.data["Names"][0]["delivery_fees"] + FoodItem.getSubtotal(),
+        "totalPrice": FoodItem.getSubtotal(),
+        "cart": cartID,
+        "first_name": FirstName,
+        "last_name": LastName,
+        "phone_number": PhoneNumber,
+        "flag": "Mobile"
+      }).then((value) {
+        NavigateAndRemov(context, const ThankYou());
+      }).catchError((onError) => print(onError));
+    });
   }
 
   Future<void> deleteCartItem(BuildContext context, String cartItemId) async {
@@ -726,62 +731,62 @@ class Xeatscubit extends Cubit<XeatsStates> {
                         RestaurantId: RestaurantId[index],
                       ));
                 },
-                child: Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Row(children: [
-                    Container(
-                      height: 130.h,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                            color: Color.fromARGB(74, 158, 158, 158)),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Padding(
-                          padding: EdgeInsets.all(16.0),
-                          child: Image.network(
-                            'https://www.x-eats.com' + imageOfRestaurant[index],
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) {
-                                return child;
-                              }
-                              return Center(
-                                child: Loading(),
-                              );
-                            },
-                          )),
+                child: Row(children: [
+                  Container(
+                    height: 130.h,
+                    decoration: BoxDecoration(
+                      border:
+                          Border.all(color: Color.fromARGB(74, 158, 158, 158)),
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
-                    SizedBox(
-                      width: 20.w,
-                    ),
-                    Expanded(
-                      child: Container(
-                        height: MediaQuery.of(context).size.height / 7,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Column(children: [
-                              Text(
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  '${restaurant_nameFromSearching![index]}',
-                                  style: GoogleFonts.poppins(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                  )),
-                            ]),
-                            SizedBox(
-                              height: 10.h,
+                    child: Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Image.network(
+                          'https://www.x-eats.com' + imageOfRestaurant[index],
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) {
+                              return child;
+                            }
+                            return Center(
+                              child: Loading(),
+                            );
+                          },
+                        )),
+                  ),
+                  SizedBox(
+                    width: 20.w,
+                  ),
+                  Expanded(
+                    child: Container(
+                      height: MediaQuery.of(context).size.height / 7,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Column(children: [
+                            Text(
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                '${restaurant_nameFromSearching![index]}',
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                )),
+                          ]),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          Row(children: [
+                            Icon(
+                              Icons.star,
+                              color: Colors.amber,
                             ),
-                            Row(children: [
-                              Icon(
-                                Icons.star,
-                                color: Colors.amber,
-                              ),
-                              Text(' 4.1'),
-                              Text(' (100+)')
-                            ]),
-                            Row(
+                            Text(' 4.1'),
+                            Text(' (100+)')
+                          ]),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
                               children: [
                                 Icon(Icons.timer_sharp),
                                 Text(
@@ -790,25 +795,25 @@ class Xeatscubit extends Cubit<XeatsStates> {
                                       fontWeight: FontWeight.w400),
                                 ),
                                 SizedBox(
-                                  width: 25.w,
+                                  width: 15.w,
                                 ),
                                 Icon(Icons.delivery_dining_outlined),
                                 SizedBox(
                                   width: 2.w,
                                 ),
                                 Text(
-                                  'EGP 10',
+                                  'X-Eats Delivery',
                                   style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.w400),
-                                )
+                                ),
                               ],
-                            )
-                          ],
-                        ),
+                            ),
+                          )
+                        ],
                       ),
                     ),
-                  ]),
-                ),
+                  ),
+                ]),
               );
             }
           },
@@ -1037,6 +1042,16 @@ class Xeatscubit extends Cubit<XeatsStates> {
       ));
     });
     return data;
+  }
+
+  double? deliveryfees;
+  Future<void> deliveryFees() async {
+    await Dio().get("$BASEURL/get_Delivery_Fees").then((value) {
+      deliveryfees = value.data["Names"][0]["delivery_fees"];
+      emit(GetDeliveryFeesState());
+    }).catchError((onError) {
+      print(onError);
+    });
   }
 
   Future<Widget> getMostSoldData(

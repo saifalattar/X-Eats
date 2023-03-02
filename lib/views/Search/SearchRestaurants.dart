@@ -141,14 +141,14 @@ class _SearchRestaurantsScreenState extends State<SearchRestaurantsScreen> {
             currentIndex: 0,
             onTap: (index) async {
               Navigator.pop(context);
-              await Xeatscubit.get(context).clearRestaurantId().asStream();
+              await Xeatscubit.get(context).clearRestaurantId();
               if (index == 0) {
-                await Xeatscubit.get(context).clearRestaurantId().asStream();
+                await Xeatscubit.get(context).clearRestaurantId();
               } else if (index == 1) {
-                await Xeatscubit.get(context).clearRestaurantId().asStream();
+                await Xeatscubit.get(context).clearRestaurantId();
                 Navigation(context, Restaurants());
               } else {
-                await Xeatscubit.get(context).clearRestaurantId().asStream();
+                await Xeatscubit.get(context).clearRestaurantId();
                 Navigation(context, Profile());
               }
             },

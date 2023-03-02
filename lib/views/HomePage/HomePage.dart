@@ -88,14 +88,80 @@ class _HomePageState extends State<HomePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: height / 20,
-                    ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                                width: MediaQuery.of(context).size.width * 0.8,
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: TextField(
+                                  decoration: const InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 9),
+                                      border: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                      enabledBorder: InputBorder.none,
+                                      hintText: "Search For Restaurants",
+                                      prefixIcon: Icon(Icons.search)),
+                                  controller: Xeatscubit.get(context)
+                                      .searchRestaurantsController,
+                                  onSubmitted: (value) async {
+                                    await Xeatscubit.get(context)
+                                        .clearRestaurantId();
+                                    await Xeatscubit.get(context)
+                                        .GetIdOfResutarant(context)
+                                        .then((value) async {
+                                      await Xeatscubit.get(context)
+                                          .SearchOnListOfRestuarant(context);
+                                      if (Xeatscubit.get(context)
+                                          .restaurant_nameFromSearching
+                                          .toString()
+                                          .toLowerCase()
+                                          .contains(Xeatscubit.get(context)
+                                              .searchRestaurantsController
+                                              .text
+                                              .toLowerCase())) {
+                                        Navigation(
+                                            context,
+                                            SearchRestaurantsScreen(
+                                              Restuarantsdata:
+                                                  Xeatscubit.get(context)
+                                                      .Restuarantsdata,
+                                              RestaurantId:
+                                                  Xeatscubit.get(context)
+                                                      .RestaurantId,
+                                              imageOfRestaurant:
+                                                  Xeatscubit.get(context)
+                                                      .imageOfRestaurant,
+                                              restaurant_nameFromSearching:
+                                                  Xeatscubit.get(context)
+                                                      .restaurant_nameFromSearching,
+                                            ));
+                                        print(Xeatscubit.get(context)
+                                            .RestaurantId);
+                                        print(Xeatscubit.get(context)
+                                            .restaurant_nameFromSearching);
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          duration: const Duration(
+                                              milliseconds: 1500),
+                                          content: Text(
+                                              "There isn't Restuarant called ${Xeatscubit.get(context).searchController.text}"),
+                                          backgroundColor: Colors.red,
+                                        ));
+                                      }
+                                    });
+                                  },
+                                )),
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
@@ -134,68 +200,6 @@ class _HomePageState extends State<HomePage> {
                                 fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                         ),
-                        Container(
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: TextField(
-                              decoration: const InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 9),
-                                  border: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                  enabledBorder: InputBorder.none,
-                                  hintText: "Search For Restaurants",
-                                  prefixIcon: Icon(Icons.search)),
-                              controller: Xeatscubit.get(context)
-                                  .searchRestaurantsController,
-                              onSubmitted: (value) async {
-                                await Xeatscubit.get(context)
-                                    .GetIdOfResutarant(context)
-                                    .then((value) async {
-                                  await Xeatscubit.get(context)
-                                      .SearchOnListOfRestuarant(context);
-                                  if (Xeatscubit.get(context)
-                                      .restaurant_nameFromSearching
-                                      .toString()
-                                      .toLowerCase()
-                                      .contains(Xeatscubit.get(context)
-                                          .searchRestaurantsController
-                                          .text
-                                          .toLowerCase())) {
-                                    Navigation(
-                                        context,
-                                        SearchRestaurantsScreen(
-                                          Restuarantsdata:
-                                              Xeatscubit.get(context)
-                                                  .Restuarantsdata,
-                                          RestaurantId: Xeatscubit.get(context)
-                                              .RestaurantId,
-                                          imageOfRestaurant:
-                                              Xeatscubit.get(context)
-                                                  .imageOfRestaurant,
-                                          restaurant_nameFromSearching:
-                                              Xeatscubit.get(context)
-                                                  .restaurant_nameFromSearching,
-                                        ));
-                                    print(Xeatscubit.get(context).RestaurantId);
-                                    print(Xeatscubit.get(context)
-                                        .restaurant_nameFromSearching);
-                                  } else {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                      duration:
-                                          const Duration(milliseconds: 1500),
-                                      content: Text(
-                                          "There isn't Restuarant called ${Xeatscubit.get(context).searchController.text}"),
-                                      backgroundColor: Colors.red,
-                                    ));
-                                  }
-                                });
-                              },
-                            )),
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(

@@ -56,6 +56,8 @@ class SearhOnProductFail extends SuperXeats {
 
 class ClearProductId extends SuperXeats {}
 
+class ClearRestaurantsIdState extends SuperXeats {}
+
 class GetListOfProductsSuccefully extends SuperXeats {}
 
 class RestaurantIdSuccefull extends SuperXeats {}

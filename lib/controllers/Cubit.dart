@@ -963,7 +963,7 @@ class Xeatscubit extends Cubit<XeatsStates> {
     imageOfRestaurant.clear();
     restaurant_nameFromSearching.clear();
     RestaurantId.clear();
-    emit(ClearProductId());
+    emit(ClearRestaurantsIdState());
   }
 
   List<String> restaurant_nameFromSearching = [];

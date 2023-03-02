@@ -127,8 +127,12 @@ class Restaurants extends StatelessWidget {
                           } else {
                             return InkWell(
                               onTap: () {
-                                Navigation(context,
-                                    ResturantsMenu(data: data_from_api[index]));
+                                Navigation(
+                                    context,
+                                    ResturantsMenu(
+                                      data: data_from_api[index],
+                                      RestaurantId: data_from_api[index]['id'],
+                                    ));
                               },
                               child: Padding(
                                 padding: const EdgeInsets.all(8),

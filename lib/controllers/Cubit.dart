@@ -1048,7 +1048,6 @@ class Xeatscubit extends Cubit<XeatsStates> {
   Future<void> deliveryFees() async {
     await Dio().get("$BASEURL/get_Delivery_Fees").then((value) {
       deliveryfees = value.data["Names"][0]["delivery_fees"];
-      emit(GetDeliveryFeesState());
     }).catchError((onError) {
       print(onError);
     });

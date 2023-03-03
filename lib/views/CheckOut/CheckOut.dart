@@ -113,3 +113,5 @@ class CheckOut extends StatelessWidget {
     });
   }
 }
+
+void _moveToScreen2(BuildContext context) => Navigation(context, const Cart());

@@ -97,17 +97,19 @@ class _SplashScreenState extends State<SplashScreen> {
     Xeatscubit.get(context).getCartID();
     print(Xeatscubit.get(context).GettingUserData());
 
-    Future.delayed(const Duration(seconds: 6)).then((value) {
-      if (Check == true) {
-        NavigateAndRemov(context, UpdateDialog());
-      } else {
-        if (Xeatscubit.get(context).EmailInforamtion != null) {
-          NavigateAndRemov(context, Layout());
+    Future.delayed(const Duration(seconds: 6)).then(
+      (value) {
+        if (Check == true) {
+          NavigateAndRemov(context, UpdateDialog());
         } else {
-          NavigateAndRemov(context, SignIn());
+          if (Xeatscubit.get(context).EmailInforamtion != null) {
+            NavigateAndRemov(context, Layout());
+          } else {
+            NavigateAndRemov(context, SignIn());
+          }
         }
-      }
-    });
+      },
+    );
   }
 
   @override

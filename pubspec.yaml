@@ -30,6 +30,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   new_version_plus: ^0.0.9
+  launch_review: ^3.0.1
   bloc:
   flutter_bloc:
   intl:

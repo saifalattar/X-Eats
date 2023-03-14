@@ -62,6 +62,9 @@ dependencies:
   pinput: ^2.2.30
   json_annotation:
   json_helper:
+  google_maps_flutter: ^2.1.10
+  geolocator: ^9.0.2
+  flutter_polyline_points: ^1.0.0
 
   flutter:
     sdk: flutter

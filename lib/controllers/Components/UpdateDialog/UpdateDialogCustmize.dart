@@ -3,7 +3,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:new_version_plus/new_version_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:xeats/controllers/Components/AppBarCustomized.dart';
+import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
 
 class UpdateDialog extends StatefulWidget {
   const UpdateDialog({super.key});

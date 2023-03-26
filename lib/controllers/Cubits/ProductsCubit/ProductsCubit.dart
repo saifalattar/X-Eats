@@ -23,9 +23,7 @@ class ProductsCubit extends Cubit<ProductsStates> {
       ProductClass? theItem;
 
       emit(ProductsSuccess());
-    }).catchError((error) {
-      print(ProductsFail(error.toString()));
-    });
+    }).catchError((error) {});
   }
 
   List<dynamic> new_products = [];
@@ -34,25 +32,24 @@ class ProductsCubit extends Cubit<ProductsStates> {
         .then((value) {
       new_products = value.data['Names'];
       emit(ProductsSuccess());
-    }).catchError((error) {
-      print(ProductsFail(error.toString()));
-    });
+    }).catchError((error) {});
   }
 
   List<dynamic> getposters = [];
   void getPoster() {
     DioHelper.getdata(url: 'get_poster/', query: {}).then((value) {
       getposters = value.data['Names'];
-      print(getposters);
+
       emit(ProductsSuccess());
-    }).catchError((error) {
-      print(ProductsFail(error.toString()));
-    });
+    }).catchError((error) {});
   }
 
-  List<String> EnglishName = [];
-  List<String> ArabicName = [];
+  final List<String> EnglishName = [];
+  final List<String> ArabicName = [];
   Future<void> ClearProductsId() async {
+    category_name.clear();
+    restaurant_name.clear();
+    image.clear();
     ProductId.clear();
     EnglishName.clear();
     ArabicName.clear();
@@ -72,7 +69,6 @@ class ProductsCubit extends Cubit<ProductsStates> {
   Future getListOfProducts(
     BuildContext context, {
     required String? CatId,
-    required String? image,
     required String? category,
     required String? restaurantName,
   }) async {
@@ -87,7 +83,7 @@ class ProductsCubit extends Cubit<ProductsStates> {
           }),
           itemBuilder: (context, index) {
             return ProductClass(
-              itemImage: image,
+              itemImage: image[index],
               englishName: EnglishName[index],
               arabicName: ArabicName[index],
               price: price[index],
@@ -99,10 +95,10 @@ class ProductsCubit extends Cubit<ProductsStates> {
               isMostPopular: isMostPopular[index],
               isNewProduct: isNewProduct[index],
             ).Search(context,
-                image: image,
-                category: category,
+                image: image[index],
+                category: category_name[index],
                 CatId: CatId,
-                restaurantName: restaurantName,
+                restaurantName: restaurant_name[index],
                 price: price[index]);
           },
           itemCount: ProductId.length),
@@ -111,49 +107,51 @@ class ProductsCubit extends Cubit<ProductsStates> {
     return data;
   }
 
-  List<double> price = [];
-  List<int> id = [];
-  List<int> restaurant = [];
-  List<String> creationDate = [];
-  List<String> description = [];
-  List<bool> isBestOffer = [];
-  List<bool> isMostPopular = [];
-  List<bool> isNewProduct = [];
-  List<String> restaurant_name = [];
-  List<int> category = [];
-  List<String> category_name = [];
-  List<String> image = [];
-  Future<void> SearchOnListOfProduct(
-    BuildContext context,
-  ) async {
-    for (var i = 0; i < ProductId.length; i++) {
-      await Dio()
-          .get("$BASEURL/get_products_by_id/${ProductId[i]}")
-          .then((value) async {
-        image.add(value.data["Names"][0]["image"]);
-        restaurant_name.add(value.data["Names"][0]["restaurant_name"]);
-        category_name.add(value.data["Names"][0]["category_name"]);
-        category.add(value.data["Names"][0]["category"]);
-        isNewProduct.add(value.data["Names"][0]["New_Products"]);
-        isMostPopular.add(value.data["Names"][0]["Most_Popular"]);
-        isBestOffer.add(value.data["Names"][0]["Best_Offer"]);
-        creationDate.add(value.data["Names"][0]["created"]);
-        description.add(value.data["Names"][0]["description"]);
-        restaurant.add(value.data["Names"][0]["Restaurant"]);
-        id.add(value.data["Names"][0]["id"]);
-        price.add(value.data["Names"][0]["price"]);
-        EnglishName.add(value.data["Names"][0]["name"]);
-        ArabicName.add(value.data["Names"][0]["ArabicName"]);
-      }).catchError((e) {
-        print("The error is $e");
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          duration: Duration(milliseconds: 1500),
-          content: Text("Something error try again later !!"),
-          backgroundColor: Colors.red,
-        ));
-      });
-      emit(SearhOnProductSuccessfull());
-    }
+  final List<double> price = [];
+  final List<int> id = [];
+  final List<int> restaurant = [];
+  final List<String> creationDate = [];
+  final List<String> description = [];
+  final List<bool> isBestOffer = [];
+  final List<bool> isMostPopular = [];
+  final List<bool> isNewProduct = [];
+  final List<String> restaurant_name = [];
+  final List<int> category = [];
+  final List<String> category_name = [];
+  final List<String> image = [];
+  Future<void> SearchOnListOfProduct(BuildContext context) async {
+    await Future.wait(ProductId.map((productId) async {
+      try {
+        final response =
+            await Dio().get('$BASEURL/get_products_by_id/$productId');
+        final name = response.data['Names'][0];
+
+        image.add(name['image']);
+        restaurant_name.add(name['restaurant_name']);
+        category_name.add(name['category_name']);
+        category.add(name['category']);
+        isNewProduct.add(name['New_Products']);
+        isMostPopular.add(name['Most_Popular']);
+        isBestOffer.add(name['Best_Offer']);
+        creationDate.add(name['created']);
+        description.add(name['description']);
+        restaurant.add(name['Restaurant']);
+        id.add(name['id']);
+        price.add(name['price']);
+        EnglishName.add(name['name']);
+        ArabicName.add(name['ArabicName']);
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            duration: Duration(milliseconds: 1500),
+            content: Text('Something went wrong. Please try again later.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }));
+
+    emit(SearhOnProductSuccessfull());
   }
 
   List<int> ProductId = [];
@@ -165,21 +163,20 @@ class ProductsCubit extends Cubit<ProductsStates> {
     await Dio()
         .get("$BASEURL/get_products_by_restaurant_id/$id")
         .then((value) async {
-      for (var i = 0; i < value.data["Names"].length; i++) {
-        if (value.data["Names"][i]["name"]
-                .toString()
-                .toLowerCase()
-                .contains(searchController.text.toLowerCase()) ||
-            value.data["Names"][i]["ArabicName"]
-                .toString()
-                .toLowerCase()
-                .contains(searchController.text.toLowerCase())) {
-          if (value.data["Names"][i]["id"] is int) {
-            ProductId.add(value.data["Names"][i]["id"]);
-            print(ProductId);
-          }
-        }
-      }
+      var products = value.data["Names"].where((product) =>
+          product["name"]
+              .toString()
+              .toLowerCase()
+              .contains(searchController.text.toLowerCase()) ||
+          product["ArabicName"]
+              .toString()
+              .toLowerCase()
+              .contains(searchController.text.toLowerCase()));
+
+      ProductId = products
+          .where((product) => product["id"] is int)
+          .map<int>((product) => product["id"] as int)
+          .toList();
     });
     emit(ProductIdSuccefull());
   }

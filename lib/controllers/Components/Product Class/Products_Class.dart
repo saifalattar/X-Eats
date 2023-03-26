@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
 import 'package:xeats/controllers/Components/AppBar/AppBarCustomized.dart';
@@ -149,9 +151,8 @@ class ProductClass extends StatelessWidget {
                     width: width / 5,
                     child: Image(
                       width: width / 5,
-                      image: NetworkImage(
-                        "https://x-eats.com${this.itemImage}",
-                      ),
+                      image: CachedNetworkImageProvider(
+                          "https://x-eats.com${this.itemImage}"),
                       loadingBuilder: (context, child, loadingProgress) {
                         if (loadingProgress == null) return child;
                         return Center(
@@ -402,8 +403,8 @@ class ProductClass extends StatelessWidget {
                             child: Hero(
                               tag: this.englishName.toString(),
                               child: Image(
-                                image: NetworkImage(
-                                  "https://x-eats.com${snapshot.data.data["Names"][0]["image"]}",
+                                image: CachedNetworkImageProvider(
+                                  "https://x-eats.com/uploads/$image",
                                 ),
                                 loadingBuilder:
                                     (context, child, loadingProgress) {
@@ -534,8 +535,8 @@ class ProductClass extends StatelessWidget {
                             tag: this.englishName.toString(),
                             child: Image(
                               width: 200,
-                              image: NetworkImage(
-                                'https://x-eats.com$image',
+                              image: CachedNetworkImageProvider(
+                                'https://x-eats.com/uploads/$image',
                               ),
                               loadingBuilder:
                                   (context, child, loadingProgress) {

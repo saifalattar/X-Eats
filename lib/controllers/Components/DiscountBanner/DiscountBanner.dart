@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:xeats/controllers/Components/Global%20Components/loading.dart';
@@ -24,7 +25,7 @@ class DiscountBanner extends StatelessWidget {
                     child: Loading(),
                   );
                 },
-                image: NetworkImage(
+                image: CachedNetworkImageProvider(
                   'https://www.x-eats.com' +
                       data_from_api[index]['background_image'],
                 ),

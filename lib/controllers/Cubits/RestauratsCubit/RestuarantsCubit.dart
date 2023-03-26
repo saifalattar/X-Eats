@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -128,18 +129,18 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Image.network(
-                          'https://www.x-eats.com' + imageOfRestaurant[index],
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) {
-                              return child;
-                            }
-                            return Center(
-                              child: Loading(),
-                            );
-                          },
-                        )),
+                      padding: EdgeInsets.all(16.0),
+                      child: CachedNetworkImage(
+                        progressIndicatorBuilder: (context, url, progress) =>
+                            Center(
+                          child: CircularProgressIndicator(
+                            value: progress.progress,
+                          ),
+                        ),
+                        imageUrl:
+                            'https://www.x-eats.com' + imageOfRestaurant[index],
+                      ),
+                    ),
                   ),
                   SizedBox(
                     width: 20.w,
@@ -215,23 +216,19 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
     return RestuarantsUI;
   }
 
-  List<int> RestaurantId = [];
-  List<dynamic> Restuarantsdata = [];
-  //---------- Search for the resturants id and take it to put it in search on list function -----///////////
-  Future GetIdOfResutarant(
-    BuildContext context,
-  ) async {
-    await Dio().get("$BASEURL/get_restaurants").then((value) async {
-      for (var i = 0; i < value.data["Names"].length; i++) {
-        if (value.data["Names"][i]["Name"]
-            .toString()
-            .toLowerCase()
-            .contains(searchRestaurantsController.text.toLowerCase())) {
-          if (value.data["Names"][i]["id"] is int) {
-            RestaurantId.add(value.data["Names"][i]["id"]);
-            Restuarantsdata.add(value.data["Names"][i]);
-            print(RestaurantId);
-          }
+  final List<int> RestaurantId = [];
+  final List<dynamic> Restuarantsdata = [];
+
+  Future<void> GetIdOfResutarant(BuildContext context) async {
+    final response = await Dio().get("$BASEURL/get_restaurants");
+    response.data["Names"].forEach((restaurant) {
+      if (restaurant["Name"]
+          .toString()
+          .toLowerCase()
+          .contains(searchRestaurantsController.text.toLowerCase())) {
+        if (restaurant["id"] is int) {
+          RestaurantId.add(restaurant["id"]);
+          Restuarantsdata.add(restaurant);
         }
       }
     });
@@ -246,29 +243,25 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
     emit(ClearRestaurantsIdState());
   }
 
-  List<String> restaurant_nameFromSearching = [];
+  final List<String> restaurant_nameFromSearching = [];
 
-  List<String> imageOfRestaurant = [];
+  final List<String> imageOfRestaurant = [];
   //----------- Loop For the Id that get it from Searching and put it into a List to display in GetList Function-----/////////
   Future<void> SearchOnListOfRestuarant(
     BuildContext context,
   ) async {
-    for (var i = 0; i < RestaurantId.length; i++) {
-      await Dio()
-          .get("$BASEURL/get_restaurants_by_id/${RestaurantId[i]}")
-          .then((value) async {
-        imageOfRestaurant.add(value.data["Names"][0]["image"]);
-        restaurant_nameFromSearching.add(value.data["Names"][0]["Name"]);
-      }).catchError((e) {
-        print("The error is $e");
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          duration: Duration(milliseconds: 1500),
-          content: Text("Something error try again later !!"),
-          backgroundColor: Colors.red,
-        ));
-      });
-      emit(SearhOnRestaurantSuccessfull());
-    }
+    await Future.wait(RestaurantId.map(
+        (id) => Dio().get("$BASEURL/get_restaurants_by_id/$id").then((value) {
+              imageOfRestaurant.add(value.data["Names"][0]["image"]);
+              restaurant_nameFromSearching.add(value.data["Names"][0]["Name"]);
+            }).catchError((e) {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                duration: Duration(milliseconds: 1500),
+                content: Text("Something error try again later !!"),
+                backgroundColor: Colors.red,
+              ));
+            })));
+    emit(SearhOnRestaurantSuccessfull());
   }
 
 //-------------------- Function Separated to get his email if his email null then it will go to login if not then it will go to home page
@@ -297,7 +290,7 @@ class RestuarantsCubit extends Cubit<RestuarantsStates> {
       if (value.data["Names"].length == 0) {
         currentRestaurant = {};
       } else {
-        var dataFromApi = await Dio().get(
+        final dataFromApi = await Dio().get(
             "$BASEURL/get_restaurants_by_id/${value.data["Names"][0]["Restaurant"]}");
         currentRestaurant = dataFromApi.data["Names"][0];
       }

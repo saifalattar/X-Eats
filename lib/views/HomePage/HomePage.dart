@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
@@ -93,6 +94,7 @@ class _HomePageState extends State<HomePage> {
           var product_api = ProductsCubit.get(context).MostSold;
           var restaurant_api = RestuarantsCubit.ResturantsList;
           var FirstName = cubit.FirstName ?? ' ';
+          print(product_api);
           return Scaffold(
             appBar: appBar(context,
                 subtitle: 'Delivering to', title: 'Nile University, Giza'),
@@ -156,10 +158,6 @@ class _HomePageState extends State<HomePage> {
                                                 RestuarantsCubit.get(context)
                                                     .restaurant_nameFromSearching,
                                           ));
-                                      print(RestuarantsCubit.get(context)
-                                          .RestaurantId);
-                                      print(RestuarantsCubit.get(context)
-                                          .restaurant_nameFromSearching);
                                     } else {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(
@@ -244,7 +242,7 @@ class _HomePageState extends State<HomePage> {
                                             child: Loading(),
                                           );
                                         },
-                                        image: NetworkImage(
+                                        image: CachedNetworkImageProvider(
                                             DioHelper.dio!.options.baseUrl +
                                                 restaurant_api[index]['image']),
                                       ),

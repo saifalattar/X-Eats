@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -99,7 +100,7 @@ class _CartState extends State<Cart> {
                                     borderRadius: BorderRadius.circular(20),
                                     child: GestureDetector(
                                       child: Image(
-                                        image: NetworkImage(
+                                        image: CachedNetworkImageProvider(
                                             "https://x-eats.com${RestuarantsCubit.currentRestaurant["image"]}"),
                                         loadingBuilder:
                                             (context, child, loadingProgress) {

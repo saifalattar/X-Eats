@@ -321,19 +321,24 @@ class OrderCubit extends Cubit<OrderStates> {
       await Dio().post(
           "$BASEURL/get_orders_by_email/${AuthCubit.get(context).EmailInforamtion}",
           data: {
-            "user": AuthCubit.get(context).idInformation,
+            "first_name": AuthCubit.get(context).FirstName,
+            "last_name": AuthCubit.get(context).LastName,
+            "phone_number": AuthCubit.get(context).PhoneNumber,
+            "email": AuthCubit.get(context).EmailInforamtion,
+            "location_name": value.data["Names"][0]["location"],
             "total_price_after_delivery": value.data["Names"][0]
                     ["delivery_fees"] +
                 ProductClass.getSubtotal(),
             "totalPrice": ProductClass.getSubtotal(),
+            "flag": "Mobile",
+            "private": false,
+            "status": "Pending",
+            "user": AuthCubit.get(context).idInformation,
             "cart": cartID,
-            "first_name": AuthCubit.get(context).FirstName,
-            "last_name": AuthCubit.get(context).LastName,
-            "phone_number": AuthCubit.get(context).PhoneNumber,
-            "flag": "Mobile"
+            "deliver_to": 1
           }).then((value) {
         NavigateAndRemov(context, const ThankYou());
-      }).catchError((onError) => print(onError));
+      }).catchError((onError) {});
     });
   }
 

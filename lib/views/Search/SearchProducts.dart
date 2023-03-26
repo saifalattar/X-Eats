@@ -21,14 +21,12 @@ class SearchProductsScreen extends StatefulWidget {
   SearchProductsScreen({
     super.key,
     this.restaurantID,
-    required this.image,
     required this.category,
     required this.categoryId,
     required this.restaurantName,
   });
   final String? restaurantID;
 
-  final String? image;
   final String? category;
   final String? categoryId;
   final String? restaurantName;
@@ -115,7 +113,6 @@ class _SearchScreenState extends State<SearchProductsScreen> {
                         context,
                         restaurantName: widget.restaurantName,
                         CatId: widget.categoryId,
-                        image: widget.image,
                         category: widget.category),
                     builder: ((context, snapshot) {
                       if (snapshot.hasData &&

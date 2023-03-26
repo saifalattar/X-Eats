@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -156,20 +157,19 @@ class Restaurants extends StatelessWidget {
                                             BorderRadius.circular(10.0),
                                       ),
                                       child: Padding(
-                                          padding: const EdgeInsets.all(16.0),
-                                          child: Image.network(
-                                            'https://www.x-eats.com' +
-                                                data_from_api[index]['image'],
-                                            loadingBuilder: (context, child,
-                                                loadingProgress) {
-                                              if (loadingProgress == null) {
-                                                return child;
-                                              }
-                                              return Center(
-                                                child: Loading(),
-                                              );
-                                            },
-                                          )),
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: CachedNetworkImage(
+                                          progressIndicatorBuilder:
+                                              (context, url, progress) =>
+                                                  Center(
+                                            child: CircularProgressIndicator(
+                                              value: progress.progress,
+                                            ),
+                                          ),
+                                          imageUrl: 'https://www.x-eats.com' +
+                                              data_from_api[index]['image'],
+                                        ),
+                                      ),
                                     ),
                                     SizedBox(
                                       width: 20.w,

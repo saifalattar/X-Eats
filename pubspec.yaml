@@ -20,7 +20,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.7+1
 
 environment:
-  sdk: '>=2.18.4 <3.0.0'
+  sdk: '>=2.1.4 <3.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -41,7 +41,6 @@ dependencies:
   carousel_slider:
   flutter_spinkit:
   connectivity_plus:
-  data_connection_checker:
   internet_connection_checker:
   google_mobile_ads: 
   flutter_svg:
@@ -61,7 +60,6 @@ dependencies:
   firebase_auth:
   pinput: ^2.2.30
   json_annotation:
-  json_helper:
   google_maps_flutter: ^2.1.10
   geolocator: ^9.0.2
   flutter_polyline_points: ^1.0.0
